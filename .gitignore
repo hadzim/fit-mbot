@@ -1,0 +1,13 @@
+CanFestival/*
+MBot.CanOpen*
+MBot.RoboCan*
+*.o
+Toolchains/bb*
+*.exe
+.metadata/*
+.metadata
+Krtek/test/*.dll
+Krtek/test/*.exe
+.metadata/*
+*.dll
+*.so

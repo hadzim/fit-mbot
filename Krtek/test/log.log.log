@@ -1,0 +1,10 @@
+D 14:19:09.688 TBS<>: --------
+D 14:19:09.733 TBS<>: Init log
+D 14:19:09.735 TBS<>: --------
+T 14:19:09.747 TBS<Net>: Module CAMERA_LIGHT_LED:Status status retrieved STATUS_SLEEPING
+T 14:19:10.298 TBS<Net>: Module CAMERA_LIGHT_LED:Status status retrieved STATUS_WAITING
+T 14:19:11.348 TBS<Net>: Module CAMERA_LIGHT_LED:Command ack ok
+T 14:19:12.897 TBS<Net>: Module CAMERA_LIGHT_LED:Command ack ok
+T 14:19:13.447 TBS<Net>: Module CAMERA_LIGHT_LED:Status status retrieved STATUS_RUNNING
+T 14:19:13.997 TBS<Net>: Module CAMERA_LIGHT_LED:Status status retrieved STATUS_WAITING
+T 14:19:14.548 TBS<Net>: Module CAMERA_LIGHT_LED:Status status retrieved STATUS_SLEEPING

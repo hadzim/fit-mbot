@@ -1,0 +1,13 @@
+D 17:56:35.618 TBS<>: --------
+D 17:56:35.619 TBS<>: Init log
+D 17:56:35.619 TBS<>: --------
+D 17:56:35.619 TBS<>: Send Can message: canID: 15 len: 4 ( 10 0 3 0 )
+D 17:56:35.620 TBS<>: Send Can message: canID: 15 len: 4 ( 10 0 1 0 )
+D 17:56:35.620 TBS<>: Send Can message: canID: 15 len: 4 ( 10 0 0 0 )
+D 17:56:35.620 TBS<Dummy>: Raised Can message: canID: 15 len: 4 ( 10 0 3 0 )
+D 17:56:35.621 TBS<Dummy>: Raised Can message: canID: 15 len: 4 ( 10 0 1 0 )
+D 17:56:35.621 TBS<Dummy>: Raised Can message: canID: 15 len: 4 ( 10 0 0 0 )
+D 17:56:36.122 TBS<>: Send Can message: canID: 15 len: 4 ( 10 0 0 0 )
+D 17:56:36.122 TBS<Dummy>: Raised Can message: canID: 15 len: 4 ( 10 0 0 0 )
+D 17:56:36.624 TBS<>: Send Can message: canID: 15 len: 4 ( 10 0 0 0 )
+D 17:56:36.625 TBS<Dummy>: Raised Can message: canID: 15 len: 4 ( 10 0 0 0 )
