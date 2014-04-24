@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1999345989.538911790/INCLUDE/delimiter=;
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1999345989.538911790/INCLUDE/operation=replace
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1999345989.538911790/INCLUDE/value=c\:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\VC\\Include;c\:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.0A\\Include;
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1999345989.538911790/LIB/delimiter=;
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1999345989.538911790/LIB/operation=replace
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1999345989.538911790/LIB/value=c\:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\VC\\Lib;c\:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.0A\\Lib;
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1999345989.538911790/append=true
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1999345989.538911790/appendContributed=true
