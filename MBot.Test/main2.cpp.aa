@@ -1,0 +1,135 @@
+/*
+ * main2.cpp
+ *
+ *  Created on: 19.2.2014
+ *      Author: JV
+ */
+
+#include <windows.h>
+#include <iostream>
+#include <stdexcept>
+
+BOOL WriteABuffer2(HANDLE hComm, char * lpBuf, DWORD dwToWrite)
+{
+   OVERLAPPED osWrite = {0};
+   DWORD dwWritten;
+   BOOL fRes;
+
+   // Create this writes OVERLAPPED structure hEvent.
+   osWrite.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+   if (osWrite.hEvent == NULL)
+      // Error creating overlapped event handle.
+      return FALSE;
+
+   // Issue write.
+   if (!WriteFile(hComm, lpBuf, dwToWrite, &dwWritten, &osWrite)) {
+      if (GetLastError() != ERROR_IO_PENDING) {
+         // WriteFile failed, but it isn't delayed. Report error and abort.
+         fRes = FALSE;
+      }
+      else {
+         // Write is pending.
+         if (!GetOverlappedResult(hComm, &osWrite, &dwWritten, TRUE))
+            fRes = FALSE;
+         else
+            // Write operation completed successfully.
+            fRes = TRUE;
+      }
+   }
+   else
+      // WriteFile completed immediately.
+      fRes = TRUE;
+
+   CloseHandle(osWrite.hEvent);
+   return fRes;
+}
+
+BOOL WriteABuffer(HANDLE hComm, char * lpBuf, DWORD dwToWrite) {
+	OVERLAPPED osWrite = { 0 };
+	DWORD dwWritten;
+	DWORD dwRes;
+	BOOL fRes;
+
+	// Create this write operation's OVERLAPPED structure's hEvent.
+	osWrite.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	if (osWrite.hEvent == NULL)
+		// error creating overlapped event handle
+		return FALSE;
+
+	// Issue write.
+	if (!WriteFile(hComm, lpBuf, dwToWrite, &dwWritten, &osWrite)) {
+		if (GetLastError() != ERROR_IO_PENDING) {
+			// WriteFile failed, but isn't delayed. Report error and abort.
+			fRes = FALSE;
+		} else
+			// Write is pending.
+			dwRes = WaitForSingleObject(osWrite.hEvent, INFINITE);
+		switch (dwRes) {
+		// OVERLAPPED structure's event has been signaled.
+		case WAIT_OBJECT_0:
+			if (!GetOverlappedResult(hComm, &osWrite, &dwWritten, FALSE))
+				fRes = FALSE;
+			else
+				// Write operation completed successfully.
+				fRes = TRUE;
+			break;
+
+		default:
+			// An error has occurred in WaitForSingleObject.
+			// This usually indicates a problem with the
+			// OVERLAPPED structure's event handle.
+			fRes = FALSE;
+			break;
+		}
+	}
+
+	else {
+// WriteFile completed immediately.
+		fRes = TRUE;
+	}
+	CloseHandle(osWrite.hEvent);
+	return fRes;
+}
+
+void sendserial(HANDLE hComm, unsigned char b0 = 0, unsigned char b1 = 0, unsigned char b2 = 0, unsigned char b3 = 0,
+		unsigned char b4 = 0, unsigned char b5 = 0, unsigned char b6 = 0, unsigned char b7 = 0){
+
+	char data[8];
+	//data[0] = (unsigned char)0xff;
+	data[0] = b0;
+	data[1] = b1;
+	data[2] = b2;
+	data[3] = b3;
+	data[4] = b4;
+	data[5] = b5;
+	data[6] = b6;
+	data[7] = b7;
+	//data[9] = 0;
+	//data[10] = 0;
+/*
+	unsigned int crc = getCheckSum(&data[0], 9);
+
+	data[9] = (crc & 0x0000ff00) >> 8;
+	data[10] = (crc & 0x000000ff);
+*/
+	int val = WriteABuffer(hComm, data, 8);
+	std::cout << "written ok?: " << val << std::endl;
+}
+
+int main(int argc, char **argv) {
+	HANDLE hComm;
+	hComm = CreateFile("COM3", GENERIC_READ | GENERIC_WRITE, 0, 0,
+			OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0);
+	if (hComm == INVALID_HANDLE_VALUE) {
+		throw std::runtime_error("failed");
+	}
+
+
+	sendserial(hComm, 0);
+	//int val = WriteABuffer(hComm, buffer, 3);
+	//std::cout << "written: " << val << std::endl;
+
+	return 0;
+
+// error opening port; abort
+}

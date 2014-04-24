@@ -1,0 +1,137 @@
+/*
+ * main.cpp
+ *
+ *  Created on: 19.2.2014
+ *      Author: JV
+ */
+
+#include "Poco/DeviceIO/SerialChannel.h"
+#include "Poco/DeviceIO/SerialConfig.h"
+
+#include "Poco/DeviceIO/Serial.h"
+#include "Poco/DeviceIO/ChannelStream.h"
+#include "Poco/DeviceIO/ProtocolStream.h"
+
+#include "Poco/BinaryReader.h"
+#include "Poco/BinaryWriter.h"
+
+#include <iostream>
+
+using namespace Poco::DeviceIO::Serial;
+using namespace Poco::DeviceIO;
+using namespace Poco;
+
+const int CMD_CONNECT = 0; 					//Check connection
+const int CMD_SET_CHANNEL_ACTIVE = 1; //Activate channel for sending / receiving
+const int CMD_GET_DATA_1TO8 = 2; 			//Request data of sensors 1 to 8
+const int CMD_GET_DATA_9TO16 = 3; 			//Request data of sensors 1 to 8
+const int CMD_WRITE_PARASET = 4; 	//Upload parameter set to board (volatile)
+const int CMD_WRITE_PARASET_TO_EEPROM = 5; //Write parameter set to board's EEPROM (non-volatile)
+const int CMD_READ_PARASET = 6; 			//Read current parameter set
+const int CMD_GET_ANALOGIN = 7; 			//Read values of analog inputs
+const int CMD_SET_DEBUG_PARA = 8; 			//For debugging only
+const int CMD_GET_DEBUG_PARA = 9; 			//For debugging only
+const int CMD_UNKNOWN = 10; 				//For debugging only
+
+unsigned int getCheckSum(unsigned char* c, int iNumBytes) {
+	unsigned int uCrc16 = 0;
+	unsigned char ucData[2];
+	ucData[0] = 0;
+	while (iNumBytes--) {
+		ucData[1] = ucData[0];
+		ucData[0] = *c++;
+		if (uCrc16 & 0x8000) {
+			uCrc16 = (uCrc16 & 0x7fff) << 1;
+			uCrc16 ^= 0x1021; //generator polynom
+		} else {
+			uCrc16 <<= 1;
+		}
+		uCrc16 ^= (unsigned int) (ucData[0])
+				| ((unsigned int) (ucData[1]) << 8);
+	}
+	return uCrc16;
+}
+
+typedef Poco::DeviceIO::ChannelInputStream SerialInputStream;
+typedef Poco::DeviceIO::ChannelOutputStream SerialOutputStream;
+
+
+void send(SerialChannel & ch, unsigned char b0 = 0, unsigned char b1 = 0, unsigned char b2 = 0, unsigned char b3 = 0,
+		unsigned char b4 = 0, unsigned char b5 = 0, unsigned char b6 = 0, unsigned char b7 = 0){
+
+	unsigned char data[8];
+	//data[0] = (unsigned char)0xff;
+	data[0] = b0;
+	data[1] = b1;
+	data[2] = b2;
+	data[3] = b3;
+	data[4] = b4;
+	data[5] = b5;
+	data[6] = b6;
+	data[7] = b7;
+	//data[9] = 0;
+	//data[10] = 0;
+/*
+	unsigned int crc = getCheckSum(&data[0], 9);
+
+	data[9] = (crc & 0x0000ff00) >> 8;
+	data[10] = (crc & 0x000000ff);
+*/
+	ch.write((char *)data, 8);
+}
+
+int main(int argc, char **argv) {
+
+	try {
+	std::string name1 = "COM3";
+
+	SerialConfig::Ptr cfg = new SerialConfig(name1,
+			SerialConfig::BPS_19200,
+			SerialConfig::DATA_BITS_EIGHT,
+			'N',
+			SerialConfig::START_ONE,
+			SerialConfig::STOP_ONE,
+			SerialConfig::FLOW_CTRL_HARDWARE,
+					0,
+					0,
+					true, //use eof
+					SerialConfig::DEFAULT_EOF, //default eof
+					32, //buffer size
+					300 //timeout
+			);
+
+	//cfg->setBufferSize(8);
+
+	SerialChannel com1(cfg);
+	for (int i = 0; i < 5; i++){
+		try {
+			//com1.write("ahoj!");
+			send(com1, CMD_CONNECT);
+		} catch (Poco::Exception & e){
+			std::cerr << "err: " << e.displayText() << std::endl;
+		}
+	}
+
+
+
+	SerialInputStream sis(com1);
+
+	Poco::BinaryReader br(sis);
+
+	//for (int a = 0; a < 11; a++){
+		std::cout << "msg " <<  std::endl;
+		for (int i = 0; i < 11; i++){
+			unsigned char val;
+			sis >> val;
+			std::cout << "val " << (int)val << std::endl;
+		}
+	//}
+
+	} catch (Poco::Exception & e){
+		std::cerr << "err: " << e.displayText() << std::endl;
+	}
+
+	return 0;
+
+}
+

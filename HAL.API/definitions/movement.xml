@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<node name="HAL.API">
+  
+  <interface name="HAL.API.Movement">
+   
+    <method name="Move">
+      <arg type="d" name="speedLeft" direction="in"/>
+      <arg type="d" name="speedRight" direction="in"/>
+    </method>
+    
+    <method name="Stop">
+    </method>
+    
+    <method name="SetPosition">
+    	<arg type="x" name="posLeft" direction="in"/>
+    	<arg type="x" name="posRight" direction="in"/>
+    </method>
+    
+    <method name="GetStatus">
+      <arg type="d" name="speedLeft" direction="out"/>
+      <arg type="d" name="speedRight" direction="out"/>
+      <arg type="x" name="posLeft" direction="out"/>
+      <arg type="x" name="posRight" direction="out"/>
+    </method>
+    
+    <signal name="StatusChanged">
+      <arg type="d" name="speedLeft" />
+      <arg type="d" name="speedRight" />
+      <arg type="x" name="posLeft" />
+      <arg type="x" name="posRight" />
+    </signal>
+   
+  </interface>
+</node>

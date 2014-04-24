@@ -10,7 +10,7 @@
 #include <Poco/Types.h>
 #include <Poco/SharedPtr.h>
 #include "TBS/Robo/RoboCan/Communicaton/IChannel.h"
-#include "TBS/Thread/NotificationWorker.h"
+#include "TBS/NotificationWorker.h"
 
 #include "TBS/Robo/INode.h"
 

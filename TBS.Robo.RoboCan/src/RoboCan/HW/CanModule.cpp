@@ -32,23 +32,23 @@ namespace TBS {
 				ModuleStatusTask::Ptr CanModule::taskGetStatus() const {
 					return new ModuleStatusTask(this->getInternalModule());
 				}
-				ModuleCommandTask::Ptr CanModule::taskGetError() const {
-					return new ModuleCommandTask(this->getInternalModule(), this->getInternalModule().cmdGetError());
+				ModuleCommandAnyAckTask::Ptr CanModule::taskGetError() const {
+					return new ModuleCommandAnyAckTask(this->getInternalModule(), this->getInternalModule().cmdGetError());
 				}
 				ModuleDataTask::Ptr CanModule::taskGetData() const {
 					return new ModuleDataTask(this->getInternalModule());
 				}
-				ModuleCommandTask::Ptr CanModule::taskStart() const {
-					return new ModuleCommandTask(this->getInternalModule(), this->getInternalModule().cmdStart());
+				ModuleCommandAnyAckTask::Ptr CanModule::taskStart() const {
+					return new ModuleCommandAnyAckTask(this->getInternalModule(), this->getInternalModule().cmdStart());
 				}
-				ModuleCommandTask::Ptr CanModule::taskHalt() const {
-					return new ModuleCommandTask(this->getInternalModule(), this->getInternalModule().cmdHalt());
+				ModuleCommandAnyAckTask::Ptr CanModule::taskHalt() const {
+					return new ModuleCommandAnyAckTask(this->getInternalModule(), this->getInternalModule().cmdHalt());
 				}
-				ModuleCommandTask::Ptr CanModule::taskRestart() const {
-					return new ModuleCommandTask(this->getInternalModule(), this->getInternalModule().cmdRestart());
+				ModuleCommandAnyAckTask::Ptr CanModule::taskRestart() const {
+					return new ModuleCommandAnyAckTask(this->getInternalModule(), this->getInternalModule().cmdRestart());
 				}
-				ModuleCommandTask::Ptr CanModule::taskStop() const {
-					return new ModuleCommandTask(this->getInternalModule(), this->getInternalModule().cmdStop());
+				ModuleCommandAnyAckTask::Ptr CanModule::taskStop() const {
+					return new ModuleCommandAnyAckTask(this->getInternalModule(), this->getInternalModule().cmdStop());
 				}
 
 			/*

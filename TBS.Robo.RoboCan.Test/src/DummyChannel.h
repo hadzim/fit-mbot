@@ -8,7 +8,7 @@
 #ifndef DUMMYCHANNEL_H_
 #define DUMMYCHANNEL_H_
 #include "TBS/Robo/RoboCan/Communicaton/IChannel.h"
-#include "TBS/Thread/NotificationBasedRunnable.h"
+#include "TBS/NotificationBasedRunnable.h"
 #include "TBS/Robo/RoboCan/Communicaton/CanMessage.h"
 
 

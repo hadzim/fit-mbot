@@ -24,14 +24,15 @@ namespace TBS {
 				}
 
 				void ModuleDataTask::packetRetrieved(CanMessage & m) {
-					std::cout << "ModuleDataTask::packate retrieved" << std::endl;
+
 					if (m.canID != this->moduleCanId) {
 						return;
 					}
+					std::cout << "DATA packet retrieved" << std::endl;
 					try {
 						RoboCanMessage message(m);
 						if (AckMessage::isAckFail(message.getCmd())) {
-							LOG_NOTICE << "Module " << this->getName() << " data ack failed" << LOG_END;
+							LNOTICE("Can") << "Module " << this->getName() << " data ack failed" << LE;
 							this->failed("AckFail"); //setDone(this->msg.getReference());
 							return;
 						}
@@ -39,19 +40,19 @@ namespace TBS {
 						if (DataMessage::isData(message.getCmd())) {
 							try {
 								if (msg.isEmpty()) {
-									LOG_TRACE << "Module " << this->getName() << " first data message" << LOG_END;
+									LTRACE("Can") << "Module " << this->getName() << " first data message" << LE;
 									msg.set(DataMessage(message));
 								} else {
-									LOG_TRACE << "Module " << this->getName() << " next data message" << LOG_END;
+									LTRACE("Can") << "Module " << this->getName() << " next data message" << LE;
 									msg.getReference().addMessage(message);
 								}
 
 								if (msg.getReference().isComplete()) {
-									LOG_TRACE << "Module " << this->getName() << " complete data message" << LOG_END;
+									LTRACE("Can") << "Module " << this->getName() << " complete data message" << LE;
 									this->setDone(this->msg.getReference());
 								}
 							} catch (Poco::Exception & e) {
-								LOG_WARNING << "Module " << this->getName() << " data message failed " << e.message() << LOG_END;
+								LWARNING("Can") << "Module " << this->getName() << " data message failed " << e.message() << LE;
 								this->failed(e.message());
 							}
 						}

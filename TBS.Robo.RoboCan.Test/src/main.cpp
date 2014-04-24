@@ -5,7 +5,7 @@
  *      Author: JV
  */
 
-#include "TBS/Thread/NotificationWorker.h"
+#include "TBS/NotificationWorker.h"
 #include "TBS/Robo/RoboCan/HW/CanNode.h"
 #include "TBS/Robo/RoboCan/HW/CanModule.h"
 #include "DummyChannel.h"

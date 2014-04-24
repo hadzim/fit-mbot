@@ -39,10 +39,10 @@ namespace TBS {
 
 						ModuleCommandTask::Ptr taskGetError() const;
 
-						ModuleCommandTask::Ptr taskStart() const;
-						ModuleCommandTask::Ptr taskHalt() const;
-						ModuleCommandTask::Ptr taskRestart() const;
-						ModuleCommandTask::Ptr taskStop() const;
+						ModuleCommandAnyAckTask::Ptr taskStart() const;
+						ModuleCommandAnyAckTask::Ptr taskHalt() const;
+						ModuleCommandAnyAckTask::Ptr taskRestart() const;
+						ModuleCommandAnyAckTask::Ptr taskStop() const;
 					protected:
 
 						const InternalCanModule & getInternalModule() const;

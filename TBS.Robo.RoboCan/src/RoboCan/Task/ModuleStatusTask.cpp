@@ -22,14 +22,15 @@ namespace TBS {
 				}
 
 				void ModuleStatusTask::packetRetrieved(CanMessage & m) {
-					std::cout << "ModuleStatusTask::packate retrieved" << std::endl;
+
 					if (m.canID != this->moduleCanId) {
 						return;
 					}
+					std::cout << "STATUS packet retrieved" << std::endl;
 					try {
 						RoboCanMessage message(m);
 						StatusMessage s(message);
-						LOG_TRACE << "Module " << this->getName() << " status retrieved " << s.toString() << LOG_END;
+						LTRACE("Can") << "Module " << this->getName() << " status retrieved " << s.toString() << LOG_END;
 
 						this->setDone(s);
 					} catch (...) {
