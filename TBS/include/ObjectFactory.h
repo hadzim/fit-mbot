@@ -2,6 +2,7 @@
 #define OBJF
 
 #include <map>
+#include <cstddef> // because of NULL definition
 
 template<class AbstractProduct, typename IdentifierType>
 class ObjectFactory {

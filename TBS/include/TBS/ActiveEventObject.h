@@ -8,6 +8,8 @@
 #ifndef ACTIVEEVENTOBJECT_H_
 #define ACTIVEEVENTOBJECT_H_
 
+#include "TBS/TBS.h"
+
 #include <Poco/BasicEvent.h>
 #include <Poco/Delegate.h>
 
@@ -17,7 +19,7 @@ namespace TBS {
 		Passivating = 0, Activating = 1
 	};
 
-	class ActiveEventObject {
+	class TBS_API ActiveEventObject {
 
 		public:
 			ActiveEventObject();
@@ -54,5 +56,4 @@ namespace TBS {
 	};
 
 }
-
 #endif /* ACTIVEOBJECT_H_ */

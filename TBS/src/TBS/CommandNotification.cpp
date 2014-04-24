@@ -5,7 +5,7 @@
  *      Author: root
  */
 
-#include "TBS/Thread/CommandNotification.h"
+#include "TBS/CommandNotification.h"
 #include <iostream>
 
 namespace TBS {

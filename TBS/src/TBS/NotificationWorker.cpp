@@ -5,12 +5,11 @@
  *      Author: Honza
  */
 
-#include "TBS/Thread/NotificationWorker.h"
+#include "TBS/NotificationWorker.h"
 
 #include <iostream>
-#include <unistd.h>
 #include "Poco/AbstractObserver.h"
-#include "TBS/Thread/CommandNotification.h"
+#include "TBS/CommandNotification.h"
 #include "Poco/Exception.h"
 
 namespace TBS {

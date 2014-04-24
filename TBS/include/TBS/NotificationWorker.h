@@ -11,7 +11,7 @@
 #include <Poco/Notification.h>
 #include <Poco/NotificationCenter.h>
 #include <Poco/SharedPtr.h>
-#include "TBS/Thread/NotificationBasedRunnable.h"
+#include "TBS/NotificationBasedRunnable.h"
 #include <Poco/NObserver.h>
 #include <list>
 
@@ -19,7 +19,7 @@
 namespace TBS {
 
 
-		class NotificationWorker: public NotificationBasedRunnable {
+	 class TBS_API NotificationWorker: public NotificationBasedRunnable {
 
 			public:
 
@@ -42,7 +42,7 @@ namespace TBS {
 				std::string name;
 		};
 
-		class NotificationObserver {
+	 class TBS_API NotificationObserver {
 
 			public:
 				NotificationObserver();
@@ -63,7 +63,7 @@ namespace TBS {
 				NotificationWorker::Ptr nw;
 		};
 
-		class NotificationObservers {
+	 class TBS_API NotificationObservers {
 				typedef std::list<Poco::AbstractObserver * > Observers;
 			public:
 

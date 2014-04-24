@@ -9,14 +9,14 @@
 #define NewDEVICE_TASK_H_
 #include "TBS/ActiveEventObject.h"
 #include <Poco/SharedPtr.h>
-#include "TBS/Thread/NotificationWorker.h"
-#include "TBS/Thread/OutputNotification.h"
-#include "TBS/Thread/CommandNotification.h"
+#include "TBS/NotificationWorker.h"
+#include "TBS/OutputNotification.h"
+#include "TBS/CommandNotification.h"
 #include <memory>
 
 namespace TBS {
 	namespace Task {
-		class Task: protected ActiveEventObject {
+		class TBS_API Task: protected ActiveEventObject {
 			public:
 				struct TaskFinishedStatus {
 						enum StatusType {

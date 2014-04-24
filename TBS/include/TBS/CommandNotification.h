@@ -11,11 +11,11 @@
 #include <Poco/Notification.h>
 #include "TBS/Command.h"
 #include "Poco/Event.h"
-#include "TBS/Thread/NotificationWorker.h"
+#include "TBS/NotificationWorker.h"
 
 namespace TBS {
 
-		class  CommandNotification: public Poco::Notification {
+	 class TBS_API CommandNotification: public Poco::Notification {
 
 			public:
 
@@ -39,7 +39,7 @@ namespace TBS {
 
 		};
 
-		void __tseriesCmdExec(NotificationWorker & nw, ICommand::Ptr command, bool alwaysEnque, bool wait);
+		void TBS_API __tseriesCmdExec(NotificationWorker & nw, ICommand::Ptr command, bool alwaysEnque, bool wait);
 
 		template<bool AlwaysEnque, bool Wait>
 		class CommandExecutor {

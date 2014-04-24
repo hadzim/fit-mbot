@@ -9,10 +9,10 @@
 #define MODULECOMMAND_H_
 #include <Poco/SharedPtr.h>
 #include <iostream>
-
+#include "TBS/TBS.h"
 namespace TBS {
 
-class ICommand{
+ class TBS_API ICommand{
 	public:
 
 		typedef Poco::SharedPtr <ICommand> Ptr;

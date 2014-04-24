@@ -5,10 +5,9 @@
  *      Author: Honza
  */
 
-#include "TBS/Thread/OutputNotification.h"
+#include "TBS/OutputNotification.h"
 
 #include <iostream>
-#include <unistd.h>
 
 
 namespace TBS {

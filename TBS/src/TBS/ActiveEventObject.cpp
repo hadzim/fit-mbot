@@ -1,4 +1,5 @@
 #include "TBS/ActiveEventObject.h"
+#include "TBS/Log.h"
 namespace TBS {
 
 	ActiveEventObject::ActiveEventObject() :
@@ -15,22 +16,25 @@ namespace TBS {
 	}
 
 	void ActiveEventObject::activate() {
+		//LOG_STREAM_DEBUG << "active lock" << LOG_STREAM_END
 		{
 
 			Activation act = Activating;
 
 			Poco::Mutex::ScopedLock(this->mutex);
 			if (!this->active) {
-				this->OuterActivation(this, act);
-				this->BeforeActivate(this, this->active);
+					LOG_STREAM_DEBUG<< "before active event " << (this->BeforeActivate.empty() ? "none" : "some") << LOG_STREAM_END
+					this->OuterActivation(this, act);
+					this->BeforeActivate(this, this->active);
 
-				this->active = true;
-				this->AfterActivate(this, this->active);
-				this->InnerActivation(this, act);
+					this->active = true;
+					LOG_STREAM_DEBUG << "after active event " << (this->AfterActivate.empty() ? "none" : "some") << LOG_STREAM_END
+					this->AfterActivate(this, this->active);
+					this->InnerActivation(this, act);
+				}
 			}
+			//LOG_STREAM_DEBUG << "after active lock" << LOG_STREAM_END
 		}
-	}
-
 	void ActiveEventObject::passivate() {
 		Activation act = Passivating;
 		Poco::Mutex::ScopedLock(this->mutex);
