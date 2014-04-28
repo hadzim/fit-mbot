@@ -19,14 +19,14 @@ namespace DBus {
 
 	}
 
-	bool ConnectionManager::isDeleted(int ptr) {
+	bool ConnectionManager::isDeleted(PtrType ptr) {
 		Poco::Mutex::ScopedLock l(m);
 		if (deleted.find(ptr) != deleted.end()){
 			return deleted[ptr];
 		}
 		return false;
 	}
-	void ConnectionManager::setAsDeleted(int ptr) {
+	void ConnectionManager::setAsDeleted(PtrType ptr) {
 		Poco::Mutex::ScopedLock l(m);
 		if (deleted.find(ptr) != deleted.end()){
 			deleted[ptr] = true;
