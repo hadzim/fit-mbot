@@ -66,7 +66,7 @@ Connection::Private::Private(DBusBusType type)
 
 Connection::Private::~Private()
 {
-  ConnectionManager::instance().setAsDeleted((int)this);
+  ConnectionManager::instance().setAsDeleted((ConnectionManager::PtrType)this);
   debug_log("terminating connection 0x%08x", conn);
 
   detach_server();

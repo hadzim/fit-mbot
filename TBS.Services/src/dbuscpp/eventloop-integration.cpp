@@ -189,7 +189,7 @@ Watch *BusDispatcher::add_watch(Watch::Internal *wi)
 
   BusWatch *bw = new BusWatch(wi, this);
 
-  std::cout << "add watch " << (int)bw << " internal " << (int)wi << std::endl;
+  //std::cout << "add watch " << (int)bw << " internal " << (int)wi << std::endl;
 
   bw->ready = new Callback<BusDispatcher, void, DefaultWatch &>(this, &BusDispatcher::watch_ready);
   bw->data(bw);
@@ -205,7 +205,7 @@ void BusDispatcher::rem_watch(Watch *w)
 
 	TBS::dumpBacktrace("rem", "dbus", true);
 
-	std::cout << "rem watch " << (int)w << std::endl;
+	//std::cout << "rem watch " << (int)w << std::endl;
 
   debug_log("removed watch %p", w);
 
