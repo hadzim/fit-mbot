@@ -13,14 +13,13 @@
 #include "Poco/Runnable.h"
 #include <dbus-c++/eventloop-integration.h>
 #include "Poco/Thread.h"
-#include "TBS/TBSServices.h"
 
 namespace TBS {
 	namespace Services {
 
 
 
-		class TBSSERV_API DBusCommChannelHolder : public IStoppableCommChannelHolder, public Poco::Runnable {
+		class DBusCommChannelHolder : public IStoppableCommChannelHolder, public Poco::Runnable {
 			public:
 				DBusCommChannelHolder(std::string name);
 				virtual ~DBusCommChannelHolder();

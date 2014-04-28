@@ -8,7 +8,7 @@
 #ifndef _NO_DBUS
 
 #include "dbus-c++/connection.h"
-#include "dbus-c++/dispatcher.h"
+#include "dbus-c++/eventloop.h"
 #include "dbus-c++/eventloop-integration.h"
 #include "TBS/Services/DBus/ConnectionWrapper.h"
 
@@ -27,6 +27,7 @@ namespace TBS {
 			DBus::Connection ConnectionWrapper::SessionBus(DBus::Dispatcher & disp) {
 				Poco::Mutex::ScopedLock l(m);
 				DBus::default_dispatcher = &disp;
+				std::cout << "session bus" << std::endl;
 				return DBus::Connection::SessionBus();
 			}
 

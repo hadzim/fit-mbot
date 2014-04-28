@@ -12,12 +12,10 @@
 #include <memory>
 #include "TBS/Services/Services.h"
 #include <Poco/Mutex.h>
-#include "TBS/TBSServices.h"
-
 namespace TBS {
 	namespace Services {
 
-	class TBSSERV_API DBusCommChannelProvider {
+		class DBusCommChannelProvider {
 			public:
 				static IStoppableCommChannelHolder::Ptr createNewCommChannel(std::string name);
 

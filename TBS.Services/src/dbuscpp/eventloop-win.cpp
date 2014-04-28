@@ -1,3 +1,4 @@
+#ifdef __WIN32__
 #ifndef _NO_DBUS
 /*
  *
@@ -30,25 +31,27 @@
 #include <dbus-c++/debug.h>
 
 //#include <sys/poll.h>
-//#include <sys/time.h>
+#include <sys/time.h>
 
 #include <dbus/dbus.h>
 #include "Poco/Thread.h"
-#include "Poco/DateTime.h"
+#include "Poco/Net/Context.h"
 
 #include "winenum.h"
-#include <Poco/Net/HTTPClientSession.h>
 
 using namespace DBus;
 using namespace std;
 
-
+static double millis(timeval tv) {
+	return (tv.tv_sec * 1000.0 + tv.tv_usec / 1000.0);
+}
 
 DefaultTimeout::DefaultTimeout(int interval, bool repeat, DefaultMainLoop *ed) :
 		_enabled(true), _interval(interval), _repeat(repeat), _expiration(0), _data(0), _disp(ed) {
-	Poco::Timestamp now;
-	long ll = now.elapsed() / 1000;
-	_expiration = ll + interval;
+	timeval now;
+	gettimeofday(&now, NULL);
+
+	_expiration = millis(now) + interval;
 
 	_disp->_mutex_t.lock();
 	_disp->_timeouts.push_back(this);
@@ -64,12 +67,14 @@ DefaultTimeout::~DefaultTimeout() {
 DefaultWatch::DefaultWatch(int fd, int flags, DefaultMainLoop *ed) :
 		_enabled(true), _fd(fd), _flags(flags), _state(0), _data(0), _disp(ed) {
 	_disp->_mutex_w.lock();
+	std::cout << "default watch add " << std::endl;
 	_disp->_watches.push_back(this);
 	_disp->_mutex_w.unlock();
 }
 
 DefaultWatch::~DefaultWatch() {
 	_disp->_mutex_w.lock();
+	std::cout << "default watch removed " << std::endl;
 	_disp->_watches.remove(this);
 	_disp->_mutex_w.unlock();
 }
@@ -326,9 +331,10 @@ void DefaultMainLoop::dispatch() {
 
 //	Poco::Thread::sleep(100);
 
-	Poco::Timestamp now;
-	Poco::Timestamp::TimeDiff el = now.elapsed() / 1000;
-	double now_millis = el;
+	timeval now;
+	gettimeofday(&now, NULL);
+
+	double now_millis = millis(now);
 
 	{
 		Poco::Mutex::ScopedLock l(mutexT);
@@ -498,4 +504,5 @@ void DefaultMainLoop::dispatch() {
  _mutex_w.unlock();
  */
 
+#endif
 #endif

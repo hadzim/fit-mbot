@@ -13,6 +13,7 @@
 #include "HAL/API/MovementSvc_DBus.h"
 #include "Virtual/VirtualHALFactory.h"
 #include "Real/HALFactory.h"
+#include "TBS/Log.h"
 
 namespace HAL {
 
@@ -65,6 +66,8 @@ int HALService::main(const std::vector<std::string>& args) {
 	if (help){
 		return EXIT_OK;
 	}
+
+	TBS::initLogs("hal", 6);
 
 	std::cout << "-----------" << std::endl;
 	std::cout << "HAL Service" << std::endl;

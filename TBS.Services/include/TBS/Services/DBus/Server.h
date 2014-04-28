@@ -17,7 +17,6 @@
 #include "TBS/Services/Services.h"
 #include "TBS/Services/DBus/DBusCommChannelHolder.h"
 #include <iostream>
-#include "TBS/Log.h"
 namespace TBS {
 		namespace Services {
 
@@ -48,11 +47,13 @@ namespace TBS {
 					}
 					virtual ~DBusServerImpl() {
 						try {
+							std::cout << "dbus DBusServerImpl deleted0" << std::endl;
 							connection.disconnect();
+							std::cout << "dbus DBusServerImpl deleted1" << std::endl;
 							serverObj = NULL;
-
+							std::cout << "dbus DBusServerImpl deleted2" << std::endl;
 						} catch (::DBus::Error & e){
-							LERROR("DBUS") << "DBusServerImpl destructor exc: " << e.message() << LE;
+							std::cout << "dbus DBusServerImpl exc: " << e.message() << std::endl;
 						}
 
 					}

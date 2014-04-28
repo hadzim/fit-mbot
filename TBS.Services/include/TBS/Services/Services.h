@@ -10,19 +10,18 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Exception.h>
 #include <vector>
-#include "TBS/TBSServices.h"
 namespace TBS {
 	namespace Services {
 
 		typedef std::vector <unsigned char> Binary;
 
-		class TBSSERV_API ICommChannelHolder {
+		class ICommChannelHolder {
 			public:
 				typedef Poco::SharedPtr <ICommChannelHolder> Ptr;
 				virtual ~ICommChannelHolder();
 		};
 
-		class TBSSERV_API IStoppableCommChannelHolder : public ICommChannelHolder {
+		class IStoppableCommChannelHolder : public ICommChannelHolder {
 			public:
 				typedef Poco::SharedPtr <IStoppableCommChannelHolder> Ptr;
 				virtual ~IStoppableCommChannelHolder();
@@ -33,17 +32,18 @@ namespace TBS {
 		};
 
 
-		class TBSSERV_API IServer {
+		class IServer {
 			public:
 				typedef Poco::SharedPtr<IServer> Ptr;
 
 				virtual ~IServer();
 		};
 
+		#define APIMACRO
 
-		POCO_DECLARE_EXCEPTION(TBSSERV_API, ServiceException, Poco::Exception);
-		POCO_DECLARE_EXCEPTION(TBSSERV_API, RuntimeServiceException, ServiceException);
-		POCO_DECLARE_EXCEPTION(TBSSERV_API, ChannelServiceException, ServiceException);
+		POCO_DECLARE_EXCEPTION(APIMACRO, ServiceException, Poco::Exception);
+		POCO_DECLARE_EXCEPTION(APIMACRO, RuntimeServiceException, ServiceException);
+		POCO_DECLARE_EXCEPTION(APIMACRO, ChannelServiceException, ServiceException);
 
 	} // namespace Services
 

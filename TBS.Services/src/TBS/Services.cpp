@@ -12,7 +12,7 @@
 #include <iostream>
 
 namespace TBS {
-	namespace Services  {
+	namespace Services {
 		ICommChannelHolder::~ICommChannelHolder() {
 		}
 

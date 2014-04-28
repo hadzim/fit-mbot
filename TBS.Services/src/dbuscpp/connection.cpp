@@ -46,7 +46,7 @@ using namespace DBus;
 Connection::Private::Private(DBusConnection *c, Server::Private *s)
   : conn(c) , dispatcher(NULL), server(s)
 {
-	 ; //debug_log("construct on %p", c);
+	 debug_log("construct on %p", c);
   init();
 }
 
@@ -60,14 +60,14 @@ Connection::Private::Private(DBusBusType type)
 
   if (e) throw Error(e);
 
-  ; //debug_log("empty construct from %p", conn);
+  debug_log("empty construct from %p", conn);
   init();
 }
 
 Connection::Private::~Private()
 {
   ConnectionManager::instance().setAsDeleted((int)this);
-  ; //debug_log("terminating connection 0x%08x", conn);
+  debug_log("terminating connection 0x%08x", conn);
 
   detach_server();
 
@@ -77,7 +77,7 @@ Connection::Private::~Private()
 
     while (i != names.end())
     {
-      ; //debug_log("%s: releasing bus name %s", dbus_bus_get_unique_name(conn), i->c_str());
+      debug_log("%s: releasing bus name %s", dbus_bus_get_unique_name(conn), i->c_str());
       dbus_bus_release_name(conn, i->c_str(), NULL);
       ++i;
     }
@@ -88,15 +88,15 @@ Connection::Private::~Private()
 
 void Connection::Private::init()
 {
-  ; //debug_log("init1 %p", conn);
+  debug_log("init1 %p", conn);
 
   dbus_connection_ref(conn);
 
-  ; //debug_log("init2 %p", conn);
+  debug_log("init2 %p", conn);
 
   dbus_connection_ref(conn);	//todo: the library has to own another reference
 
-  ; //debug_log("init3 %p", conn);
+  debug_log("init3 %p", conn);
 
   disconn_filter = new Callback<Connection::Private, bool, const Message &>(
     this, &Connection::Private::disconn_filter_function
@@ -132,11 +132,11 @@ void Connection::Private::detach_server()
 bool Connection::Private::do_dispatch()
 {
 
-  ; //debug_log("dispatching on %p", conn);
+  debug_log("dispatching on %p", conn);
 
   if (!dbus_connection_get_is_connected(conn))
   {
-    ; //debug_log("connection terminated");
+    debug_log("connection terminated");
 
     detach_server();
 
@@ -153,16 +153,16 @@ void Connection::Private::dispatch_status_stub(DBusConnection *dc, DBusDispatchS
   switch (status)
   {
   case DBUS_DISPATCH_DATA_REMAINS:
-    ; //debug_log("some dispatching to do on %p", dc);
+    debug_log("some dispatching to do on %p", dc);
     p->dispatcher->queue_connection(p);
     break;
 
   case DBUS_DISPATCH_COMPLETE:
-    ; //debug_log("all dispatching done on %p", dc);
+    debug_log("all dispatching done on %p", dc);
     break;
 
   case DBUS_DISPATCH_NEED_MEMORY: //uh oh...
-    ; //debug_log("connection %p needs memory", dc);
+    debug_log("connection %p needs memory", dc);
     break;
   }
 }
@@ -182,7 +182,7 @@ bool Connection::Private::disconn_filter_function(const Message &msg)
 {
   if (msg.is_signal(DBUS_INTERFACE_LOCAL, "Disconnected"))
   {
-    ; //debug_log("%p disconnected by local bus", conn);
+    debug_log("%p disconnected by local bus", conn);
     dbus_connection_close(conn);
 
     return true;
@@ -230,7 +230,7 @@ Connection::Connection(const char *address, bool priv)
 
   setup(default_dispatcher);
 
-  ; //debug_log("connected to %s", address);
+  debug_log("connected to %s", address);
 }
 
 Connection::Connection(Connection::Private *p)
@@ -252,7 +252,7 @@ Connection::~Connection()
 
 Dispatcher *Connection::setup(Dispatcher *dispatcher)
 {
-  ; //debug_log("registering stubs for connection %p", _pvt->conn);
+  debug_log("registering stubs for connection %p", _pvt->conn);
 
   if (!dispatcher) dispatcher = default_dispatcher;
 
@@ -281,7 +281,6 @@ Dispatcher *Connection::setup(Dispatcher *dispatcher)
     dispatcher,
     0
   );
-
 
   return prev;
 }
@@ -339,7 +338,7 @@ void Connection::add_match(const char *rule)
 
   dbus_bus_add_match(_pvt->conn, rule, e);
 
-  ; //debug_log("%s: added match rule %s", unique_name(), rule);
+  debug_log("%s: added match rule %s", unique_name(), rule);
 
   if (e) throw Error(e);
 }
@@ -351,28 +350,28 @@ void Connection::remove_match(const char	*rule,
 
   dbus_bus_remove_match(_pvt->conn, rule, e);
 
-  ; //debug_log("%s: removed match rule %s", unique_name(), rule);
+  debug_log("%s: removed match rule %s", unique_name(), rule);
 
   if (e)
   {
     if (throw_on_error)
       throw Error(e);
     else
-      ; /*debug_log("DBus::Connection::remove_match: %s (%s).",
+      debug_log("DBus::Connection::remove_match: %s (%s).",
                 static_cast<DBusError *>(e)->message,
-                static_cast<DBusError *>(e)->name);*/
+                static_cast<DBusError *>(e)->name);
   }
 }
 
 bool Connection::add_filter(MessageSlot &s)
 {
-  ; //debug_log("%s: adding filter", unique_name());
+  debug_log("%s: adding filter", unique_name());
   return dbus_connection_add_filter(_pvt->conn, Private::message_filter_stub, &s, NULL);
 }
 
 void Connection::remove_filter(MessageSlot &s)
 {
-  ; //debug_log("%s: removing filter", unique_name());
+  debug_log("%s: removing filter", unique_name());
   dbus_connection_remove_filter(_pvt->conn, Private::message_filter_stub, &s);
 }
 
@@ -415,7 +414,7 @@ void Connection::request_name(const char *name, int flags)
 {
   InternalError e;
 
-  ; //debug_log("%s: registering bus name %s", unique_name(), name);
+  debug_log("%s: registering bus name %s", unique_name(), name);
 
   /*
    * TODO:

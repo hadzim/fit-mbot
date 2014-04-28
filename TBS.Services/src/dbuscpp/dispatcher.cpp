@@ -160,6 +160,7 @@ bool Dispatcher::has_something_to_dispatch() {
 
 void Dispatcher::dispatch_pending() {
 	while (true) {
+		//std::cout << "Pending cycle" << std::endl;
 		Connection::PrivatePList pending_queue_copy;
 		{
 			Poco::Mutex::ScopedLock l(mutex_p);
@@ -171,6 +172,7 @@ void Dispatcher::dispatch_pending() {
 
 		size_t copy_elem_num(pending_queue_copy.size());
 
+		//std::cout << "Pending cycle size before:" << copy_elem_num << std::endl;
 
 		dispatch_pending(pending_queue_copy);
 
@@ -185,6 +187,7 @@ void Dispatcher::dispatch_pending() {
 
 			_pending_queue.erase(from, to);
 
+			//std::cout << "Pending cycle size after:" << _pending_queue.size() << std::endl;
 
 		}
 	}
@@ -204,14 +207,14 @@ void Dispatcher::dispatch_pending(Connection::PrivatePList &toDispatch) {
 			++j;
 
 			if (ConnectionManager::instance().isDeleted((int) *i)) {
-				; //debug_log("skip because of deleted");
+				debug_log("skip because of deleted");
 				toDispatch.erase(i);
 			} else {
 
 				if ((*i)->do_dispatch())
 					toDispatch.erase(i);
 				else
-					; //debug_log("dispatch_pending_private: do_dispatch error");
+					debug_log("dispatch_pending_private: do_dispatch error");
 			}
 			i = j;
 		}
@@ -222,7 +225,7 @@ void DBus::_init_threading() {
 #ifdef DBUS_HAS_THREADS_INIT_DEFAULT
 	dbus_threads_init_default();
 #else
-	; //debug_log("Thread support is not enabled! Your D-Bus version is too old!");
+	debug_log("Thread support is not enabled! Your D-Bus version is too old!");
 #endif//DBUS_HAS_THREADS_INIT_DEFAULT
 }
 

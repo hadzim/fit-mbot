@@ -33,7 +33,7 @@ namespace TBS {
 			}
 
 			bool dbusinit(){
-				//DBus::debug_log = hdbg;
+				DBus::debug_log = hdbg;
 				return true;
 			}
 			//bool tmpdbusval = dbusinit();

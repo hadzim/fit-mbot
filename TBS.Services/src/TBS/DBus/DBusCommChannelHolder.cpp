@@ -21,22 +21,22 @@ namespace TBS {
 		}
 
 		DBusCommChannelHolder::~DBusCommChannelHolder() {
-			LTRACE("DBUS") << "dbus destuct entered" << LE;
+			std::cout << "dbus destuct entered" << std::endl;
 			this->stop();
-			LTRACE("DBUS") << "dbus destuct after stop" << LE;
+			std::cout << "dbus destuct after stop" << std::endl;
 		}
 
 		void DBusCommChannelHolder::start() {
-			LTRACE("DBUS") << "dbus thread started" << LE;
+			std::cout << "dbus thread started" << std::endl;
 			t.start(*this);
 			running = true;
 		}
 
 		void DBusCommChannelHolder::stop() {
-			LTRACE("DBUS") << "dbus thread stop" << LE;
+			std::cout << "dbus thread stop" << std::endl;
 			running = false;
 			dispatcher_.leave();
-			LTRACE("DBUS") << "dbus thread stop done" << LE;
+			std::cout << "dbus thread stop done" << std::endl;
 		}
 
 		bool DBusCommChannelHolder::isRunning() {
@@ -45,19 +45,19 @@ namespace TBS {
 
 		void DBusCommChannelHolder::run() {
 			try {
-				LTRACE("DBUS") << "dbus thread started BG" << LE;
+				TBS::threadDebug();
+				std::cout << "dbus thread started BG" << std::endl;
 				dispatcher_.enter();
-				LTRACE("DBUS") << "dbus thread finished BG" << LE;
 			} catch (::DBus::Error & e){
-				LERROR("DBUS") << "dbus thread started exception: " << e.message() << LE;
+				std::cout << "dbus thread started exception: " << e.message() << std::endl;
 			}  catch (Poco::Exception & e){
-				LERROR("DBUS") << "dbus thread started exception: " << e.displayText() << LE;
+				std::cout << "dbus thread started exception: " << e.displayText() << std::endl;
 			} catch (std::exception & e){
-				LERROR("DBUS") << "dbus thread started exception: " << e.what() << LE;
+				std::cout << "dbus thread started exception: " << e.what() << std::endl;
 			}
 		}
 		::DBus::BusDispatcher & DBusCommChannelHolder::dispatcher(){
-			LTRACE("DBUS") << "get dispatcher" << LE;
+			std::cout << "get dispatcher" << std::endl;
 
 			return this->dispatcher_;
 		}

@@ -16,6 +16,7 @@ class VirtualMovement: public HAL::API::IMovement {
 public:
 	VirtualMovement() :
 			speedLeft(0.0), speedRight(0.0), posLeft(0), posRight(0) {
+		std::cout << "CONSTRUCT called" << std::endl;
 		this->updateSpeed(0, 0);
 	}
 
@@ -24,6 +25,7 @@ public:
 	}
 
 	virtual void Move(const double & speedLeft, const double & speedRight) {
+		std::cout << "MOVE called" << std::endl;
 		this->updateSpeed(speedLeft, speedRight);
 	}
 
@@ -64,11 +66,11 @@ private:
 			a.posLeft = this->posLeft;
 			a.posRight = this->posRight;
 
-			std::cout << "\rSpeed: (" << left << " " << right
-					<< ")                         ";
+			std::cout << "Speed: (" << left << " " << right
+					<< ")" << std::endl;
 		}
 
-		this->StatusChanged.notify(this, a);
+		//this->StatusChanged.notify(this, a);
 	}
 private:
 	Poco::Mutex m;

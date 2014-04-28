@@ -32,11 +32,12 @@
 \n\
 \n\
 <namespaceStart>\
-       class Client {\n\
+       class GEN_SERVICE_API Client {\n\
 			public:\n\
 				typedef Poco::SharedPtr <Client> Ptr;\n\
 				\n\
 				Client(const TBS::Services::JsonClientChannel & ch);\n\
+				~Client();\n\
 				\n\
 				\n //methods \n\
 				<clients>\n\
@@ -47,10 +48,11 @@
 			};\n\
 			\n\
 			\n\
-		class Server {\n\
+		class GEN_SERVICE_API Server {\n\
 			public:\n\
 				typedef Poco::SharedPtr<Server> Ptr;\n\
 				Server(const TBS::Services::JsonServerChannel & ch);\n\
+				~Server();\n\
 				\n\
 				void start();\n\
 				void stop();\n\
@@ -80,6 +82,7 @@
 	   Client::Client(const TBS::Services::JsonClientChannel & ch) : \n\
 	       ch(ch){\n\
 	   }\n\
+	   Client::~Client(){}\n\
 	   <clientMethods>\n\
 	   \n\
 	   \n\
@@ -87,6 +90,7 @@
 	   	   channel(new <channel>(ch)){\n\
 		   \n\
 	    } \n\
+	    Server::~Server(){}\n\
 	    void Server::start(){ \n\
 	   	   channel.cast<<channel>>()->interface.StartListening();\n\
 	    } \n\
