@@ -31,3 +31,5 @@ VS*
 *.vcxproj
 *.vcproj
 *.vmsbuild
+*/bin/*
+BoostBuild/
