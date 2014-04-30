@@ -33,3 +33,5 @@ VS*
 *.vmsbuild
 */bin/*
 BoostBuild/
+cbuild/*
+*.cmake

@@ -203,7 +203,7 @@ Watch *BusDispatcher::add_watch(Watch::Internal *wi)
 void BusDispatcher::rem_watch(Watch *w)
 {
 
-	TBS::dumpBacktrace("rem", "dbus", true);
+	//TBS::dumpBacktrace("rem", "dbus", true);
 
 	//std::cout << "rem watch " << (int)w << std::endl;
 
