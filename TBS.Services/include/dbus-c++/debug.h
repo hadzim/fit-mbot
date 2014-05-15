@@ -32,9 +32,7 @@ namespace DBus
 
 typedef void (*LogFunction)(const char *format, ...);
 
-
-
-//DXXAPI LogFunction debug_log; // = &hdbg;
+extern DXXAPI LogFunction debug_log;
 
 } /* namespace DBus */
 

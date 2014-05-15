@@ -22,7 +22,7 @@ HALObserver::~HALObserver() {
 
 }
 
-void onSpeedChanged(HAL::API::IMovement::SpeedChangedArg & arg){
+void onSpeedChanged(HAL::API::IMovement::StatusChangedArg & arg){
 	std::cout << "Speed: (" << arg.speedLeft << " " << arg.speedRight << std::endl;
 
 }
@@ -39,9 +39,9 @@ int HALObserver::main(const std::vector<std::string>& args) {
 
 		{
 			HAL::API::DBus::Client::Ptr client = new HAL::API::DBus::Client();
-			client->Movement().SpeedChanged += Poco::delegate(&onSpeedChanged);
+			client->Movement().StatusChanged += Poco::delegate(&onSpeedChanged);
 			waitForTerminationRequest();
-			client->Movement().SpeedChanged -= Poco::delegate(&onSpeedChanged);
+			client->Movement().StatusChanged -= Poco::delegate(&onSpeedChanged);
 		}
 	}
 

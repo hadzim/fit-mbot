@@ -1,12 +1,12 @@
 
 import tbs ;
 
-project TSeries_Services 
+project HAL_API 
 	:
 		requirements
 		<include>include
 		<include>src
-	    <library>$(TBS)/TBS_Services//TBS@Services
+	    <library>$(TBS)/TBS.Services//TBS@Services
 	    <device>tpro:<library>$(TBS)//dbus-1
 	    <device>lin:<library>$(TBS)//dbus-1
 	    <device>linpc:<library>$(TBS)//dbus-1
@@ -24,7 +24,7 @@ project TSeries_Services
 
 path-constant proj-dir : . ;
 tbs.obj-build common-sources : $(proj-dir) : [ tbs.glob-tree $(proj-dir)/src : *.cpp ] ; 
-lib TSeries@Services : common-sources : <tag>@tbs.dot-from-at ;
+lib HAL@API : common-sources : <tag>@tbs.dot-from-at ;
 
-tbs.link-test TSeries@Services ;
-tbs.installation : TSeries@Services : lib ;
+tbs.link-test HAL@API ;
+tbs.installation : HAL@API : lib ;

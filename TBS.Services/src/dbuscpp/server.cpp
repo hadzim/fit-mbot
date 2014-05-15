@@ -55,7 +55,7 @@ void Server::Private::on_new_conn_cb(DBusServer *server, DBusConnection *conn, v
 
   s->on_new_connection(nc);
 
-  ; //debug_log("incoming connection 0x%08x", conn);
+  debug_log("incoming connection 0x%08x", conn);
 }
 
 Server::Server(const char *address)
@@ -65,7 +65,7 @@ Server::Server(const char *address)
 
   if (e) throw Error(e);
 
-  ; //debug_log("server 0x%08x listening on %s", server, address);
+  debug_log("server 0x%08x listening on %s", server, address);
 
   _pvt = new Private(server);
 
@@ -87,7 +87,7 @@ Server::~Server()
 
 Dispatcher *Server::setup(Dispatcher *dispatcher)
 {
-  ; //debug_log("registering stubs for server %p", _pvt->server);
+  debug_log("registering stubs for server %p", _pvt->server);
 
   Dispatcher *prev = _pvt->dispatcher;
 

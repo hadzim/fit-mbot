@@ -1,3 +1,4 @@
+#ifndef __WIN32__
 #ifndef _NO_DBUS
 /*
  *
@@ -86,4 +87,5 @@ void Pipe::signal()
   // TODO: ignoring return of read/write generates warning; maybe relevant for eventloop work...
   ::write(_fd_write, '\0', 1);
 }
+#endif
 #endif

@@ -14,13 +14,13 @@
 #include "ConnectionWrapper.h"
 #include "dbus-c++/introspection.h"
 #include "dbus-c++/object.h"
-#include "TBS/TBSServices.h"
+
 
 
 namespace TBS {
 		namespace Services {
 
-			class TBSSERV_API CommunicationChannelHolder {
+			class CommunicationChannelHolder {
 				public:
 					CommunicationChannelHolder(ICommChannelHolder::Ptr ch) : ch(ch){
 					}

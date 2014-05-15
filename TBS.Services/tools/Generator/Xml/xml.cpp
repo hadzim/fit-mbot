@@ -59,7 +59,7 @@ Node::Node(const char *n, const char **a)
     {
       _attrs[a[i]] = a[i + 1];
 
-      //; //debug_log("xml:\t%s = %s", a[i], a[i+1]);
+      //debug_log("xml:\t%s = %s", a[i], a[i+1]);
     }
 }
 
@@ -259,7 +259,7 @@ void Document::Expat::start_element_handler(void *data, const XML_Char *name, co
 {
   Document *doc = (Document *)data;
 
-  //; //debug_log("xml:%d -> %s", doc->_depth, name);
+  //debug_log("xml:%d -> %s", doc->_depth, name);
 
   if (!doc->root)
   {
@@ -305,7 +305,7 @@ void Document::Expat::end_element_handler(void *data, const XML_Char *name)
 {
   Document *doc = (Document *)data;
 
-  //; //debug_log("xml:%d <- %s", doc->_depth, name);
+  //debug_log("xml:%d <- %s", doc->_depth, name);
 
   doc->_depth--;
 }

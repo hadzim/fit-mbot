@@ -10,19 +10,12 @@
 #ifndef CONNECTIONWRAPPER_H_
 #define CONNECTIONWRAPPER_H_
 #include <dbus-c++/connection.h>
-#include <dbus-c++/debug.h>
 #include <Poco/BasicEvent.h>
-#include "TBS/TBSServices.h"
-
-
-
-//DBus::debug_log = hdbg;
-
 
 namespace TBS {
 		namespace Services {
 
-			class TBSSERV_API ConnectionWrapper {
+			class ConnectionWrapper {
 				public:
 
 				  static DBus::Connection SystemBus(DBus::Dispatcher & disp);

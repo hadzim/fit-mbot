@@ -15,18 +15,22 @@ namespace DBus {
 
 	class ConnectionManager {
 		public:
+
+			typedef intptr_t PtrType;
+
 			ConnectionManager();
 			virtual ~ConnectionManager();
 
-			bool isDeleted(int ptr);
-			void setAsDeleted(int ptr);
+			bool isDeleted(PtrType ptr);
+			void setAsDeleted(PtrType ptr);
 
 			static ConnectionManager & instance();
+
 		private:
 			static Poco::Mutex globalm;
 			Poco::Mutex m;
-			typedef std::deque<int> DeletedQueue;
-			typedef std::map <int, bool> Deleted;
+			typedef std::deque<PtrType> DeletedQueue;
+			typedef std::map <PtrType, bool> Deleted;
 			DeletedQueue deletedQueue;
 			Deleted deleted;
 	};

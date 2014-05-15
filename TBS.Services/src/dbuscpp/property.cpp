@@ -51,7 +51,7 @@ Message PropertiesAdaptor::Get(const CallMessage &call)
 
   ri >> iface_name >> property_name;
 
-  ; //debug_log("requesting property %s on interface %s", property_name.c_str(), iface_name.c_str());
+  debug_log("requesting property %s on interface %s", property_name.c_str(), iface_name.c_str());
 
   InterfaceAdaptor *interface = (InterfaceAdaptor *) find_interface(iface_name);
 

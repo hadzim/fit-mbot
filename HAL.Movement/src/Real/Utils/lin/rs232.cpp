@@ -35,7 +35,7 @@
 
 
 #include "rs232.h"
-
+#include <iostream>
 
 
 #ifdef __linux__   /* Linux */
@@ -118,6 +118,8 @@ int RS232_OpenComport(int comport_number, int baudrate)
                    return(1);
                    break;
   }
+
+  std::cout << "opeing: " << comports[comport_number] << std::endl;
 
   Cport[comport_number] = open(comports[comport_number], O_RDWR | O_NOCTTY | O_NDELAY);
   if(Cport[comport_number]==-1)

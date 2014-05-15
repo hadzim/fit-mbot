@@ -21,9 +21,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
-#include "winenum.h"
-
+#include <unistd.h>
+#include "TBS/Log.h"
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -31,6 +30,7 @@
 /* Project */
 #include <dbus-c++/eventloop-integration.h>
 #include <dbus-c++/debug.h>
+#include <dbus-c++/pipe.h>
 
 /* DBus */
 #include <dbus/dbus.h>
@@ -38,7 +38,11 @@
 /* STD */
 #include <string.h>
 #include <cassert>
-
+#ifdef __WIN32__
+#include "winenum.h"
+#else
+#include <sys/poll.h>
+#endif
 #include <fcntl.h>
 
 using namespace DBus;
@@ -52,7 +56,7 @@ BusTimeout::BusTimeout(Timeout::Internal *ti, BusDispatcher *bd)
 
 void BusTimeout::toggle()
 {
-  ; //debug_log("timeout %p toggled (%s)", this, Timeout::enabled() ? "on" : "off");
+  debug_log("timeout %p toggled (%s)", this, Timeout::enabled() ? "on" : "off");
 
   DefaultTimeout::enabled(Timeout::enabled());
 }
@@ -73,7 +77,7 @@ BusWatch::BusWatch(Watch::Internal *wi, BusDispatcher *bd)
 
 void BusWatch::toggle()
 {
-  ; //debug_log("watch %p toggled (%s)", this, Watch::enabled() ? "on" : "off");
+  debug_log("watch %p toggled (%s)", this, Watch::enabled() ? "on" : "off");
 
   DefaultWatch::enabled(Watch::enabled());
 }
@@ -83,28 +87,31 @@ BusDispatcher::BusDispatcher() :
 {
   // pipe to create a new fd used to unlock a dispatcher at any
   // moment (used by leave function)
-  /*
-	int ret = pipe(_pipe);
+#ifndef __WIN32__
+  int ret = pipe(_pipe);
   if (ret == -1) throw Error("PipeError:errno", toString(errno).c_str());
 
   _fdunlock[0] = _pipe[0];
-  _fdunlock[1] = _pipe[1];*/
+  _fdunlock[1] = _pipe[1];
+#endif
 }
 
 void BusDispatcher::enter()
 {
-  ; //debug_log("entering dispatcher %p", this);
+  debug_log("entering dispatcher %p", this);
 
   _running = true;
 
   while (_running)
   {
     do_iteration();
-/*
+    /*
+    std::cout << "pipe iter" << std::endl;
     for (std::list <Pipe *>::iterator p_it = pipe_list.begin();
          p_it != pipe_list.end();
          ++p_it)
     {
+    	std::cout << "pipe iter in" << std::endl;
       Pipe *read_pipe = *p_it;
       char buffer[1024]; // TODO: should be max pipe size
       unsigned int nbytes = 0;
@@ -117,14 +124,22 @@ void BusDispatcher::enter()
     }*/
   }
 
-  ; //debug_log("leaving dispatcher %p", this);
+  debug_log("leaving dispatcher %p", this);
 }
 
 void BusDispatcher::leave()
 {
   _running = false;
+#ifndef __WIN32__
+  int ret = write(_fdunlock[1], "exit", strlen("exit"));
+  if (ret == -1) throw Error("WriteError:errno", toString(errno).c_str());
+
+  close(_fdunlock[1]);
+  close(_fdunlock[0]);
+#endif
 }
-/*
+
+#ifndef __WIN32__
 Pipe *BusDispatcher::add_pipe(void(*handler)(const void *data, void *buffer, unsigned int nbyte), const void *data)
 {
   Pipe *new_pipe = new Pipe(handler, data);
@@ -137,7 +152,8 @@ void BusDispatcher::del_pipe(Pipe *pipe)
 {
   pipe_list.remove(pipe);
   delete pipe;
-}*/
+}
+#endif
 
 void BusDispatcher::do_iteration()
 {
@@ -152,45 +168,55 @@ Timeout *BusDispatcher::add_timeout(Timeout::Internal *ti)
   bt->expired = new Callback<BusDispatcher, void, DefaultTimeout &>(this, &BusDispatcher::timeout_expired);
   bt->data(bt);
 
-  /* //debug_log("added timeout %p (%s) (%d millies)",
+  debug_log("added timeout %p (%s) (%d millies)",
             bt,
             ((Timeout *)bt)->enabled() ? "on" : "off",
             ((Timeout *)bt)->interval()
            );
-*/
+
   return bt;
 }
 
 void BusDispatcher::rem_timeout(Timeout *t)
 {
-  ; //debug_log("removed timeout %p", t);
+  debug_log("removed timeout %p", t);
 
   delete t;
 }
 
 Watch *BusDispatcher::add_watch(Watch::Internal *wi)
 {
+
   BusWatch *bw = new BusWatch(wi, this);
+
+  //std::cout << "add watch " << (int)bw << " internal " << (int)wi << std::endl;
 
   bw->ready = new Callback<BusDispatcher, void, DefaultWatch &>(this, &BusDispatcher::watch_ready);
   bw->data(bw);
-/*
-  ; //debug_log("added watch %p (%s) fd=%d flags=%d",
+
+  debug_log("added watch %p (%s) fd=%d flags=%d",
             bw, ((Watch *)bw)->enabled() ? "on" : "off", ((Watch *)bw)->descriptor(), ((Watch *)bw)->flags());
-*/
+
   return bw;
 }
 
 void BusDispatcher::rem_watch(Watch *w)
 {
-  ; //debug_log("removed watch %p", w);
+
+	//TBS::dumpBacktrace("rem", "dbus", true);
+
+	//std::cout << "rem watch " << (int)w << std::endl;
+
+  debug_log("removed watch %p", w);
+
+
 
   delete w;
 }
 
 void BusDispatcher::timeout_expired(DefaultTimeout &et)
 {
-  ; //debug_log("timeout %p expired", &et);
+  debug_log("timeout %p expired", &et);
 
   BusTimeout *timeout = reinterpret_cast<BusTimeout *>(et.data());
 
@@ -200,11 +226,11 @@ void BusDispatcher::timeout_expired(DefaultTimeout &et)
 void BusDispatcher::watch_ready(DefaultWatch &ew)
 {
   BusWatch *watch = reinterpret_cast<BusWatch *>(ew.data());
-/*
-  ; //debug_log("watch %p ready, flags=%d state=%d",
+
+  debug_log("watch %p ready, flags=%d state=%d",
             watch, ((Watch *)watch)->flags(), watch->state()
            );
-*/
+
   int flags = 0;
 
   if (watch->state() & POLLIN)

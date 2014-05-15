@@ -8,12 +8,13 @@
 #include <iostream>
 #include <Poco/NumberParser.h>
 #include "HAL/API/MovementSvc_DBus.h"
+#include "TBS/Log.h"
 
 int main(int argc, char **argv) {
 
 	try {
 		std::cout << "HAL Client Starts" << std::endl;
-
+		TBS::initLogs("hal.client", 6);
 		{
 			HAL::API::DBus::Client::Ptr client = new HAL::API::DBus::Client();
 			while (1){
@@ -27,6 +28,7 @@ int main(int argc, char **argv) {
 
 					double val1 = Poco::NumberParser::parseFloat(str);
 					double val2 = val1;
+					std::cout << "try move: " << val1 << std::endl;
 					client->Movement().Move(val1, val2);
 					std::cout << "Ok" << std::endl;
 				} catch (Poco::Exception & e){

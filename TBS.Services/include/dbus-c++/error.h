@@ -264,12 +264,7 @@ struct DXXAPI ErrorInvalidSignature : public Error
 {
   ErrorInvalidSignature(const char *message)
     : Error("org.freedesktop.DBus.Error.InvalidSignature", message)
-  {
-	  std::cout << "ffailed" << std::endl;
-	  int * a = NULL;
-	  int val = *a;
-	  std::cout << "ffailed" << std::endl;
-  }
+  {}
 };
 
 struct DXXAPI ErrorUnixProcessIdUnknown : public Error

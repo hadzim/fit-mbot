@@ -51,7 +51,7 @@ InterfaceAdaptor *AdaptorBase::find_interface(const std::string &name)
 InterfaceAdaptor::InterfaceAdaptor(const std::string &name)
   : Interface(name)
 {
-  ; //debug_log("adding interface %s", name.c_str());
+  debug_log("adding interface %s", name.c_str());
 
   _interfaces[name] = this;
 }
@@ -124,7 +124,7 @@ InterfaceProxy *ProxyBase::find_interface(const std::string &name)
 InterfaceProxy::InterfaceProxy(const std::string &name)
   : Interface(name)
 {
-  ; //debug_log("adding interface %s", name.c_str());
+  debug_log("adding interface %s", name.c_str());
 
   _interfaces[name] = this;
 }
@@ -133,15 +133,15 @@ bool InterfaceProxy::dispatch_signal(const SignalMessage &msg)
 {
   const char *name = msg.member();
 
-  ; //debug_log("dispatch name %s: \n", name);
+  debug_log("dispatch name %s: \n", name);
     for (SignalTable::const_iterator iii = _signals.begin(); iii != _signals.end(); iii++){
-  	  ; //debug_log("interfaces %s: \n", iii->first.c_str());
+  	  debug_log("interfaces %s: \n", iii->first.c_str());
     }
 
   SignalTable::iterator si = _signals.find(name);
   if (si != _signals.end())
   {
-	  ; //debug_log("receiver found in signal table");
+	  debug_log("receiver found in signal table");
     si->second.call(msg);
     // Here we always return false because there might be
     // another InterfaceProxy listening for the same signal.
@@ -151,7 +151,7 @@ bool InterfaceProxy::dispatch_signal(const SignalMessage &msg)
   }
   else
   {
-	  ; //debug_log("receiver not found");
+	  debug_log("receiver not found");
     return false;
   }
 }

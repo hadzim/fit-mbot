@@ -16,10 +16,10 @@ namespace TBS {
 	const Json::Value& JsonValueGetter::get(const std::string& name, Json::ValueType check) const {
 		if (!root) throw std::logic_error("no root in JSonValueGetter");
 		const Json::Value& target(Json::Path(path).resolve(*root));
-		if (!target.isMember(name)) {
+		if (not target.isMember(name)) {
 			throw std::runtime_error("JsonValueGetter cannot find " + name + " in " + path);
 		}
-		if (!target[name].isConvertibleTo(check)) {
+		if (not target[name].isConvertibleTo(check)) {
 			throw std::runtime_error("JsonValueGetter cannot convert " + name + " in " + path + " to given type");
 		}
 

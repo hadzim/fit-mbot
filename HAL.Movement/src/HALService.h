@@ -7,6 +7,7 @@
 
 #ifndef HALSERVICE_H_
 #define HALSERVICE_H_
+#include <Poco/SharedPtr.h>
 #include "Poco/Util/ServerApplication.h"
 #include "Poco/Timer.h"
 #include "TBS/SafeTimer.h"

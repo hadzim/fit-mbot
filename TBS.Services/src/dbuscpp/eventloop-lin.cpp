@@ -1,3 +1,4 @@
+#ifndef __WIN32__
 #ifndef _NO_DBUS
 /*
  *
@@ -29,10 +30,11 @@
 #include <dbus-c++/eventloop.h>
 #include <dbus-c++/debug.h>
 
-//#include <sys/poll.h>
+#include <sys/poll.h>
 #include <sys/time.h>
 
 #include <dbus/dbus.h>
+#include "TBS/Log.h"
 
 using namespace DBus;
 using namespace std;
@@ -201,6 +203,8 @@ void DefaultMainLoop::dispatch()
 
   _mutex_t.unlock();
 
+  //std::cout << "loop: " << _watches.size() << " wait: " << wait_min << std::endl;
+
   poll(fds, nfd, wait_min);
 
   timeval now;
@@ -262,4 +266,5 @@ void DefaultMainLoop::dispatch()
   _mutex_w.unlock();
 }
 
+#endif
 #endif

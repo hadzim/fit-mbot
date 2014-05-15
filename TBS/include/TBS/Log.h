@@ -15,12 +15,12 @@
 #include <Poco/LogStream.h>
 #include <Poco/NullStream.h>
 
-#ifndef __func__
-#define __func__ "fnc:"
-#endif
-
 #define LOG_THREAD  "THREAD"
 #define LOG_TIME 	"TIME"
+
+namespace TBS {
+	TBS_API std::string logBasename(const std::string& fullname);
+}
 
 #ifdef NO_LOGGING
 	#define LOG_STREAM { if (1){} else { Poco::NullOutputStream str; str
@@ -39,16 +39,16 @@
 	#define LOG_NAMED_STREAM_CRITICAL(name) LOG_STREAM
 	#define LOG_NAMED_STREAM_ERROR(name) LOG_STREAM
 	#define LOG_NAMED_STREAM_WARNING(name)  LOG_STREAM
-	#define LOG_NAMED_STREAM_NOTICE(name)  LOG_STREAM
+	#define LNOTICE(name)  LOG_STREAM
     #define LOG_NAMED_STREAM_INFO(name) LOG_STREAM
-	#define LOG_NAMED_STREAM_DEBUG(name) LOG_STREAM
+	#define LDEBUG(name) LOG_STREAM
     #define LOG_NAMED_STREAM_TRACE(name) LOG_STREAM
 
 #else
 
 
 	#define LOG_STREAM { Poco::LogStream(Poco::Logger::get(__FILE__)) str; { str
-	#define LOG_STREAM_END " (in " << __FILE__ << ":" << __func__ << ":" << __LINE__ << ")"<< std::endl; }}
+	#define LOG_STREAM_END " (in " << ::TBS::logBasename(__FILE__) << ":" << __func__ << ":" << __LINE__ << ")"<< std::endl; }}
 	#define LE LOG_STREAM_END
 
 	#define LFATAL(name) { Poco::Logger & pl = Poco::Logger::get(name); Poco::LogStream str(pl); if (pl.fatal()) { str.fatal()
@@ -83,13 +83,13 @@
 	#define LOG_STREAM_CRITICAL LOG_NAMED_STREAM_CRITICAL("TS")
 	#define LOG_STREAM_ERROR LOG_NAMED_STREAM_ERROR("TS")
 	#define LOG_STREAM_WARNING LOG_NAMED_STREAM_WARNING("TS")
-	#define LOG_STREAM_NOTICE LOG_NAMED_STREAM_NOTICE("TS")
+	#define LOG_STREAM_NOTICE LNOTICE("TS")
 	#define LOG_STREAM_INFO LOG_NAMED_STREAM_INFO("TS")
-	#define LOG_STREAM_DEBUG LOG_NAMED_STREAM_DEBUG("TS")
-	#define LOG_STREAM_TRACE LOG_NAMED_STREAM_TRACE("TS")
+	#define LOG_STREAM_DEBUG LDEBUG("TS")
+	#define LOG_STREAM_TRACE LTRACE("TS")
 
-	#define LOG_STREAM_IDENT LOG_NAMED_STREAM_NOTICE("IDENT")
-	#define LOG_STREAM_BGENROLL LOG_NAMED_STREAM_NOTICE("BGENROLL")
+	#define LOG_STREAM_IDENT LNOTICE("IDENT")
+	#define LOG_STREAM_BGENROLL LNOTICE("BGENROLL")
 
 	//journal log
 	#define LOG_EVENT_ERROR(module) 	LOG_NAMED_STREAM_ERROR   ("TBS." module)
@@ -113,7 +113,7 @@ namespace TBS {
 		TBS_API void initLogs(std::string logName, int level, std::string logDir = "");
 		TBS_API void initLogs(std::string logName, int level, std::string logDir, LogHistory history);
 
-		TBS_API void separeLog(std::string logName, std::string fileName);
+		TBS_API void separeLog(std::string logName, std::string fileName, int level = 8);
 		TBS_API void separateIdentLog(std::string logName = "ident.log");
 		TBS_API void separateBgEnrollmentLog(std::string logName = "bgEnrollment.log");
 
