@@ -26,6 +26,7 @@ namespace TBS {
 				Poco::Event ec;
 				Task::Ptr task;
 				Task::TaskFinishedStatus exitStatus;
+				Poco::Timestamp timestamp;
 		};
 
 	}

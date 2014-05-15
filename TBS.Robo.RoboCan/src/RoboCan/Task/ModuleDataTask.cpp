@@ -17,10 +17,18 @@ namespace TBS {
 				ModuleDataTask::ModuleDataTask(const InternalCanModule & module) :
 						ModuleTask<DataMessage>(module.getName() + ":Data", module.getNotificationWorker(), module.getCommunicationChannel(),
 								module.cmdGetData()), moduleCanId(module.getCanID()) {
-
+					this->OuterActivation += Poco::delegate(this, &ModuleDataTask::onOuterActivation);
 				}
 				ModuleDataTask::~ModuleDataTask() {
+					this->OuterActivation -= Poco::delegate(this, &ModuleDataTask::onOuterActivation);
+				}
 
+				void ModuleDataTask::onOuterActivation(TBS::Activation & a) {
+					if (a == TBS::Activating) {
+						msg.reset();
+					} else {
+
+					}
 				}
 
 				void ModuleDataTask::packetRetrieved(CanMessage & m) {

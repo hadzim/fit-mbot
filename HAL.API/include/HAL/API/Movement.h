@@ -11,74 +11,75 @@
 #include <vector>
 #include <map>
 
-namespace TBS {
-namespace Services {
-namespace Introspection {
-class Class;
-struct Struct;
-}
-}
-}
+namespace TBS{ namespace Services{ namespace Introspection{ class Class; struct Struct; } } } 
 
-namespace HAL {
-namespace API {
-/** [interface] IMovement:  */
-class IMovement {
-public:
-	typedef Poco::SharedPtr<IMovement> Ptr;
 
-	virtual ~IMovement() {
-	}
 
-	static std::string name() {
-		static std::string n = "HAL.API.Movement";
-		return n;
-	}
-	static const ::TBS::Services::Introspection::Class & introspection();
 
-	//methods
+namespace HAL { 
+	namespace API { 
+		namespace Movement { 
+	   /** [interface] IMovement:  */
+       class IMovement {
+			public:
+				typedef Poco::SharedPtr <IMovement> Ptr;
+				
+				virtual ~IMovement(){}
+				
+				static std::string name(){
+					static std::string n = "HAL.API.Movement.Movement";
+					return n;
+				}
+				static const ::TBS::Services::Introspection::Class & introspection();
+				
+ //methods 
+				
+		/** 
+		  * [method] Move: 
+		  * [in] double speedLeft: 
+		  * [in] double speedRight: 
+		  */ 
+		        virtual void Move(const double & speedLeft, const double & speedRight) = 0;
 
-	/**
-	 * [method] Move:
-	 * [in] double speedLeft:
-	 * [in] double speedRight:
-	 */
-	virtual void Move(const double & speedLeft, const double & speedRight) = 0;
+		/** 
+		  * [method] Stop: 
+		  */ 
+		        virtual void Stop() = 0;
 
-	/**
-	 * [method] Stop:
-	 */
-	virtual void Stop() = 0;
+		/** 
+		  * [method] SetPosition: 
+		  * [in] int64_t posLeft: 
+		  * [in] int64_t posRight: 
+		  */ 
+		        virtual void SetPosition(const int64_t & posLeft, const int64_t & posRight) = 0;
 
-	/**
-	 * [method] SetPosition:
-	 * [in] int64_t posLeft:
-	 * [in] int64_t posRight:
-	 */
-	virtual void SetPosition(const int64_t & posLeft,
-			const int64_t & posRight) = 0;
+		/** 
+		  * [method] GetStatus: 
+		  * [out] double speedLeft: 
+		  * [out] double speedRight: 
+		  * [out] int64_t posLeft: 
+		  * [out] int64_t posRight: 
+		  */ 
+		        virtual void GetStatus(double & speedLeft, double & speedRight, int64_t & posLeft, int64_t & posRight) = 0;
 
-	/**
-	 * [method] GetStatus:
-	 * [out] double speedLeft:
-	 * [out] double speedRight:
-	 * [out] int64_t posLeft:
-	 * [out] int64_t posRight:
-	 */
-	virtual void GetStatus(double & speedLeft, double & speedRight,
-			int64_t & posLeft, int64_t & posRight) = 0;
-
-	//signals
-	struct StatusChangedArg {
-		double speedLeft;
-		double speedRight;
-		int64_t posLeft;
-		int64_t posRight;
-	};
-	Poco::BasicEvent<StatusChangedArg> StatusChanged;
-
+				
+ //signals 
+						struct StatusChangedArg { 
+double speedLeft;
+double speedRight;
+int64_t posLeft;
+int64_t posRight;
 };
-}
-}
+		Poco::BasicEvent <StatusChangedArg> StatusChanged;
+		
+
+				
+			};
+ } 
+ } 
+ } 
+
+
 
 #endif //_MOVEMENT_H_
+

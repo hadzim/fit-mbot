@@ -14,7 +14,7 @@ namespace MBot {
 
 class MovementImpl;
 
-class Movement: public HAL::API::IMovement, public Poco::Runnable {
+class Movement: public HAL::API::Movement::IMovement, public Poco::Runnable {
 public:
 	Movement();
 	virtual ~Movement();

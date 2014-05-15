@@ -24,6 +24,7 @@ HALObserver::~HALObserver() {
 
 void onSpeedChanged(HAL::API::IMovement::SpeedChangedArg & arg){
 	std::cout << "Speed: (" << arg.speedLeft << " " << arg.speedRight << std::endl;
+
 }
 
 int HALObserver::main(const std::vector<std::string>& args) {

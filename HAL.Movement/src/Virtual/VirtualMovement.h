@@ -11,7 +11,7 @@
 #include <iostream>
 namespace MBot {
 
-class VirtualMovement: public HAL::API::IMovement {
+class VirtualMovement: public HAL::API::Movement::IMovement {
 
 public:
 	VirtualMovement() :

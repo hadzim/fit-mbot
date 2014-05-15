@@ -37,26 +37,35 @@ namespace TBS {
 			task->start();
 			try {
 				e.wait(timeout);
-				std::cout << "SUCCESS" << std::endl;
 			} catch (Poco::TimeoutException & ){
-				std::cout << "ERROR: timeout: " << timeout << std::endl;
+
 				task->cancel();
 				ec.wait(timeout);
 				//std::cout << "ERROR: timeout done " << std::endl;
 			}
 			this->afterFinished();
+
 			//std::cout << "sync execute done" << std::endl;
 		}
 
 		SynchronizedExectution::~SynchronizedExectution(){
 			if (!this->task.isNull()){
+				this->task->Finished -= Poco::delegate(this, &SynchronizedExectution::onSyncFinished);
 				this->task->cancel();
 			}
 		}
 
 
 		void SynchronizedExectution::onSyncFinished(TBS::Task::Task::TaskFinishedStatus & s) {
-			std::cout << "task finished: " << (s.isOk() ? "ok" : "fail/cancel") << std::endl;
+			std::cout << "sync task finished: ";
+			if (s.isOk()){
+				std::cout << "ok";
+			} else if (s.isCanceled()){
+				std::cout << "canceled";
+			} else {
+				std::cout << "error: " << s.getErrorMessage();
+			}
+			std::cout << " after " << (timestamp.elapsed()/ 1000) << "ms" << std::endl;
 			task->Finished -= Poco::delegate(this, &SynchronizedExectution::onSyncFinished);
 			this->exitStatus = s;
 			e.set();

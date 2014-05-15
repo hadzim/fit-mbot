@@ -19,7 +19,7 @@ public:
 	typedef Poco::SharedPtr <IHALFactory> Ptr;
 	virtual ~IHALFactory() {
 	}
-	virtual HAL::API::IMovement::Ptr createMovement() = 0;
+	virtual HAL::API::Movement::IMovement::Ptr createMovement() = 0;
 };
 
 } /* namespace MBot */

@@ -21,12 +21,13 @@
 
 namespace HAL { 
 	namespace API { 
-		namespace Stub { 
+		namespace Movement { 
+			namespace Stub { 
 	class Movement_DBusServer : public ::DBus::InterfaceAdaptor
 		{
 			public:
-				Movement_DBusServer(HAL::API::IMovement::Ptr impl) :
-					::DBus::InterfaceAdaptor("com.HAL.API.Movement"), impl(impl){
+				Movement_DBusServer(HAL::API::Movement::IMovement::Ptr impl) :
+					::DBus::InterfaceAdaptor("com.HAL.API.Movement.Movement"), impl(impl){
 								impl->StatusChanged += Poco::delegate(this, &Movement_DBusServer::handlerStatusChanged);
 		register_method(Movement_DBusServer, Move, _Move_mstub);
 		register_method(Movement_DBusServer, Stop, _Stop_mstub);
@@ -39,8 +40,8 @@ namespace HAL {
 
 				}
 				
-				static const std::string & dbuspath(){ static std::string val = "/com/HAL/API"; return val; }
-				static const std::string & dbusname(){ static std::string val = "com.HAL.API.Movement"; return val; }
+				static const std::string & dbuspath(){ static std::string val = "/com/HAL/API/Movement"; return val; }
+				static const std::string & dbusname(){ static std::string val = "com.HAL.API.Movement.Movement"; return val; }
                 
                 //::DBus::IntrospectedInterface *introspect() const {
 				//	<introspection>
@@ -123,12 +124,13 @@ impl->GetStatus(_speedLeft, _speedRight, _posLeft, _posRight);
 		} 
 	}
 
-						void handlerStatusChanged(HAL::API::IMovement::StatusChangedArg & arg){
+						void handlerStatusChanged(HAL::API::Movement::IMovement::StatusChangedArg & arg){
 			this->StatusChanged(arg.speedLeft, arg.speedRight, arg.posLeft, arg.posRight);
 		}
 
-				HAL::API::IMovement::Ptr impl;
+				HAL::API::Movement::IMovement::Ptr impl;
 };
+ } 
  } 
  } 
  } 

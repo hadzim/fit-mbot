@@ -22,6 +22,8 @@ namespace TBS {
 					virtual ~ModuleDataTask();
 				private:
 					virtual void packetRetrieved(CanMessage & m);
+					void onOuterActivation(TBS::Activation & a);
+
 				private:
 					TBS::Nullable<DataMessage> msg;
 					Poco::UInt32 moduleCanId;

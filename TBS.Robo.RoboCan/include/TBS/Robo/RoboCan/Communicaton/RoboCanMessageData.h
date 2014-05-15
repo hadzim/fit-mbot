@@ -39,6 +39,14 @@ namespace TBS {
 						Poco::UInt32 getULONG() const;
 						void setULONG(Poco::UInt32 value);
 
+						struct UShort2 {
+							Poco::UInt16 short1;
+							Poco::UInt16 short2;
+						};
+
+						UShort2 getUSHORT2() const;
+						void setUSHORT2(UShort2 value);
+
 					private:
 						void checkLength(int length) const;
 						void checkType(RoboCanMessage::eDataType type) const;

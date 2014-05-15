@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
-<node name="HAL.API">
+<node name="HAL.API.Movement">
   
-  <interface name="HAL.API.Movement">
+  <interface name="HAL.API.Movement.Movement">
    
     <method name="Move">
       <arg type="d" name="speedLeft" direction="in"/>

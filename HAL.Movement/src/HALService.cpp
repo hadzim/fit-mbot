@@ -80,7 +80,7 @@ int HALService::main(const std::vector<std::string>& args) {
 			f = new MBot::HALFactory();
 		}
 
-		HAL::API::DBus::Server::Ptr srv = new HAL::API::DBus::Server();
+		HAL::API::Movement::DBus::Server::Ptr srv = new HAL::API::Movement::DBus::Server();
 		{
 			TBS::Services::IServer::Ptr movement = srv->createMovement(f->createMovement());
 			waitForTerminationRequest();

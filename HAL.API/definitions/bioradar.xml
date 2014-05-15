@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<node name="HAL.API.BioRadar">
+  
+  <interface name="HAL.API.BioRadar.Base">
+   
+    <method name="GoMin">
+    </method>
+    
+    <method name="GoMax">
+    </method>
+    
+    <method name="GoRel">
+    	<arg type="i" name="speed" direction="in" comment="-100 to 100"/>
+    </method>
+    
+  </interface>
+</node>

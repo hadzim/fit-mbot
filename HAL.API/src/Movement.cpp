@@ -8,11 +8,13 @@
 
 namespace HAL { 
 	namespace API { 
+		namespace Movement { 
 		::TBS::Services::Introspection::Class __introspectionIMovement(){
 			::TBS::Services::Introspection::Namespace cnmspc;
 cnmspc.push_back("HAL");
 cnmspc.push_back("API");
-::TBS::Services::Introspection::Class c("HAL.API.Movement", "Movement", cnmspc,"");
+cnmspc.push_back("Movement");
+::TBS::Services::Introspection::Class c("HAL.API.Movement.Movement", "Movement", cnmspc,"");
 {
 	::TBS::Services::Introspection::Method m("Move", "");
   m.inArguments.push_back(::TBS::Services::Introspection::Argument("speedLeft", "d", ""));
@@ -52,6 +54,7 @@ return c;
 			static ::TBS::Services::Introspection::Class c(__introspectionIMovement());
 			return c;
 	   }
+ } 
  } 
  } 
 

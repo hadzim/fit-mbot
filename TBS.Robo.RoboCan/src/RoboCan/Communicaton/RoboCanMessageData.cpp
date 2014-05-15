@@ -133,6 +133,25 @@ namespace TBS {
 				b0 = (Poco::UInt8) (value >> 24 & 0xFF);
 			}
 
+			RoboCanMessageData::UShort2 RoboCanMessageData::getUSHORT2() const {
+				RoboCanMessageData::UShort2 u;
+
+				this->checkLength(4);
+				this->checkType(RoboCanMessage::DT_USHORT2);
+				u.short1 = (Poco::Int16) (this->b0 << 8 | this->b1);
+				u.short2 = (Poco::Int16) (this->b2 << 8 | this->b3);
+				return u;
+			}
+			void RoboCanMessageData::setUSHORT2(UShort2 value){
+				this->length = 4;
+				this->dataType = RoboCanMessage::DT_USHORT2;
+				this->b1 = (Poco::UInt8) (value.short1 & 0xFF);
+				this->b0 = (Poco::UInt8) (value.short1 >> 8 & 0xFF);
+
+				this->b3 = (Poco::UInt8) (value.short2 & 0xFF);
+				this->b2 = (Poco::UInt8) (value.short2 >> 8 & 0xFF);
+			}
+
 		}
 
 	}

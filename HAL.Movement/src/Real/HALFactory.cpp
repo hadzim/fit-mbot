@@ -18,7 +18,7 @@ HALFactory::~HALFactory() {
 
 }
 
-HAL::API::IMovement::Ptr HALFactory::createMovement(){
+HAL::API::Movement::IMovement::Ptr HALFactory::createMovement(){
 	return new Movement();
 }
 

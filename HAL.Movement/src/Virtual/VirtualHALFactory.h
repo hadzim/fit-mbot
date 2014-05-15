@@ -17,7 +17,7 @@ public:
 	VirtualHALFactory();
 	virtual ~VirtualHALFactory();
 
-	virtual HAL::API::IMovement::Ptr createMovement() {
+	virtual HAL::API::Movement::IMovement::Ptr createMovement() {
 		return new VirtualMovement();
 	}
 };
