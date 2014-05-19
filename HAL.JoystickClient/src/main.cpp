@@ -7,7 +7,7 @@
 #include <Poco/Delegate.h>
 #include "HAL/API/MovementSvc_DBus.h"
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 using namespace cv;
 using namespace std;
