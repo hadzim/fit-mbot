@@ -43,6 +43,7 @@ namespace jsonrpc {
 
 			JsonpMultiRootHandler(ServiceHandlers & serviceHandlers, HttpServerParams p) :
 					handlerProvider(serviceHandlers), p(p) {
+				std::cout << "create jsonp root handler: " << p.port << std::endl;
 			}
 
 			static std::string parseResponse(std::string respOriginalStr){

@@ -150,10 +150,13 @@ class GeneratorApp: public Poco::Util::Application {
 				DBusServiceGenerator dbsvc(definition, info);
 			}
 			if (generate.find("json") != generate.end() && generate.find("jsonp") == generate.end()) {
-				std::cout << "JSON NORMAL" << std::endl;
+				std::cout << "JSON NORMAL 1" << std::endl;
 				JsonClientGenerator dbc(definition, info);
+				std::cout << "JSON NORMAL 2" << std::endl;
 				JsonServerGenerator dbs(definition, info);
+				std::cout << "JSON NORMAL 3" << std::endl;
 				JsonServiceGenerator dbsvc(definition, info);
+				std::cout << "JSON NORMAL 4" << std::endl;
 				JsonJavascriptClientGenerator javascript(definition, info);
 
 			}

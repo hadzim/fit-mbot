@@ -50,6 +50,9 @@ jsonrpc::jsontype_t JsonHelpers::jsonCast(std::string type) {
 	if (type == "i") {
 		return jsonrpc::JSON_INTEGER;
 	}
+	if (type == "d") {
+		return jsonrpc::JSON_REAL;
+	}
 	if (type == "s") {
 		return jsonrpc::JSON_STRING;
 	}

@@ -35,3 +35,8 @@ VS*
 BoostBuild/
 cbuild/*
 *.cmake
+*.make
+*.marks
+*.includecache
+*.internal
+*link.txt

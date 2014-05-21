@@ -48,6 +48,7 @@ namespace jsonrpc {
 
 			MultiRootHandler(ServiceHandlers & serviceHandlers, HttpServerParams p) :
 					handlerProvider(serviceHandlers), p(p) {
+				std::cout << "create json root handler: " << p.port << std::endl;
 			}
 
 			void handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {
@@ -57,14 +58,14 @@ namespace jsonrpc {
 					std::string serviceName = request.getURI();
 
 					bool isRoot = serviceName == "/";
-/*
+
 					std::cout << "SERVER service name: " << serviceName << std::endl;
 					std::cout << "SERVER request length: " << request.getContentLength() << std::endl;
 					std::cout << "SERVER request method: " << request.getMethod() << std::endl;
 					std::cout << "SERVER request chunked: " << request.getChunkedTransferEncoding() << std::endl;
 					std::cout << "SERVER request type: " << request.getContentType() << std::endl;
 					std::cout << "SERVER request host: " << request.getHost() << std::endl;
-*/
+
 					if (p.allowCrossDomain && !isRoot) {
 						try {
 							response.set("Access-Control-Allow-Origin", request.get("Origin"));

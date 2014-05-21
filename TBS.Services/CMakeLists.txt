@@ -3,15 +3,17 @@ project (TBS.Services)
  
 set (PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 set (PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
- 
+
+file(GLOB_RECURSE JSON_SOURCES "src/jsonrpc/*.cpp")  
 file(GLOB_RECURSE DBUS_SOURCES "src/dbuscpp/*.cpp")
 file(GLOB_RECURSE DBUSTBS_SOURCES "src/TBS/DBus/*.cpp")
+file(GLOB_RECURSE JSONTBS_SOURCES "src/TBS/Json/*.cpp")
 file(GLOB_RECURSE TBS_SOURCES "src/Services.cpp")
  
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories("${PROJECT_INCLUDE_DIR}")
 include_directories("${PROJECT_ROOT}/TBS/include")
  
-LINK_LIBRARIES (PocoFoundation TBS dbus-1)  
+LINK_LIBRARIES (PocoFoundation PocoNet PocoNetSSL TBS dbus-1)  
  
-add_library(${PROJECT_NAME} SHARED ${DBUS_SOURCES} ${DBUSTBS_SOURCES} ${TBS_SOURCES})
+add_library(${PROJECT_NAME} SHARED ${DBUS_SOURCES} ${DBUSTBS_SOURCES} ${JSON_SOURCES} ${JSONTBS_SOURCES} ${TBS_SOURCES})

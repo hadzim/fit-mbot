@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<node name="HAL.Remote">
+  
+  <interface name="HAL.Remote.Movement">
+   
+    <method name="Move">
+      <arg type="d" name="speedLeft" direction="in"/>
+      <arg type="d" name="speedRight" direction="in"/>
+    </method>
+    
+    <method name="Stop">
+    </method>
+       
+  </interface>
+</node>
