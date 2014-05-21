@@ -119,7 +119,7 @@ public:
 			tmp.y = normalizeTo1(-y);
 			c = tmp;
 		}
-		CoordUpdate(tmp);
+		CoordUpdate(this, tmp);
 	}
 	void run() {
 		std::cout << "start bg" << std::endl;
