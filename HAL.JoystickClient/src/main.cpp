@@ -128,9 +128,9 @@ public:
 		//SDL_Rect axis_area[2];
 
 		while (!done) {
-			for (int i = 0; i < 50; i++) {
+			for (int i = 0; i < 20; i++) {
 				iteration();
-				Poco::Thread::sleep(20);
+				Poco::Thread::sleep(100);
 			}
 		}
 		std::cout << "finish bg" << std::endl;
