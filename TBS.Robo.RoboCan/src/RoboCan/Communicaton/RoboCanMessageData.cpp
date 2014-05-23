@@ -21,7 +21,7 @@ namespace TBS {
 
 			void RoboCanMessageData::writeToMessage(RoboCanMessage & message) const {
 
-				message.getCanMessageRef().length = (Poco::UInt8) (this->length + 4);
+				message.getCanMessageRef().length = (Poco::UInt8)(this->length + 4);
 				message.setDataType(this->dataType);
 
 				message.getCanMessageRef().b4 = this->b0;
@@ -33,7 +33,7 @@ namespace TBS {
 			void RoboCanMessageData::readFromMessage(const RoboCanMessage & message) {
 
 				CanMessage msg = message.getCanMessage();
-				this->length = (Poco::UInt8) (msg.length - 4);
+				this->length = (Poco::UInt8)(msg.length - 4);
 				this->dataType = message.getDataType();
 
 				this->b0 = msg.b4;
@@ -83,54 +83,54 @@ namespace TBS {
 			Poco::Int16 RoboCanMessageData::getSHORT() const {
 				this->checkLength(2);
 				this->checkType(RoboCanMessage::DT_SHORT);
-				return (Poco::Int16) (this->b0 << 8 | this->b1);
+				return (Poco::Int16)(this->b0 << 8 | this->b1);
 			}
 			void RoboCanMessageData::setSHORT(Poco::Int16 value) {
 				this->length = 2;
 				this->dataType = RoboCanMessage::DT_SHORT;
-				this->b1 = (Poco::UInt8) (value & 0xFF);
-				this->b0 = (Poco::UInt8) (value >> 8 & 0xFF);
+				this->b1 = (Poco::UInt8)(value & 0xFF);
+				this->b0 = (Poco::UInt8)(value >> 8 & 0xFF);
 			}
 
 			Poco::UInt16 RoboCanMessageData::getUSHORT() const {
 				this->checkLength(2);
 				this->checkType(RoboCanMessage::DT_USHORT);
-				return (Poco::Int16) (this->b0 << 8 | this->b1);
+				return (Poco::Int16)(this->b0 << 8 | this->b1);
 			}
 			void RoboCanMessageData::setUSHORT(Poco::UInt16 value) {
 				this->length = 2;
 				this->dataType = RoboCanMessage::DT_USHORT;
-				this->b1 = (Poco::UInt8) (value & 0xFF);
-				this->b0 = (Poco::UInt8) (value >> 8 & 0xFF);
+				this->b1 = (Poco::UInt8)(value & 0xFF);
+				this->b0 = (Poco::UInt8)(value >> 8 & 0xFF);
 			}
 
 			Poco::Int32 RoboCanMessageData::getLONG() const {
 				this->checkLength(4);
 				this->checkType(RoboCanMessage::DT_LONG);
-				return (Poco::Int32) (b0 << 24 | b1 << 16 | b2 << 8 | b3);
+				return (Poco::Int32)(b0 << 24 | b1 << 16 | b2 << 8 | b3);
 			}
 			void RoboCanMessageData::setLONG(Poco::Int32 value) {
 				this->length = 4;
 				this->dataType = RoboCanMessage::DT_LONG;
-				b3 = (Poco::UInt8) (value & 0xFF);
-				b2 = (Poco::UInt8) (value >> 8 & 0xFF);
-				b1 = (Poco::UInt8) (value >> 16 & 0xFF);
-				b0 = (Poco::UInt8) (value >> 24 & 0xFF);
+				b3 = (Poco::UInt8)(value & 0xFF);
+				b2 = (Poco::UInt8)(value >> 8 & 0xFF);
+				b1 = (Poco::UInt8)(value >> 16 & 0xFF);
+				b0 = (Poco::UInt8)(value >> 24 & 0xFF);
 			}
 
 			Poco::UInt32 RoboCanMessageData::getULONG() const {
 				this->checkLength(4);
 				this->checkType(RoboCanMessage::DT_ULONG);
-				return (Poco::Int32) (b0 << 24 | b1 << 16 | b2 << 8 | b3);
+				return (Poco::Int32)(b0 << 24 | b1 << 16 | b2 << 8 | b3);
 			}
 
 			void RoboCanMessageData::setULONG(Poco::UInt32 value) {
 				this->length = 4;
 				this->dataType = RoboCanMessage::DT_ULONG;
-				b3 = (Poco::UInt8) (value & 0xFF);
-				b2 = (Poco::UInt8) (value >> 8 & 0xFF);
-				b1 = (Poco::UInt8) (value >> 16 & 0xFF);
-				b0 = (Poco::UInt8) (value >> 24 & 0xFF);
+				b3 = (Poco::UInt8)(value & 0xFF);
+				b2 = (Poco::UInt8)(value >> 8 & 0xFF);
+				b1 = (Poco::UInt8)(value >> 16 & 0xFF);
+				b0 = (Poco::UInt8)(value >> 24 & 0xFF);
 			}
 
 			RoboCanMessageData::UShort2 RoboCanMessageData::getUSHORT2() const {
@@ -138,18 +138,37 @@ namespace TBS {
 
 				this->checkLength(4);
 				this->checkType(RoboCanMessage::DT_USHORT2);
-				u.short1 = (Poco::Int16) (this->b0 << 8 | this->b1);
-				u.short2 = (Poco::Int16) (this->b2 << 8 | this->b3);
+				u.short1 = (Poco::UInt16)(this->b0 << 8 | this->b1);
+				u.short2 = (Poco::UInt16)(this->b2 << 8 | this->b3);
 				return u;
 			}
-			void RoboCanMessageData::setUSHORT2(UShort2 value){
+			void RoboCanMessageData::setUSHORT2(UShort2 value) {
 				this->length = 4;
 				this->dataType = RoboCanMessage::DT_USHORT2;
-				this->b1 = (Poco::UInt8) (value.short1 & 0xFF);
-				this->b0 = (Poco::UInt8) (value.short1 >> 8 & 0xFF);
+				this->b1 = (Poco::UInt8)(value.short1 & 0xFF);
+				this->b0 = (Poco::UInt8)(value.short1 >> 8 & 0xFF);
 
-				this->b3 = (Poco::UInt8) (value.short2 & 0xFF);
-				this->b2 = (Poco::UInt8) (value.short2 >> 8 & 0xFF);
+				this->b3 = (Poco::UInt8)(value.short2 & 0xFF);
+				this->b2 = (Poco::UInt8)(value.short2 >> 8 & 0xFF);
+			}
+
+			RoboCanMessageData::Short2 RoboCanMessageData::getSHORT2() const {
+				RoboCanMessageData::Short2 u;
+
+				this->checkLength(4);
+				this->checkType(RoboCanMessage::DT_SHORT2);
+				u.short1 = (Poco::Int16)(this->b0 << 8 | this->b1);
+				u.short2 = (Poco::Int16)(this->b2 << 8 | this->b3);
+				return u;
+			}
+			void RoboCanMessageData::setSHORT2(Short2 value) {
+				this->length = 4;
+				this->dataType = RoboCanMessage::DT_SHORT2;
+				this->b1 = (Poco::UInt8)(value.short1 & 0xFF);
+				this->b0 = (Poco::UInt8)(value.short1 >> 8 & 0xFF);
+
+				this->b3 = (Poco::UInt8)(value.short2 & 0xFF);
+				this->b2 = (Poco::UInt8)(value.short2 >> 8 & 0xFF);
 			}
 
 		}

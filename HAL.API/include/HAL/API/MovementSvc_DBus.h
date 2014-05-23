@@ -26,7 +26,7 @@ namespace HAL {
 	namespace API { 
 		namespace Movement { 
 			namespace DBus { 
-       class Client {
+       class GEN_SERVICE_API Client {
 			public:
 				typedef Poco::SharedPtr <Client> Ptr;
 				
@@ -34,6 +34,7 @@ namespace HAL {
 				Client(TBS::Services::ICommChannelHolder::Ptr ch);
 				//with default dbus dispatcher
 				Client();
+				~Client();
 				
 				HAL::API::Movement::IMovement & Movement();
 
@@ -46,13 +47,14 @@ namespace HAL {
 			};
 			
 			
-		class Server {
+		class GEN_SERVICE_API Server {
 			public:
 				typedef Poco::SharedPtr<Server> Ptr;
 				//with given dbus dispatcher via DBusCommChannelProvider
 				Server(TBS::Services::ICommChannelHolder::Ptr ch);
 				//uses default dbus dispatcher
 				Server();
+				~Server();
 				
 			public:
 				TBS::Services::IServer::Ptr createMovement(HAL::API::Movement::IMovement::Ptr impl);

@@ -20,7 +20,7 @@ namespace HAL {
 	namespace API { 
 		namespace Movement { 
 	   /** [interface] IMovement:  */
-       class IMovement {
+       class GEN_SERVICE_API IMovement {
 			public:
 				typedef Poco::SharedPtr <IMovement> Ptr;
 				

@@ -21,9 +21,11 @@ namespace HAL {
 	   Client::Client() : 
 		   ch(TBS::Services::DBusCommChannelProvider::getDefaultCommChannel()), comChannelHolder(new TBS::Services::CommunicationChannelHolder(ch)) {
 	   }
-	   HAL::API::BioRadar::IBase & Client::Base(){
-   if (!base_) {      base_ =  new TBS::Services::DBusClientImpl<HAL::API::BioRadar::Stub::Base_DBusClient>(comChannelHolder->getConnection());
-   }   return *base_;
+	   Client::~Client(){ 
+	   }
+	   HAL::API::BioRadar::IBioRadar & Client::BioRadar(){
+   if (!bioradar_) {      bioradar_ =  new TBS::Services::DBusClientImpl<HAL::API::BioRadar::Stub::BioRadar_DBusClient>(comChannelHolder->getConnection());
+   }   return *bioradar_;
 }
 
 	   
@@ -36,9 +38,11 @@ namespace HAL {
 	   	   ch(TBS::Services::DBusCommChannelProvider::getDefaultCommChannel()){
 		   
 	    } 
+	    Server::~Server(){ 
+	    }
 	    
-	   TBS::Services::IServer::Ptr Server::createBase(HAL::API::BioRadar::IBase::Ptr impl){
-   return new TBS::Services::DBusServerImpl<HAL::API::BioRadar::IBase, HAL::API::BioRadar::Stub::Base_DBusServer>(ch, impl);
+	   TBS::Services::IServer::Ptr Server::createBioRadar(HAL::API::BioRadar::IBioRadar::Ptr impl){
+   return new TBS::Services::DBusServerImpl<HAL::API::BioRadar::IBioRadar, HAL::API::BioRadar::Stub::BioRadar_DBusServer>(ch, impl);
 }
 
  } 

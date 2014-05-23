@@ -23,25 +23,25 @@ namespace HAL {
 	namespace API { 
 		namespace BioRadar { 
 			namespace Stub { 
-       class Base_DBusClient : public ::DBus::InterfaceProxy, public HAL::API::BioRadar::IBase {
+       class BioRadar_DBusClient : public ::DBus::InterfaceProxy, public HAL::API::BioRadar::IBioRadar {
 			public:
-				typedef Poco::SharedPtr <Base_DBusClient> Ptr;
+				typedef Poco::SharedPtr <BioRadar_DBusClient> Ptr;
 				
-				Base_DBusClient() : ::DBus::InterfaceProxy("com.HAL.API.BioRadar.Base"){
+				BioRadar_DBusClient() : ::DBus::InterfaceProxy("com.HAL.API.BioRadar.BioRadar"){
 					
 				}
-				virtual ~Base_DBusClient() {
+				virtual ~BioRadar_DBusClient() {
 				}
 
 				
 				static const std::string & dbuspath(){ static std::string val = "/com/HAL/API/BioRadar"; return val; }
-				static const std::string & dbusname(){ static std::string val = "com.HAL.API.BioRadar.Base"; return val; }
+				static const std::string & dbusname(){ static std::string val = "com.HAL.API.BioRadar.BioRadar"; return val; }
 				
 				
  //methods 
-				virtual void GoMin(){		try {
+				virtual void Enable(){		try {
 		::DBus::CallMessage call;
-		call.member("GoMin");
+		call.member("Enable");
 		::DBus::Message ret = invoke_method (call);
 		} catch (::DBus::Error & err){
 			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
@@ -52,9 +52,9 @@ namespace HAL {
 		}
 	}
 
-virtual void GoMax(){		try {
+virtual void Disable(){		try {
 		::DBus::CallMessage call;
-		call.member("GoMax");
+		call.member("Disable");
 		::DBus::Message ret = invoke_method (call);
 		} catch (::DBus::Error & err){
 			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
@@ -65,13 +65,112 @@ virtual void GoMax(){		try {
 		}
 	}
 
-virtual void GoRel(const int32_t & speed){		try {
+virtual void GoMinBase(){		try {
+		::DBus::CallMessage call;
+		call.member("GoMinBase");
+		::DBus::Message ret = invoke_method (call);
+		} catch (::DBus::Error & err){
+			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
+				throw ::TBS::Services::RuntimeServiceException(err.message());
+			} else {
+				throw ::TBS::Services::ChannelServiceException(err.what());
+			}
+		}
+	}
+
+virtual void GoMaxBase(){		try {
+		::DBus::CallMessage call;
+		call.member("GoMaxBase");
+		::DBus::Message ret = invoke_method (call);
+		} catch (::DBus::Error & err){
+			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
+				throw ::TBS::Services::RuntimeServiceException(err.message());
+			} else {
+				throw ::TBS::Services::ChannelServiceException(err.what());
+			}
+		}
+	}
+
+virtual void GoRelBase(const double & speed){		try {
 		::DBus::CallMessage call;
 		::DBus::MessageIter wi = call.writer();
 
 		wi << speed;
-		call.member("GoRel");
+		call.member("GoRelBase");
 		::DBus::Message ret = invoke_method (call);
+		} catch (::DBus::Error & err){
+			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
+				throw ::TBS::Services::RuntimeServiceException(err.message());
+			} else {
+				throw ::TBS::Services::ChannelServiceException(err.what());
+			}
+		}
+	}
+
+virtual void GoMinAntenna(){		try {
+		::DBus::CallMessage call;
+		call.member("GoMinAntenna");
+		::DBus::Message ret = invoke_method (call);
+		} catch (::DBus::Error & err){
+			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
+				throw ::TBS::Services::RuntimeServiceException(err.message());
+			} else {
+				throw ::TBS::Services::ChannelServiceException(err.what());
+			}
+		}
+	}
+
+virtual void GoMaxAntenna(){		try {
+		::DBus::CallMessage call;
+		call.member("GoMaxAntenna");
+		::DBus::Message ret = invoke_method (call);
+		} catch (::DBus::Error & err){
+			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
+				throw ::TBS::Services::RuntimeServiceException(err.message());
+			} else {
+				throw ::TBS::Services::ChannelServiceException(err.what());
+			}
+		}
+	}
+
+virtual void GoRelAntenna(const double & speed){		try {
+		::DBus::CallMessage call;
+		::DBus::MessageIter wi = call.writer();
+
+		wi << speed;
+		call.member("GoRelAntenna");
+		::DBus::Message ret = invoke_method (call);
+		} catch (::DBus::Error & err){
+			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
+				throw ::TBS::Services::RuntimeServiceException(err.message());
+			} else {
+				throw ::TBS::Services::ChannelServiceException(err.what());
+			}
+		}
+	}
+
+virtual void GetStatus(bool & baseTouchMin, bool & baseTouchMax, double & basePosition, bool & basePositionError, bool & antennaTouchMin, bool & antennaTouchMax, double & antennaPosition, bool & antennaPositionError, bool & antennaTouch1, bool & antennaTouch2, bool & antennaTouch3, bool & antennaTouch4, int32_t & antennaDistance1, int32_t & antennaDistance2, int32_t & antennaDistance3, int32_t & antennaDistance4){		try {
+		::DBus::CallMessage call;
+		call.member("GetStatus");
+		::DBus::Message ret = invoke_method (call);
+		::DBus::MessageIter ri = ret.reader();
+
+		ri >> baseTouchMin;
+		ri >> baseTouchMax;
+		ri >> basePosition;
+		ri >> basePositionError;
+		ri >> antennaTouchMin;
+		ri >> antennaTouchMax;
+		ri >> antennaPosition;
+		ri >> antennaPositionError;
+		ri >> antennaTouch1;
+		ri >> antennaTouch2;
+		ri >> antennaTouch3;
+		ri >> antennaTouch4;
+		ri >> antennaDistance1;
+		ri >> antennaDistance2;
+		ri >> antennaDistance3;
+		ri >> antennaDistance4;
 		} catch (::DBus::Error & err){
 			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
 				throw ::TBS::Services::RuntimeServiceException(err.message());

@@ -23,22 +23,28 @@ namespace HAL {
 	namespace API { 
 		namespace BioRadar { 
 			namespace Stub { 
-	class Base_DBusServer : public ::DBus::InterfaceAdaptor
+	class BioRadar_DBusServer : public ::DBus::InterfaceAdaptor
 		{
 			public:
-				Base_DBusServer(HAL::API::BioRadar::IBase::Ptr impl) :
-					::DBus::InterfaceAdaptor("com.HAL.API.BioRadar.Base"), impl(impl){
-								register_method(Base_DBusServer, GoMin, _GoMin_mstub);
-		register_method(Base_DBusServer, GoMax, _GoMax_mstub);
-		register_method(Base_DBusServer, GoRel, _GoRel_mstub);
+				BioRadar_DBusServer(HAL::API::BioRadar::IBioRadar::Ptr impl) :
+					::DBus::InterfaceAdaptor("com.HAL.API.BioRadar.BioRadar"), impl(impl){
+								register_method(BioRadar_DBusServer, Enable, _Enable_mstub);
+		register_method(BioRadar_DBusServer, Disable, _Disable_mstub);
+		register_method(BioRadar_DBusServer, GoMinBase, _GoMinBase_mstub);
+		register_method(BioRadar_DBusServer, GoMaxBase, _GoMaxBase_mstub);
+		register_method(BioRadar_DBusServer, GoRelBase, _GoRelBase_mstub);
+		register_method(BioRadar_DBusServer, GoMinAntenna, _GoMinAntenna_mstub);
+		register_method(BioRadar_DBusServer, GoMaxAntenna, _GoMaxAntenna_mstub);
+		register_method(BioRadar_DBusServer, GoRelAntenna, _GoRelAntenna_mstub);
+		register_method(BioRadar_DBusServer, GetStatus, _GetStatus_mstub);
 
 				}
-				virtual ~Base_DBusServer(){
+				virtual ~BioRadar_DBusServer(){
 						
 				}
 				
 				static const std::string & dbuspath(){ static std::string val = "/com/HAL/API/BioRadar"; return val; }
-				static const std::string & dbusname(){ static std::string val = "com.HAL.API.BioRadar.Base"; return val; }
+				static const std::string & dbusname(){ static std::string val = "com.HAL.API.BioRadar.BioRadar"; return val; }
                 
                 //::DBus::IntrospectedInterface *introspect() const {
 				//	<introspection>
@@ -46,10 +52,10 @@ namespace HAL {
 				
 				
 			private:
-					::DBus::Message _GoMin_mstub(const ::DBus::CallMessage &call){
+					::DBus::Message _Enable_mstub(const ::DBus::CallMessage &call){
 		try {
 		call.reader();
-impl->GoMin();
+impl->Enable();
 		::DBus::ReturnMessage reply(call);
 		return reply;
 		} catch (Poco::Exception &ex){
@@ -58,10 +64,10 @@ impl->GoMin();
 			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.what());
 		} 
 	}
-	::DBus::Message _GoMax_mstub(const ::DBus::CallMessage &call){
+	::DBus::Message _Disable_mstub(const ::DBus::CallMessage &call){
 		try {
 		call.reader();
-impl->GoMax();
+impl->Disable();
 		::DBus::ReturnMessage reply(call);
 		return reply;
 		} catch (Poco::Exception &ex){
@@ -70,13 +76,120 @@ impl->GoMax();
 			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.what());
 		} 
 	}
-	::DBus::Message _GoRel_mstub(const ::DBus::CallMessage &call){
+	::DBus::Message _GoMinBase_mstub(const ::DBus::CallMessage &call){
+		try {
+		call.reader();
+impl->GoMinBase();
+		::DBus::ReturnMessage reply(call);
+		return reply;
+		} catch (Poco::Exception &ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.message().c_str());
+		} catch (std::exception & ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.what());
+		} 
+	}
+	::DBus::Message _GoMaxBase_mstub(const ::DBus::CallMessage &call){
+		try {
+		call.reader();
+impl->GoMaxBase();
+		::DBus::ReturnMessage reply(call);
+		return reply;
+		} catch (Poco::Exception &ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.message().c_str());
+		} catch (std::exception & ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.what());
+		} 
+	}
+	::DBus::Message _GoRelBase_mstub(const ::DBus::CallMessage &call){
 		try {
 		::DBus::MessageIter ri = call.reader();
-		int32_t _speed;
+		double _speed;
 ri >> _speed;
-impl->GoRel(_speed);
+impl->GoRelBase(_speed);
 		::DBus::ReturnMessage reply(call);
+		return reply;
+		} catch (Poco::Exception &ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.message().c_str());
+		} catch (std::exception & ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.what());
+		} 
+	}
+	::DBus::Message _GoMinAntenna_mstub(const ::DBus::CallMessage &call){
+		try {
+		call.reader();
+impl->GoMinAntenna();
+		::DBus::ReturnMessage reply(call);
+		return reply;
+		} catch (Poco::Exception &ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.message().c_str());
+		} catch (std::exception & ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.what());
+		} 
+	}
+	::DBus::Message _GoMaxAntenna_mstub(const ::DBus::CallMessage &call){
+		try {
+		call.reader();
+impl->GoMaxAntenna();
+		::DBus::ReturnMessage reply(call);
+		return reply;
+		} catch (Poco::Exception &ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.message().c_str());
+		} catch (std::exception & ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.what());
+		} 
+	}
+	::DBus::Message _GoRelAntenna_mstub(const ::DBus::CallMessage &call){
+		try {
+		::DBus::MessageIter ri = call.reader();
+		double _speed;
+ri >> _speed;
+impl->GoRelAntenna(_speed);
+		::DBus::ReturnMessage reply(call);
+		return reply;
+		} catch (Poco::Exception &ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.message().c_str());
+		} catch (std::exception & ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.what());
+		} 
+	}
+	::DBus::Message _GetStatus_mstub(const ::DBus::CallMessage &call){
+		try {
+		call.reader();
+		bool _baseTouchMin;
+		bool _baseTouchMax;
+		double _basePosition;
+		bool _basePositionError;
+		bool _antennaTouchMin;
+		bool _antennaTouchMax;
+		double _antennaPosition;
+		bool _antennaPositionError;
+		bool _antennaTouch1;
+		bool _antennaTouch2;
+		bool _antennaTouch3;
+		bool _antennaTouch4;
+		int32_t _antennaDistance1;
+		int32_t _antennaDistance2;
+		int32_t _antennaDistance3;
+		int32_t _antennaDistance4;
+impl->GetStatus(_baseTouchMin, _baseTouchMax, _basePosition, _basePositionError, _antennaTouchMin, _antennaTouchMax, _antennaPosition, _antennaPositionError, _antennaTouch1, _antennaTouch2, _antennaTouch3, _antennaTouch4, _antennaDistance1, _antennaDistance2, _antennaDistance3, _antennaDistance4);
+		::DBus::ReturnMessage reply(call);
+		::DBus::MessageIter wi = reply.writer();
+		wi <<  _baseTouchMin;
+		wi <<  _baseTouchMax;
+		wi <<  _basePosition;
+		wi <<  _basePositionError;
+		wi <<  _antennaTouchMin;
+		wi <<  _antennaTouchMax;
+		wi <<  _antennaPosition;
+		wi <<  _antennaPositionError;
+		wi <<  _antennaTouch1;
+		wi <<  _antennaTouch2;
+		wi <<  _antennaTouch3;
+		wi <<  _antennaTouch4;
+		wi <<  _antennaDistance1;
+		wi <<  _antennaDistance2;
+		wi <<  _antennaDistance3;
+		wi <<  _antennaDistance4;
 		return reply;
 		} catch (Poco::Exception &ex){
 			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.message().c_str());
@@ -86,7 +199,7 @@ impl->GoRel(_speed);
 	}
 
 				
-				HAL::API::BioRadar::IBase::Ptr impl;
+				HAL::API::BioRadar::IBioRadar::Ptr impl;
 };
  } 
  } 

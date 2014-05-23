@@ -12,8 +12,8 @@ namespace TBS {
 		namespace RoboCan {
 			
 
-				ModuleCommandTask::ModuleCommandTask(const InternalCanModule & module, const CanMessage & cmd) :
-						ModuleTask<AckMessage>(module.getName() + ":Command", module.getNotificationWorker(), module.getCommunicationChannel(), cmd), moduleCanId(
+				ModuleCommandTask::ModuleCommandTask(std::string commandName, const InternalCanModule & module, const CanMessage & cmd) :
+						ModuleTask<AckMessage>(module.getName() + ":Command:" + commandName, module.getNotificationWorker(), module.getCommunicationChannel(), cmd), moduleCanId(
 								module.getCanID()) {
 
 				}
@@ -58,8 +58,8 @@ namespace TBS {
 					}
 				}
 
-				ModuleCommandAnyAckTask::ModuleCommandAnyAckTask(const InternalCanModule & module, const CanMessage & cmd) :
-						ModuleTask<AckMessage>(module.getName() + ":AnyAckCommand", module.getNotificationWorker(), module.getCommunicationChannel(), cmd), moduleCanId(
+				ModuleCommandAnyAckTask::ModuleCommandAnyAckTask(std::string taskname, const InternalCanModule & module, const CanMessage & cmd) :
+						ModuleTask<AckMessage>(module.getName() + ":AnyAckCommand:" + taskname, module.getNotificationWorker(), module.getCommunicationChannel(), cmd), moduleCanId(
 								module.getCanID()) {
 
 				}

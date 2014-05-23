@@ -1,17 +1,62 @@
 <?xml version="1.0" ?>
 <node name="HAL.API.BioRadar">
   
-  <interface name="HAL.API.BioRadar.Base">
+  <interface name="HAL.API.BioRadar.BioRadar">
    
-    <method name="GoMin">
+    <method name="Enable">
     </method>
     
-    <method name="GoMax">
+    <method name="Disable">
     </method>
     
-    <method name="GoRel">
-    	<arg type="i" name="speed" direction="in" comment="-100 to 100"/>
+    <method name="GoMinBase">
     </method>
+    
+    <method name="GoMaxBase">
+    </method>
+    
+    <method name="GoRelBase">
+    	<arg type="d" name="speed" direction="in"/>
+    </method>
+    
+    <method name="GoMinAntenna">
+    </method>
+    
+    <method name="GoMaxAntenna">
+    </method>
+    
+    <method name="GoRelAntenna">
+    	<arg type="d" name="speed" direction="in"/>
+    </method>
+    
+    
+    <method name="GetStatus">
+      <arg type="b" name="baseTouchMin" direction="out"/>
+      <arg type="b" name="baseTouchMax" direction="out"/>
+      
+      <arg type="d" name="basePosition" direction="out"/>
+      <arg type="b" name="basePositionError" direction="out"/>
+      
+      <arg type="b" name="antennaTouchMin" direction="out"/>
+      <arg type="b" name="antennaTouchMax" direction="out"/>
+      
+      <arg type="d" name="antennaPosition" direction="out"/>
+      <arg type="b" name="antennaPositionError" direction="out"/>
+      
+      <arg type="b" name="antennaTouch1" direction="out"/>
+      <arg type="b" name="antennaTouch2" direction="out"/>
+      <arg type="b" name="antennaTouch3" direction="out"/>
+      <arg type="b" name="antennaTouch4" direction="out"/>
+      
+      <arg type="i" name="antennaDistance1" direction="out"/>
+      <arg type="i" name="antennaDistance2" direction="out"/>
+      <arg type="i" name="antennaDistance3" direction="out"/>
+      <arg type="i" name="antennaDistance4" direction="out"/>
+      
+    </method>
+    
     
   </interface>
+  
+  
 </node>

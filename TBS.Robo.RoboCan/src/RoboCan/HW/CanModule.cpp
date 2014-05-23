@@ -33,22 +33,22 @@ namespace TBS {
 					return new ModuleStatusTask(this->getInternalModule());
 				}
 				ModuleCommandAnyAckTask::Ptr CanModule::taskGetError() const {
-					return new ModuleCommandAnyAckTask(this->getInternalModule(), this->getInternalModule().cmdGetError());
+					return new ModuleCommandAnyAckTask("GetError", this->getInternalModule(), this->getInternalModule().cmdGetError());
 				}
 				ModuleDataTask::Ptr CanModule::taskGetData() const {
 					return new ModuleDataTask(this->getInternalModule());
 				}
 				ModuleCommandAnyAckTask::Ptr CanModule::taskStart() const {
-					return new ModuleCommandAnyAckTask(this->getInternalModule(), this->getInternalModule().cmdStart());
+					return new ModuleCommandAnyAckTask("Start", this->getInternalModule(), this->getInternalModule().cmdStart());
 				}
 				ModuleCommandAnyAckTask::Ptr CanModule::taskHalt() const {
-					return new ModuleCommandAnyAckTask(this->getInternalModule(), this->getInternalModule().cmdHalt());
+					return new ModuleCommandAnyAckTask("Halt", this->getInternalModule(), this->getInternalModule().cmdHalt());
 				}
 				ModuleCommandAnyAckTask::Ptr CanModule::taskRestart() const {
-					return new ModuleCommandAnyAckTask(this->getInternalModule(), this->getInternalModule().cmdRestart());
+					return new ModuleCommandAnyAckTask("Restart", this->getInternalModule(), this->getInternalModule().cmdRestart());
 				}
 				ModuleCommandAnyAckTask::Ptr CanModule::taskStop() const {
-					return new ModuleCommandAnyAckTask(this->getInternalModule(), this->getInternalModule().cmdStop());
+					return new ModuleCommandAnyAckTask("Stop", this->getInternalModule(), this->getInternalModule().cmdStop());
 				}
 
 			/*

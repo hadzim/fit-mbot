@@ -13,38 +13,29 @@
 #include "TBS/OutputNotification.h"
 #include "TBS/CommandNotification.h"
 #include <memory>
+#include <Poco/Semaphore.h>
 
 namespace TBS {
 	namespace Task {
+
 		class TBS_API Task: protected ActiveEventObject {
 			public:
-				struct TaskFinishedStatus {
+				class TBS_API TaskFinishedStatus {
+					public:
 						enum StatusType {
 							STATUS_DONE, STATUS_ERROR, STATUS_CANCELED,
 						};
 
+						TaskFinishedStatus(std::string errorMessage);
+						TaskFinishedStatus(StatusType t = STATUS_DONE);
+
+						bool isOk() const;
+						bool isError() const;
+						bool isCanceled() const;
+						std::string getErrorMessage() const;
+					private:
 						StatusType statusType;
 						std::string errorMessage;
-
-						TaskFinishedStatus(std::string errorMessage) :
-								statusType(STATUS_ERROR), errorMessage(errorMessage) {
-						}
-						TaskFinishedStatus(StatusType t = STATUS_DONE) :
-								statusType(t), errorMessage("") {
-						}
-
-						bool isOk() {
-							return statusType == STATUS_DONE;
-						}
-						bool isError() {
-							return statusType == STATUS_ERROR;
-						}
-						bool isCanceled() {
-							return statusType == STATUS_CANCELED;
-						}
-						std::string getErrorMessage() {
-							return this->errorMessage;
-						}
 				};
 
 				typedef Poco::SharedPtr<Task> Ptr;
@@ -58,6 +49,8 @@ namespace TBS {
 				void cancel();
 				Poco::BasicEvent<TaskFinishedStatus> Finished;
 
+				bool isActive();
+
 				std::string getName();
 			protected:
 
@@ -66,7 +59,14 @@ namespace TBS {
 
 				template<class Argument>
 				void notify(Poco::BasicEvent<Argument> & event, Argument & value) {
-					TBS::CommandExecutorEnqueueAndContinue::execute(this->nw(), new OutputEventCommand<Argument>(this, event, value));
+					LOG_STREAM_DEBUG << "Task " << this->getName() << " notify " << LE;
+
+					typename OutputEventCommandCheckable<Argument>::Ptr o = new OutputEventCommandCheckable<Argument>(
+							this->getName(), this, event, value);
+					this->check = o->getCheck();
+					CommandExecutorEnqueueAndContinue::execute(this->nw(), o);
+
+					LOG_STREAM_DEBUG << "Task " << this->getName() << " notify enqued" << LE;
 					//this->nw().postNotification(new OutputEventNotification<Argument>(this, event, value));
 				}
 
@@ -77,6 +77,7 @@ namespace TBS {
 				std::string name;
 				NotificationWorker::Ptr nw_;
 
+				Poco::SharedPtr<Poco::Event> check;
 		};
 
 		/**
@@ -111,4 +112,8 @@ namespace TBS {
 		};
 	}
 } /* namespace TBS */
+
+TBS_API std::ostream & operator<<(std::ostream & stream, const TBS::Task::Task::TaskFinishedStatus & s);
+
+
 #endif /* TASK_H_ */

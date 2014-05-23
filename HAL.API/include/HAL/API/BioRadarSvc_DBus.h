@@ -26,7 +26,7 @@ namespace HAL {
 	namespace API { 
 		namespace BioRadar { 
 			namespace DBus { 
-       class Client {
+       class GEN_SERVICE_API Client {
 			public:
 				typedef Poco::SharedPtr <Client> Ptr;
 				
@@ -34,28 +34,30 @@ namespace HAL {
 				Client(TBS::Services::ICommChannelHolder::Ptr ch);
 				//with default dbus dispatcher
 				Client();
+				~Client();
 				
-				HAL::API::BioRadar::IBase & Base();
+				HAL::API::BioRadar::IBioRadar & BioRadar();
 
 				
 		private: 
 				TBS::Services::ICommChannelHolder::Ptr ch;
 				std::auto_ptr<TBS::Services::CommunicationChannelHolder> comChannelHolder;
-				HAL::API::BioRadar::IBase::Ptr base_;
+				HAL::API::BioRadar::IBioRadar::Ptr bioradar_;
 
 			};
 			
 			
-		class Server {
+		class GEN_SERVICE_API Server {
 			public:
 				typedef Poco::SharedPtr<Server> Ptr;
 				//with given dbus dispatcher via DBusCommChannelProvider
 				Server(TBS::Services::ICommChannelHolder::Ptr ch);
 				//uses default dbus dispatcher
 				Server();
+				~Server();
 				
 			public:
-				TBS::Services::IServer::Ptr createBase(HAL::API::BioRadar::IBase::Ptr impl);
+				TBS::Services::IServer::Ptr createBioRadar(HAL::API::BioRadar::IBioRadar::Ptr impl);
 
 				
 			private:

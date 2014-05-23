@@ -21,6 +21,8 @@ namespace HAL {
 	   Client::Client() : 
 		   ch(TBS::Services::DBusCommChannelProvider::getDefaultCommChannel()), comChannelHolder(new TBS::Services::CommunicationChannelHolder(ch)) {
 	   }
+	   Client::~Client(){ 
+	   }
 	   HAL::API::Movement::IMovement & Client::Movement(){
    if (!movement_) {      movement_ =  new TBS::Services::DBusClientImpl<HAL::API::Movement::Stub::Movement_DBusClient>(comChannelHolder->getConnection());
    }   return *movement_;
@@ -36,6 +38,8 @@ namespace HAL {
 	   	   ch(TBS::Services::DBusCommChannelProvider::getDefaultCommChannel()){
 		   
 	    } 
+	    Server::~Server(){ 
+	    }
 	    
 	   TBS::Services::IServer::Ptr Server::createMovement(HAL::API::Movement::IMovement::Ptr impl){
    return new TBS::Services::DBusServerImpl<HAL::API::Movement::IMovement, HAL::API::Movement::Stub::Movement_DBusServer>(ch, impl);

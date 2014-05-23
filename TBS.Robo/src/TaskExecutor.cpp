@@ -37,7 +37,7 @@ namespace TBS {
 			task->start();
 			try {
 				e.wait(timeout);
-			} catch (Poco::TimeoutException & ){
+			} catch (Poco::TimeoutException &) {
 
 				task->cancel();
 				ec.wait(timeout);
@@ -48,28 +48,80 @@ namespace TBS {
 			//std::cout << "sync execute done" << std::endl;
 		}
 
-		SynchronizedExectution::~SynchronizedExectution(){
-			if (!this->task.isNull()){
+		SynchronizedExectution::~SynchronizedExectution() {
+			if (!this->task.isNull()) {
 				this->task->Finished -= Poco::delegate(this, &SynchronizedExectution::onSyncFinished);
 				this->task->cancel();
 			}
 		}
 
-
 		void SynchronizedExectution::onSyncFinished(TBS::Task::Task::TaskFinishedStatus & s) {
-			std::cout << "sync task finished: ";
-			if (s.isOk()){
-				std::cout << "ok";
-			} else if (s.isCanceled()){
-				std::cout << "canceled";
-			} else {
-				std::cout << "error: " << s.getErrorMessage();
-			}
-			std::cout << " after " << (timestamp.elapsed()/ 1000) << "ms" << std::endl;
+			std::cout << "sync task finished: " << s << " after " << (timestamp.elapsed() / 1000) << "ms" << std::endl;
 			task->Finished -= Poco::delegate(this, &SynchronizedExectution::onSyncFinished);
 			this->exitStatus = s;
 			e.set();
 			ec.set();
+		}
+
+		 Poco::Mutex TaskWrapper::m;
+
+		TaskWrapper::TaskWrapper(Task::Ptr t) :
+				t(t), active(true) {
+			LERROR("app") << "wrap task " << t->getName() << LE;
+
+			t->Finished += Poco::delegate(this, &TaskWrapper::onFinished);
+			t->start();
+		}
+		TaskWrapper::~TaskWrapper() {
+			t->cancel();
+			t->Finished -= Poco::delegate(this, &TaskWrapper::onFinished);
+		}
+
+		void TaskWrapper::cancel() {
+			t->cancel();
+		}
+		bool TaskWrapper::isActive() {
+			return active;
+		}
+
+		void TaskWrapper::onFinished(Task::TaskFinishedStatus & status) {
+			std::cout << "task finished: " << status << " after " << (tstmp.elapsed() / 1000) << "ms" << std::endl;
+
+			t->Finished -= Poco::delegate(this, &TaskWrapper::onFinished);
+			active = false;
+		}
+
+		OneActiveTaskExectution::~OneActiveTaskExectution() {
+			Poco::Mutex::ScopedLock l(m);
+			this->cancelAll();
+			LDEBUG("app") << "one active task finished" << LE;
+		}
+
+		void OneActiveTaskExectution::addTask(Task::Ptr t) {
+			LWARNING("app") << "add task " << t->getName() << LE;
+			Poco::Mutex::ScopedLock l(m);
+			//cancel all old tasks
+			this->cancelAll();
+
+
+			tasks.push_back(new TaskWrapper(t));
+
+
+			//remove passive tasks
+			std::vector<TaskWrapper::Ptr> cpy = tasks;
+			tasks.clear();
+			for (std::vector<TaskWrapper::Ptr>::iterator i = cpy.begin(); i != cpy.end(); i++) {
+				if ((*i)->isActive()) {
+					tasks.push_back(*i);
+				}
+			}
+		}
+
+		void OneActiveTaskExectution::cancelAll() {
+			for (std::vector<TaskWrapper::Ptr>::iterator i = tasks.begin(); i != tasks.end(); i++) {
+				(*i)->cancel();
+			}
+			LDEBUG("app") << "all tasks canceled" << LE;
 		}
 
 	}
