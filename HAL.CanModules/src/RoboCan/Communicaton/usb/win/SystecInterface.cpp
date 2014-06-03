@@ -2,10 +2,12 @@
 #include <iostream>
 #include <sstream>
 // ONLY FOR WIN32 PLATFORM!
-#if 1
+#ifdef _WIN32
 
 // Project libraries.
 #include "SystecInterface.h"
+
+namespace can {
 
 // Namespaces.
 
@@ -133,7 +135,7 @@ bool SystecInterface::getMessage(CANFrame::Ptr frame) {
 		for (i = 0; i < rx.m_bDLC; i++) {
 			frame->setData8(i, rx.m_bData[i]);
 		}
-		for (i; i < 8; i++) {
+		for (; i < 8; i++) {
 			frame->setData8(i, 0);
 		}
 		return TRUE;
@@ -160,14 +162,10 @@ void PUBLIC SystecInterface::callback(tUcanHandle UcanHandle_p, BYTE bEvent_p) {
 	switch (bEvent_p) {
 	// CAN message received
 	case USBCAN_EVENT_RECEIVE:
-		//qDebug() << "USBCAN_EVENT_RECEIVE";
-		//TODO
 		if (instance){
 			instance->emitMessage();
 		}
-		//SystecInterface::getInstance().emitMessageFromCAN();
 		break;
-
 		// changes error status
 	case USBCAN_EVENT_STATUS:
 		std::cout << "USBCAN_EVENT_STATUS" << std::endl;
@@ -178,56 +176,6 @@ void PUBLIC SystecInterface::callback(tUcanHandle UcanHandle_p, BYTE bEvent_p) {
 	}
 }
 
-//----------------------------------UNUSED-------------------------------
-//    if (autoreply_) {
-//        if (checkAutoReplyID(frame->ID())) {
-//            replyToMessage(frame);
-//        }
-//    }
-//-----------------------------------------------------------------------
-//
-// Fast reply to message (Same message, just CAN_ID = CAN_ID + 1).
-//void SystecInterface::replyToMessage(rce::net::can::CANFrame::ptr frame)
-//{
-//#ifdef TIMING_OUTPUT
-//    QDateTime time = QDateTime::currentDateTime();
-//#endif
-//    if (connected_) {
-//        tCanMsgStruct tx;
-//
-//        tx.m_dwID = frame->ID()+1;
-//        tx.m_bFF = 0;
-//        tx.m_bDLC = frame->DLC();
-//        for (int i = 0; i < 8; i++) {
-//            tx.m_bData[i] = frame->getData8(i);
-//        }
-//        int ret = UcanWriteCanMsg(this->canHandle_, &tx);
-//#ifdef TIMING_OUTPUT
-//        qDebug() << time.toString("mm:ss.zzz") << "\t" << "rep! " << frame->toString();
-//#endif
-//        if (ret != 0) {
-//            qDebug() << "SystecInterface::replyToMessage - wrong return value:" << ret;
-//        }
-//    }
-//}
-//-----------------------------------------------------------------------
-//bool SystecInterface::sendMessage(rce::net::can::CANFrame::ptr frame)
-//{
-//    if (connected_) {
-//        tCanMsgStruct tx;
+}
 
-//        tx.m_dwID = frame->ID();
-//        tx.m_bFF = 0;
-//        tx.m_bDLC = frame->DLC();
-//        for (int i = 0; i < 8; i++) {
-//            tx.m_bData[i] = frame->getData8(i);
-//        }
-//        int ret = UcanWriteCanMsg(this->canHandle_, &tx);
-
-//        if (ret != 0) {
-//            qDebug() << "SystecInterface::sendPacket - wrong return value:" << ret;
-//        }
-//    }
-//    return false;
-//}
 #endif

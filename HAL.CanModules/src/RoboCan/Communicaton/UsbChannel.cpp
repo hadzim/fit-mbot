@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include "usb/CANFrame.h"
-#include "usb/SystecInterface.h"
+#include "usb/ICanWorker.h"
 #include <Poco/Delegate.h>
 #include "TBS/Robo/RoboCan/Communication/UsbChannel.h"
 
@@ -83,10 +83,10 @@ void UsbChannel::onFrame(CANFrame::Ptr & f) {
 void UsbChannel::run() {
 	try {
 		std::cout << "start usb bg" << std::endl;
-		SystecInterface interface(500);
-		std::cout << "usb interface: " << interface.getVestion() << std::endl;
+		can::ICanWorker::Ptr interface = can::ICanWorker::create();
 
-		interface.FrameReady += Poco::delegate(this, &UsbChannel::onFrame);
+
+		interface->FrameReady += Poco::delegate(this, &UsbChannel::onFrame);
 		while (!stopThread) {
 			CanMessages toSend;
 			{
@@ -102,14 +102,14 @@ void UsbChannel::run() {
 				std::cout << std::endl;
 				std::cout << "send: " << msg->toString() << std::endl;
 				std::cout << std::endl;
-				interface.sendFrame(frame);
+				interface->sendFrame(frame);
 			}
 
 			if (stopThread)
 				break;
 
 		}
-		interface.FrameReady -= Poco::delegate(this, &UsbChannel::onFrame);
+		interface->FrameReady -= Poco::delegate(this, &UsbChannel::onFrame);
 		std::cout << "usb thread loop exit" << std::endl;
 	} catch (Poco::Exception & e) {
 		std::cerr << "net thread loop failed " << e.displayText() << std::endl;

@@ -1,8 +1,11 @@
 // Project libraries.
+#include <string.h>
 #include "CANFrame.h"
 
 
 
+
+#include <stdlib.h>
 
 // Constructor
 CANFrame::CANFrame()
@@ -184,6 +187,36 @@ bool CANFrame::compare(CANFrame::Ptr p)
 //    return buf;
 //}
 
+Poco::UInt32 CANFrame::getFrameID() const{
+	Poco::UInt32 id_mess = 0;
+	if (IDE_ == EXTENDED)
+	{
+		id_mess = maskIDE | (ID_ & maskID_Extended);
+	}
+	else
+	{
+		id_mess = ID_ & maskID_Standard;
+	}
+	if (RTR_)
+	{
+		id_mess |= maskRTR;
+	}
+	return id_mess;
+
+}
+
+void CANFrame::initDataBuffer(unsigned char * buffer, int length){
+	int i = 0;
+	for (i = 0; i < length; i++)
+	{
+		if (i < DLC_){
+			buffer[i] = ((Poco::UInt8)data_[i]);
+		} else {
+			buffer[i] = ((unsigned char)0);
+		}
+
+	}
+}
 
 std::vector <Poco::UInt8> CANFrame::toByteArray()
 {

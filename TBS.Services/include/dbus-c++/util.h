@@ -109,6 +109,7 @@ private:
  *   Reference counting pointers (emulate boost::shared_ptr)
  */
 
+
 template <class T>
 class RefPtrI		// RefPtr to incomplete type
 {

@@ -20,7 +20,7 @@ namespace HAL {
 class RemoteJsonServer: public HAL::Remote::IMovement {
 public:
 	RemoteJsonServer() {
-		client = new HAL::API::DBus::Client();
+		client = new HAL::API::Movement::DBus::Client();
 	}
 	virtual void Move(const double & speedLeft, const double & speedRight) {
 		client->Movement().Move(speedLeft, speedRight);
@@ -30,7 +30,7 @@ public:
 		client->Movement().Stop();
 	}
 private:
-	HAL::API::DBus::Client::Ptr client;
+	HAL::API::Movement::DBus::Client::Ptr client;
 
 };
 

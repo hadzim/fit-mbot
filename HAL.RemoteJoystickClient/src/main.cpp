@@ -177,7 +177,7 @@ void onJoystick(Joystick::Coord & c) {
 
 int main(int argc, char** argv) {
 	try {
-		client = new HAL::Remote::Json::Client(TBS::Services::JsonClientChannel("192.168.0.1", 8181));
+		client = new HAL::Remote::Json::Client(TBS::Services::JsonClientChannel("192.168.0.1", 8080));
 		{
 			SDLLoop loop;
 			{

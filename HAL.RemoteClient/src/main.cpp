@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
 		TBS::initLogs("hal.remoteclient", 6);
 		{
 			HAL::Remote::Json::Client::Ptr client = new HAL::Remote::Json::Client(
-					TBS::Services::JsonClientChannel("192.168.64.141", 8080));
+					TBS::Services::JsonClientChannel("192.168.0.1", 8080));
 			while (1){
 				std::string str;
 				std::cin >> str;

@@ -8,6 +8,8 @@
 #include "HAL/API/MovementSvc_DBus.h"
 #include "HAL/API/BioRadarSvc_DBus.h"
 
+#include "TBS/Log.h"
+
 using namespace cv;
 using namespace std;
 
@@ -63,6 +65,7 @@ static void onMouse2( int event, int x, int y, int, void* )
 	} catch (std::exception & e){
 		std::cerr << "Exception: " << e.what() << std::endl;
 	}
+	//Poco::Thread::sleep(50);
 }
 
 void updateSpeed(HAL::API::Movement::IMovement::StatusChangedArg & arg){
@@ -93,6 +96,9 @@ void drawSpeed(Mat & img){
 int main( int argc, char** argv )
 {
 	try {
+
+		TBS::initLogs("cvclient", 8);
+
 		std::cout << "HAL Client Starts" << std::endl;
 		Mat image(200, 200, CV_8UC3);
 		Mat imageRadar(50, 200, CV_8UC3);

@@ -2,7 +2,7 @@
 #define SYSTECINTERFACE_H
 
 // ONLY FOR WIN32 PLATFORM!
-#if 1
+#ifdef _WIN32
 
 // Project libraries.
 #include <windows.h>
@@ -15,9 +15,9 @@
 #include <Poco/BasicEvent.h>
 
 
+namespace can {
 
-
-class SystecInterface {
+class SystecInterface : public ICanWorker {
 
 public:
 	//! Constructor is defined later.
@@ -36,8 +36,7 @@ public:
 		return &canHandle_;
 	}
 
-	Poco::BasicEvent <CANFrame::Ptr> FrameReady;
-	void sendFrame(CANFrame::Ptr frame);
+	virtual void sendFrame(CANFrame::Ptr frame);
 
 private:
 	void emitMessage();
@@ -62,16 +61,13 @@ private:
 	tUcanHandle canHandle_;         //! USB-CAN dongle handler.
 
 private:
-	SystecInterface(SystecInterface const&); // Don't Implement
-	void operator=(SystecInterface const&); // Don't Implement
 
-	//! Constructor.
-	SystecInterface();
 
 public:
 	static SystecInterface * instance;
 };
 
+}
 
 #endif
 #endif // SYSTECINTERFACE_H

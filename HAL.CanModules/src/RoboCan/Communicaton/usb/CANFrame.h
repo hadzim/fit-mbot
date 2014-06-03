@@ -13,6 +13,7 @@ class CANFrame
 {
 public:
     typedef Poco::SharedPtr<CANFrame> Ptr;
+    typedef std::vector <Ptr> PtrList;
 
     enum Identifier
     {
@@ -79,6 +80,11 @@ public:
     CANFrame();
     CANFrame(Poco::UInt32 id, Poco::UInt8 dlc);
     ~CANFrame();
+
+    Poco::UInt32 getFrameID() const;
+
+    void initDataBuffer(unsigned char * buffer, int length);
+
     void setData8(int index, Poco::UInt8 value);
     void setData16(int index, Poco::UInt16 value);
     void setData32(int index, Poco::UInt32 value);
