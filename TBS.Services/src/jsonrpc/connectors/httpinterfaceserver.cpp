@@ -48,6 +48,7 @@ namespace jsonrpc {
 
 			MultiRootHandler(ServiceHandlers & serviceHandlers, HttpServerParams p) :
 					handlerProvider(serviceHandlers), p(p) {
+				std::cout << "create json root handler: " << p.port << std::endl;
 			}
 
 			void handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {
@@ -57,14 +58,14 @@ namespace jsonrpc {
 					std::string serviceName = request.getURI();
 
 					bool isRoot = serviceName == "/";
-/*
+
 					std::cout << "SERVER service name: " << serviceName << std::endl;
 					std::cout << "SERVER request length: " << request.getContentLength() << std::endl;
 					std::cout << "SERVER request method: " << request.getMethod() << std::endl;
 					std::cout << "SERVER request chunked: " << request.getChunkedTransferEncoding() << std::endl;
 					std::cout << "SERVER request type: " << request.getContentType() << std::endl;
 					std::cout << "SERVER request host: " << request.getHost() << std::endl;
-*/
+
 					if (p.allowCrossDomain && !isRoot) {
 						try {
 							response.set("Access-Control-Allow-Origin", request.get("Origin"));
@@ -197,19 +198,10 @@ namespace jsonrpc {
 		Poco::Net::HTTPServerParams* pParams = new Poco::Net::HTTPServerParams;
 		pParams->setMaxQueued(100);
 		pParams->setMaxThreads(2);
-		if (p.isHttps) {
-			std::cout << "service via https: PK: " << p.privateKey << " CT:" << p.certificate << std::endl;
-			Poco::Net::Context::Ptr context = new Poco::Net::Context(Poco::Net::Context::SERVER_USE, p.privateKey, p.certificate, "");
-			// disable session cache because of Firefox (less memory consuming than session cache enabling)
-			context->disableStatelessSessionResumption();
-			Poco::Net::SecureServerSocket svs(p.port, 64, context);
-			srv = std::auto_ptr<Poco::Net::HTTPServer>(new Poco::Net::HTTPServer(new MultiRequestHandlerFactory(handlers_, p), svs, pParams));
-			std::cout << "multi https server listens on " << srv->port() << std::endl;
-		} else {
 			Poco::Net::ServerSocket svs(p.port); // set-up a server socket
 			srv = std::auto_ptr<Poco::Net::HTTPServer>(new Poco::Net::HTTPServer(new MultiRequestHandlerFactory(handlers_, p), svs, pParams));
 			std::cout << "multi server listens on " << srv->port() << std::endl;
-		}
+
 	}
 
 	HttpInterfaceServer::~HttpInterfaceServer() {

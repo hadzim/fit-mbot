@@ -50,8 +50,8 @@ static void onMouse( int event, int x, int y, int, void* )
 static void onMouse2( int event, int x, int y, int, void* )
 {
 	try {
-		if( event != CV_EVENT_LBUTTONDOWN )
-			return;
+		//if( event != CV_EVENT_LBUTTONDOWN )
+		//	return;
 
 		double speed = -((-100 + y) * 1.0);
 

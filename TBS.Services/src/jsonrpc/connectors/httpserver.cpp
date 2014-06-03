@@ -27,6 +27,7 @@ namespace jsonrpc {
 
 			RootHandler(ServerHandlerProvider & handlerProvider) :
 					handlerProvider(handlerProvider) {
+				std::cout << "create simple handler: "<< std::endl;
 			}
 
 			void handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {

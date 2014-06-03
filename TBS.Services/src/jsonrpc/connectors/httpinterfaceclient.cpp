@@ -41,7 +41,7 @@ namespace jsonrpc {
 			client = ClientPtr(new Poco::Net::HTTPSClientSession(p.host, p.port, context));
 			std::cout << "create https done" << std::endl;
 		} else {
-			std::cout << "create http" << std::endl;
+			std::cout << "create http for " << p.host << " on port " << p.port << std::endl;
 			client = ClientPtr(new Poco::Net::HTTPClientSession(p.host, p.port));
 			std::cout << "create http done" << std::endl;
 		}

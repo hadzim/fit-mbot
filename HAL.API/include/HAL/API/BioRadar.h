@@ -11,101 +11,102 @@
 #include <vector>
 #include <map>
 
-namespace TBS {
-	namespace Services {
-		namespace Introspection {
-			class Class;
-			struct Struct;
-		}
-	}
-}
+namespace TBS{ namespace Services{ namespace Introspection{ class Class; struct Struct; } } } 
 
-namespace HAL {
-	namespace API {
-		namespace BioRadar {
-		/** [interface] IBioRadar:  */
-		class GEN_SERVICE_API IBioRadar {
+
+
+
+namespace HAL { 
+	namespace API { 
+		namespace BioRadar { 
+	   /** [interface] IBioRadar:  */
+       class GEN_SERVICE_API IBioRadar {
 			public:
-			typedef Poco::SharedPtr <IBioRadar> Ptr;
+				typedef Poco::SharedPtr <IBioRadar> Ptr;
+				
+				virtual ~IBioRadar(){}
+				
+				static std::string name(){
+					static std::string n = "HAL.API.BioRadar.BioRadar";
+					return n;
+				}
+				static const ::TBS::Services::Introspection::Class & introspection();
+				
+ //methods 
+				
+		/** 
+		  * [method] Enable: 
+		  */ 
+		        virtual void Enable() = 0;
 
-			virtual ~IBioRadar() {}
+		/** 
+		  * [method] Disable: 
+		  */ 
+		        virtual void Disable() = 0;
 
-			static std::string name() {
-				static std::string n = "HAL.API.BioRadar.BioRadar";
-				return n;
-			}
-			static const ::TBS::Services::Introspection::Class & introspection();
+		/** 
+		  * [method] GoMinBase: 
+		  */ 
+		        virtual void GoMinBase() = 0;
 
-			//methods
+		/** 
+		  * [method] GoMaxBase: 
+		  */ 
+		        virtual void GoMaxBase() = 0;
 
-			/**
-			 * [method] Enable:
-			 */
-			virtual void Enable() = 0;
+		/** 
+		  * [method] GoRelBase: 
+		  * [in] double speed: 
+		  */ 
+		        virtual void GoRelBase(const double & speed) = 0;
 
-			/**
-			 * [method] Disable:
-			 */
-			virtual void Disable() = 0;
+		/** 
+		  * [method] GoMinAntenna: 
+		  */ 
+		        virtual void GoMinAntenna() = 0;
 
-			/**
-			 * [method] GoMinBase:
-			 */
-			virtual void GoMinBase() = 0;
+		/** 
+		  * [method] GoMaxAntenna: 
+		  */ 
+		        virtual void GoMaxAntenna() = 0;
 
-			/**
-			 * [method] GoMaxBase:
-			 */
-			virtual void GoMaxBase() = 0;
+		/** 
+		  * [method] GoRelAntenna: 
+		  * [in] double speed: 
+		  */ 
+		        virtual void GoRelAntenna(const double & speed) = 0;
 
-			/**
-			 * [method] GoRelBase:
-			 * [in] double speed:
-			 */
-			virtual void GoRelBase(const double & speed) = 0;
+		/** 
+		  * [method] GetStatus: 
+		  * [out] bool baseTouchMin: 
+		  * [out] bool baseTouchMax: 
+		  * [out] double basePosition: 
+		  * [out] bool basePositionError: 
+		  * [out] bool antennaTouchMin: 
+		  * [out] bool antennaTouchMax: 
+		  * [out] double antennaPosition: 
+		  * [out] bool antennaPositionError: 
+		  * [out] bool antennaTouch1: 
+		  * [out] bool antennaTouch2: 
+		  * [out] bool antennaTouch3: 
+		  * [out] bool antennaTouch4: 
+		  * [out] int32_t antennaDistance1: 
+		  * [out] int32_t antennaDistance2: 
+		  * [out] int32_t antennaDistance3: 
+		  * [out] int32_t antennaDistance4: 
+		  */ 
+		        virtual void GetStatus(bool & baseTouchMin, bool & baseTouchMax, double & basePosition, bool & basePositionError, bool & antennaTouchMin, bool & antennaTouchMax, double & antennaPosition, bool & antennaPositionError, bool & antennaTouch1, bool & antennaTouch2, bool & antennaTouch3, bool & antennaTouch4, int32_t & antennaDistance1, int32_t & antennaDistance2, int32_t & antennaDistance3, int32_t & antennaDistance4) = 0;
 
-			/**
-			 * [method] GoMinAntenna:
-			 */
-			virtual void GoMinAntenna() = 0;
+				
+ //signals 
+				
+				
+			};
+ } 
+ } 
+ } 
 
-			/**
-			 * [method] GoMaxAntenna:
-			 */
-			virtual void GoMaxAntenna() = 0;
 
-			/**
-			 * [method] GoRelAntenna:
-			 * [in] double speed:
-			 */
-			virtual void GoRelAntenna(const double & speed) = 0;
-
-			/**
-			 * [method] GetStatus:
-			 * [out] bool baseTouchMin:
-			 * [out] bool baseTouchMax:
-			 * [out] double basePosition:
-			 * [out] bool basePositionError:
-			 * [out] bool antennaTouchMin:
-			 * [out] bool antennaTouchMax:
-			 * [out] double antennaPosition:
-			 * [out] bool antennaPositionError:
-			 * [out] bool antennaTouch1:
-			 * [out] bool antennaTouch2:
-			 * [out] bool antennaTouch3:
-			 * [out] bool antennaTouch4:
-			 * [out] int32_t antennaDistance1:
-			 * [out] int32_t antennaDistance2:
-			 * [out] int32_t antennaDistance3:
-			 * [out] int32_t antennaDistance4:
-			 */
-			virtual void GetStatus(bool & baseTouchMin, bool & baseTouchMax, double & basePosition, bool & basePositionError, bool & antennaTouchMin, bool & antennaTouchMax, double & antennaPosition, bool & antennaPositionError, bool & antennaTouch1, bool & antennaTouch2, bool & antennaTouch3, bool & antennaTouch4, int32_t & antennaDistance1, int32_t & antennaDistance2, int32_t & antennaDistance3, int32_t & antennaDistance4) = 0;
-
-			//signals
-
-		};
-	}
-}
-}
 
 #endif //_BIORADAR_H_
+

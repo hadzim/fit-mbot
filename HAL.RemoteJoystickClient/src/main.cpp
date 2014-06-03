@@ -5,7 +5,7 @@
 #include <iostream>
 #include <Poco/NumberParser.h>
 #include <Poco/Delegate.h>
-#include "HAL/API/MovementSvc_DBus.h"
+#include "HAL/API/RemoteSvc_Json.h"
 
 #include <SDL/SDL.h>
 
@@ -15,7 +15,7 @@ using namespace std;
 double curSpeedL = 0;
 double curSpeedR = 0;
 
-HAL::API::DBus::Client::Ptr client;
+HAL::Remote::Json::Client::Ptr client;
 
 class SDLLoop {
 public:
@@ -177,7 +177,7 @@ void onJoystick(Joystick::Coord & c) {
 
 int main(int argc, char** argv) {
 	try {
-		client = new HAL::API::DBus::Client();
+		client = new HAL::Remote::Json::Client(TBS::Services::JsonClientChannel("192.168.0.1", 8181));
 		{
 			SDLLoop loop;
 			{
