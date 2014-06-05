@@ -149,7 +149,7 @@ int main( int argc, char** argv )
 					}
 					lastInRow = 0;
 				}
-				std::cout << "tst " << tst.elapsed() / 1000 << "ms - speed: " << speed << std::endl;
+				//std::cout << "tst " << tst.elapsed() / 1000 << "ms - speed: " << speed << std::endl;
 				tst.update();
 			} catch (Poco::Exception & e){
 
@@ -176,6 +176,35 @@ int main( int argc, char** argv )
 				}
 				std::cout << "tst " << tst.elapsed() / 1000 << "ms - speed: " << speed << std::endl;
 				tst.update();
+			} catch (Poco::Exception & e){
+
+			}
+
+			try {
+				if ( (c & 255) == 'e'){
+					bioRadarClient->BioRadar().Enable();
+				} else if( (c & 255) == 'd'){
+					bioRadarClient->BioRadar().Disable();
+				}
+			} catch (Poco::Exception & e){
+
+			}
+
+			try {
+				if ( (c & 255) == 'r'){
+
+					bool touchMin;
+					bool touchMax;
+					double position;
+					bool positionError;
+
+					bioRadarClient->BioRadar().GetMotorStatus(false, touchMin, touchMax, position, positionError);
+
+					std::cout << "Antena touch min: " << (touchMin ? 1 : 0) << std::endl;
+					std::cout << "Antena touch max: " << (touchMax ? 1 : 0) << std::endl;
+					std::cout << "Antena position: " << (position) << std::endl;
+					std::cout << "Antena error: " << (positionError ? 1 : 0) << std::endl;
+				}
 			} catch (Poco::Exception & e){
 
 			}

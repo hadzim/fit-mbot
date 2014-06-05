@@ -25,6 +25,7 @@ namespace MBot {
 			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskGoMin(Poco::Int16 speed = 50) const;
 			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskGoMax(Poco::Int16 speed = 50) const;
 			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskGoRel(Poco::Int16 speed = 50, Poco::Int16 timeInMs = 50) const;
+			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const;
 	};
 
 	class BioRadarPositionTask: public TBS::Robo::RoboCan::ConsumingDataModuleTask {

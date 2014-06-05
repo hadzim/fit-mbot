@@ -35,6 +35,12 @@ namespace MBot {
 		return new TBS::Robo::RoboCan::ModuleCommandTask("GoRel", this->getInternalModule(), this->getInternalModule().composeCommand((int) GoRel, data));
 	}
 
+	TBS::Robo::RoboCan::ModuleCommandTask::Ptr BioRadarMotorModule::taskEnable(bool enable) const {
+		TBS::Robo::RoboCan::RoboCanMessageData data;
+		data.setUSHORT(enable ? 1 : 0);
+		return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask(enable ? "Enable" : "Disable", this->getInternalModule(), this->getInternalModule().composeCommand((int)Enable, data));
+	}
+
 	BioRadarPositionTask::BioRadarPositionTask(std::string name, const TBS::Robo::RoboCan::InternalCanModule & module) :
 			TBS::Robo::RoboCan::ConsumingDataModuleTask(name, module) {
 		this->DataMessageReady += Poco::delegate(this, &BioRadarPositionTask::onDataReady);

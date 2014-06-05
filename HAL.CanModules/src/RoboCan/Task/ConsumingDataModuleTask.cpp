@@ -43,9 +43,10 @@ void ConsumingDataModuleTask::packetRetrieved(CanMessage & m) {
 	if (m.canID != this->canID) {
 		return;
 	}
-	std::cout << "DATA packet retrieved" << std::endl;
+
 	try {
 		RoboCanMessage message(m);
+		std::cout << "DATA packet retrieved: can id: " << m.canID << " command: " << (int)message.getCmd() << " channel: " << (int)message.getChannel() << std::endl;
 		if (DataMessage::isData(message.getCmd())) {
 			try {
 
@@ -53,9 +54,12 @@ void ConsumingDataModuleTask::packetRetrieved(CanMessage & m) {
 					std::cout << "Module " << this->getName()
 							<< " first data message" << std::endl;
 					currentMessage.set(DataMessage(message));
+					std::cout << "Module " << this->getName()
+												<< " size is: " << currentMessage.ref().getSize() << std::endl;
 				} else {
 					std::cout << "Module " << this->getName()
-							<< " next data message" << std::endl;
+							<< " next data message - size is: " << currentMessage.ref().getSize() << std::endl;
+
 					currentMessage.ref().addMessage(message);
 				}
 

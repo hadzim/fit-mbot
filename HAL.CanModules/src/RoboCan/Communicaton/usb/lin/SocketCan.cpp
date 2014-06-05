@@ -129,6 +129,8 @@ void SocketCan::canWrite(CANFrame::Ptr frame) {
 	}
 }
 
+} /* namespace can */
+
 #endif
 
-} /* namespace can */
+

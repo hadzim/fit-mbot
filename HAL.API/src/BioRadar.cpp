@@ -50,23 +50,17 @@ cnmspc.push_back("BioRadar");
 	c.methods.push_back(m);
 }
 {
-	::TBS::Services::Introspection::Method m("GetStatus", "");
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("baseTouchMin", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("baseTouchMax", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("basePosition", "d", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("basePositionError", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaTouchMin", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaTouchMax", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaPosition", "d", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaPositionError", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaTouch1", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaTouch2", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaTouch3", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaTouch4", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaDistance1", "i", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaDistance2", "i", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaDistance3", "i", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antennaDistance4", "i", ""));
+	::TBS::Services::Introspection::Method m("GetMotorStatus", "");
+  m.inArguments.push_back(::TBS::Services::Introspection::Argument("isBase", "b", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("touchMin", "b", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("touchMax", "b", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("position", "d", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("positionError", "b", ""));
+	c.methods.push_back(m);
+}
+{
+	::TBS::Services::Introspection::Method m("GetAntenaStatus", "");
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antenaSensors", "a(bi)", "array of structs(isTouch,distance)"));
 	c.methods.push_back(m);
 }
 return c;

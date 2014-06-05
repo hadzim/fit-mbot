@@ -77,25 +77,20 @@ namespace HAL {
 		        virtual void GoRelAntenna(const double & speed) = 0;
 
 		/** 
-		  * [method] GetStatus: 
-		  * [out] bool baseTouchMin: 
-		  * [out] bool baseTouchMax: 
-		  * [out] double basePosition: 
-		  * [out] bool basePositionError: 
-		  * [out] bool antennaTouchMin: 
-		  * [out] bool antennaTouchMax: 
-		  * [out] double antennaPosition: 
-		  * [out] bool antennaPositionError: 
-		  * [out] bool antennaTouch1: 
-		  * [out] bool antennaTouch2: 
-		  * [out] bool antennaTouch3: 
-		  * [out] bool antennaTouch4: 
-		  * [out] int32_t antennaDistance1: 
-		  * [out] int32_t antennaDistance2: 
-		  * [out] int32_t antennaDistance3: 
-		  * [out] int32_t antennaDistance4: 
+		  * [method] GetMotorStatus: 
+		  * [in] bool isBase: 
+		  * [out] bool touchMin: 
+		  * [out] bool touchMax: 
+		  * [out] double position: 
+		  * [out] bool positionError: 
 		  */ 
-		        virtual void GetStatus(bool & baseTouchMin, bool & baseTouchMax, double & basePosition, bool & basePositionError, bool & antennaTouchMin, bool & antennaTouchMax, double & antennaPosition, bool & antennaPositionError, bool & antennaTouch1, bool & antennaTouch2, bool & antennaTouch3, bool & antennaTouch4, int32_t & antennaDistance1, int32_t & antennaDistance2, int32_t & antennaDistance3, int32_t & antennaDistance4) = 0;
+		        virtual void GetMotorStatus(const bool & isBase, bool & touchMin, bool & touchMax, double & position, bool & positionError) = 0;
+
+		/** 
+		  * [method] GetAntenaStatus: 
+		  * [out] std::vector< TBS::Services::Tuple< bool, int32_t > > antenaSensors: array of structs(isTouch,distance)
+		  */ 
+		        virtual std::vector< TBS::Services::Tuple< bool, int32_t > > GetAntenaStatus() = 0;
 
 				
  //signals 

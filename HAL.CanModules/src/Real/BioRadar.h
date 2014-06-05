@@ -17,31 +17,35 @@
 #include "TBS/Robo/TaskExecutor.h"
 namespace MBot {
 
-	class BioRadar : public HAL::API::BioRadar::IBioRadar, public Poco::Runnable {
+	class BioRadar: public HAL::API::BioRadar::IBioRadar, public Poco::Runnable {
 		public:
+			struct MotorStatus {
+					bool touchMin;
+					bool touchMax;
+
+					double position;
+					bool positionError;
+
+					MotorStatus();
+			};
+
+			struct AntennaSensor {
+					bool touch;
+					int distance;
+
+					AntennaSensor();
+			};
 
 			struct Status {
-				bool baseTouchMin;
-				bool baseTouchMax;
+					MotorStatus base;
+					MotorStatus antenna;
 
-				double basePosition;
-				bool basePositionError;
+					AntennaSensor antenna1;
+					AntennaSensor antenna2;
+					AntennaSensor antenna3;
+					AntennaSensor antenna4;
 
-				bool antennaTouchMin;
-				bool antennaTouchMax;
 
-				double antennaPosition;
-				bool antennaPositionError;
-
-				bool antennaTouch1;
-				bool antennaTouch2;
-				bool antennaTouch3;
-				bool antennaTouch4;
-
-				int antennaDistance1;
-				int antennaDistance2;
-				int antennaDistance3;
-				int antennaDistance4;
 			};
 
 			BioRadar(TBS::NotificationWorker::Ptr nw, TBS::Robo::RoboCan::IChannel::Ptr canChannel);
@@ -58,8 +62,13 @@ namespace MBot {
 			void GoMaxBase();
 			void GoRelBase(const double & speed);
 
-			void GetStatus(bool & baseTouchMin, bool & baseTouchMax, double & basePosition, bool & basePositionError, bool & antennaTouchMin, bool & antennaTouchMax, double & antennaPosition, bool & antennaPositionError, bool & antennaTouch1, bool & antennaTouch2, bool & antennaTouch3, bool & antennaTouch4, int32_t & antennaDistance1, int32_t & antennaDistance2, int32_t & antennaDistance3, int32_t & antennaDistance4);
+			void GetMotorStatus(const bool & isBase, bool & touchMin, bool & touchMax, double & position, bool & positionError);
 
+			/**
+			 *
+			 * [out] std::vector< TBS::Services::Tuple< bool, int32_t > > antenaSensors: array of structs(isTouch,distance)
+			 */
+			std::vector<TBS::Services::Tuple<bool, int32_t> > GetAntenaStatus();
 
 		private:
 

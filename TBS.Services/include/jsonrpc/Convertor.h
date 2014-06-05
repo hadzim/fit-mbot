@@ -63,6 +63,18 @@ namespace jsonrpc {
 
 	// class template:
 	template<>
+	class InternalConvertor<long long int> {
+		public:
+			static int json2Cpp(const Json::Value & val) {
+				return val.asInt();
+			}
+			static Json::Value cpp2Json(const long long int & val) {
+				Json::Value v((int)val); return v;
+			}
+	};
+
+	// class template:
+	template<>
 	class InternalConvertor<bool> {
 		public:
 			static bool json2Cpp(const Json::Value & val) {

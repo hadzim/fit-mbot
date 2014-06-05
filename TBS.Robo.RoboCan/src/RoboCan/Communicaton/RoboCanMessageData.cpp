@@ -171,6 +171,26 @@ namespace TBS {
 				this->b2 = (Poco::UInt8)(value.short2 >> 8 & 0xFF);
 			}
 
+			RoboCanMessageData::UChar4 RoboCanMessageData::getUCHAR4() const {
+				RoboCanMessageData::UChar4 u;
+
+				this->checkLength(4);
+				this->checkType(RoboCanMessage::DT_UCHAR4);
+				u.uchar1 = (Poco::UInt8)(this->b0);
+				u.uchar2 = (Poco::UInt8)(this->b1);
+				u.uchar3 = (Poco::UInt8)(this->b2);
+				u.uchar4 = (Poco::UInt8)(this->b3);
+				return u;
+			}
+			void RoboCanMessageData::setUCHAR4(UChar4 value){
+				this->length = 4;
+				this->dataType = RoboCanMessage::DT_UCHAR4;
+				this->b0 = (Poco::UInt8)value.uchar1;
+				this->b1 = (Poco::UInt8)value.uchar2;
+				this->b2 = (Poco::UInt8)value.uchar3;
+				this->b3 = (Poco::UInt8)value.uchar4;
+			}
+
 		}
 
 	}

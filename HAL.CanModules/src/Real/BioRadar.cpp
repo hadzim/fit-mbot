@@ -11,6 +11,17 @@
 
 namespace MBot {
 
+	BioRadar::MotorStatus::MotorStatus(){
+		touchMin = false;
+		touchMax =  false;
+		position = 0.0;
+		positionError = false;
+	}
+	BioRadar::AntennaSensor::AntennaSensor(){
+		touch = false;
+		distance = 0;
+	}
+
 	BioRadar::BioRadar(TBS::NotificationWorker::Ptr nw, TBS::Robo::RoboCan::IChannel::Ptr canChannel) :
 			baseNode("BioRadarBase", 2, nw, canChannel), baseMotorModule("BioRadar.Base.Motor", &baseNode, 1), baseMagneticModule("BioRadar.Base.Magnetic",
 					&baseNode, 2),
@@ -30,9 +41,11 @@ namespace MBot {
 
 	void BioRadar::Enable() {
 		enabled = true;
+		antennaExecution.addTask(antennaMotorModule.taskEnable(true));
 	}
 	void BioRadar::Disable() {
 		enabled = false;
+		antennaExecution.addTask(antennaMotorModule.taskEnable(false));
 	}
 
 	void BioRadar::GoMinAntenna() {
@@ -71,26 +84,41 @@ namespace MBot {
 			}
 		}
 
-	void BioRadar::GetStatus(bool & baseTouchMin, bool & baseTouchMax, double & basePosition, bool & basePositionError,
+	void BioRadar::GetMotorStatus(const bool & isBase, bool & touchMin, bool & touchMax, double & position, bool & positionError) {
+		Poco::Mutex::ScopedLock l(m);
 
-	bool & antennaTouchMin, bool & antennaTouchMax, double & antennaPosition, bool & antennaPositionError,
+		MotorStatus s = isBase ? this->currentStatus.base : this->currentStatus.antenna;
 
-	bool & antennaTouch1, bool & antennaTouch2, bool & antennaTouch3, bool & antennaTouch4,
-
-	int32_t & antennaDistance1, int32_t & antennaDistance2, int32_t & antennaDistance3, int32_t & antennaDistance4) {
-
+		position = s.position;
+		positionError = s.positionError;
+		touchMin = s.touchMin;
+		touchMax = s.touchMax;
 	}
+
+	/**
+	 *
+	 * [out] std::vector< TBS::Services::Tuple< bool, int32_t > > antenaSensors: array of structs(isTouch,distance)
+	 */
+	std::vector<TBS::Services::Tuple<bool, int32_t> > BioRadar::GetAntenaStatus() {
+		std::vector<TBS::Services::Tuple<bool, int32_t> > status;
+		return status;
+	}
+
+
 
 	void BioRadar::onBasePositionChanged(BioRadarPositionTask::Position & pos) {
 		Poco::Mutex::ScopedLock l(m);
-		this->currentStatus.basePosition = pos.position;
-		this->currentStatus.basePositionError = pos.isError;
+		this->currentStatus.base.position = pos.position;
+		this->currentStatus.base.positionError = pos.isError;
 	}
 
 	void BioRadar::onAntennaPositionChanged(BioRadarPositionTask::Position & pos) {
 		Poco::Mutex::ScopedLock l(m);
-		this->currentStatus.antennaPosition = pos.position;
-		this->currentStatus.antennaPositionError = pos.isError;
+
+		std::cout << "antenna position changed to: " << pos.position << std::endl;
+
+		this->currentStatus.antenna.position = pos.position;
+		this->currentStatus.antenna.positionError = pos.isError;
 	}
 
 	void BioRadar::run() {
@@ -100,19 +128,23 @@ namespace MBot {
 		BioRadarPositionTask::Ptr tAntenna = antennaMagneticModule.taskConsumePosition();
 		tAntenna->PositionChanged += Poco::delegate(this, &BioRadar::onAntennaPositionChanged);
 
+		std::cout << "start" << std::endl;
 		tBase->start();
 		tAntenna->start();
 
 		while (!finished) {
 			if (enabled) {
 				//TODO
+				std::cout << "running" << std::endl;
 			}
+
 			Poco::Thread::sleep(250);
 		}
 
+		std::cout << "done" << std::endl;
+
 		tBase->PositionChanged -= Poco::delegate(this, &BioRadar::onBasePositionChanged);
 		tAntenna->PositionChanged -= Poco::delegate(this, &BioRadar::onAntennaPositionChanged);
-
 
 		tAntenna->cancel();
 		tBase->cancel();

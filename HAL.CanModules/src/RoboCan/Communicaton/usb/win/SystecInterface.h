@@ -11,8 +11,9 @@
 // C++ libraries.
 #include <queue>
 #include <memory>
-#include "CANFrame.h"
 #include <Poco/BasicEvent.h>
+#include <RoboCan/Communicaton/usb/CANFrame.h>
+#include <RoboCan/Communicaton/usb/ICanWorker.h>
 
 
 namespace can {

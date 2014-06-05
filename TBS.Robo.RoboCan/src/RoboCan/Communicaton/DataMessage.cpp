@@ -21,7 +21,7 @@ namespace TBS {
 					if (!isData(m.getCmd())) {
 						throw Poco::Exception("Data Message out of range");
 					}
-					size = getSize(m.getCmd());
+					size = getDataMessageSize(m.getCmd());
 					messages.resize(size);
 					messages.at(getIndex(m.getChannel())).set(m);
 				}
@@ -31,7 +31,7 @@ namespace TBS {
 				}
 
 				void DataMessage::addMessage(const RoboCanMessage & m) {
-					if (getSize(m.getCmd()) != size) {
+					if (getDataMessageSize(m.getCmd()) != size) {
 						throw Poco::Exception("Data size missmatch");
 					}
 					if (messages[getIndex(m.getChannel())].isSet()) {
@@ -53,6 +53,10 @@ namespace TBS {
 					return true;
 				}
 
+				int DataMessage::getSize() const{
+					return this->size;
+				}
+
 				RoboCanMessageData DataMessage::getData(int channel) {
 					RoboCanMessageData mData;
 					mData.readFromMessage(messages.at(channel).getConstReference());
@@ -63,7 +67,7 @@ namespace TBS {
 					int val = value;
 					return val >= from && val <= to;
 				}
-				int DataMessage::getSize(Poco::UInt8 value) {
+				int DataMessage::getDataMessageSize(Poco::UInt8 value) {
 					return value - from + 1;
 				}
 

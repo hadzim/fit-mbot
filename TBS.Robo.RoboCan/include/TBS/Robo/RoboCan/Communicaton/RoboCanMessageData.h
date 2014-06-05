@@ -55,6 +55,16 @@ namespace TBS {
 						Short2 getSHORT2() const;
 						void setSHORT2(Short2 value);
 
+						struct UChar4 {
+							Poco::UInt8 uchar1;
+							Poco::UInt8 uchar2;
+							Poco::UInt8 uchar3;
+							Poco::UInt8 uchar4;
+						};
+
+						UChar4 getUCHAR4() const;
+						void setUCHAR4(UChar4 value);
+
 					private:
 						void checkLength(int length) const;
 						void checkType(RoboCanMessage::eDataType type) const;

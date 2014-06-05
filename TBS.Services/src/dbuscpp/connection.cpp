@@ -48,7 +48,7 @@ using namespace DBus;
 Connection::Private::Private(DBusConnection *c, Server::Private *s)
   : conn(c) , dispatcher(NULL), server(s)
 {
-	LTRACE("dbus") << "construct private " << this << LE;
+	LTRACE("dbus") << "construct private 1 " << (ConnectionManager::PtrType)this << LE;
 	 debug_log("construct on %p", c);
   init();
 }
@@ -56,7 +56,7 @@ Connection::Private::Private(DBusConnection *c, Server::Private *s)
 Connection::Private::Private(DBusBusType type)
   : dispatcher(NULL), server(NULL)
 {
-	LTRACE("dbus") << "construct private 2 " << this << LE;
+	LTRACE("dbus") << "construct private 2 " << (ConnectionManager::PtrType)this << LE;
 
   InternalError e;
 
@@ -70,9 +70,8 @@ Connection::Private::Private(DBusBusType type)
 
 Connection::Private::~Private()
 {
-	LTRACE("dbus") << "destruct private " << this << LE;
+  LTRACE("dbus") << "destruct private " << (ConnectionManager::PtrType)this << LE;
   ConnectionManager::instance().setAsDeleted((ConnectionManager::PtrType)this);
-  debug_log("terminating connection 0x%08x", conn);
 
   detach_server();
 

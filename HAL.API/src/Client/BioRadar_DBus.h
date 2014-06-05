@@ -149,28 +149,37 @@ virtual void GoRelAntenna(const double & speed){		try {
 		}
 	}
 
-virtual void GetStatus(bool & baseTouchMin, bool & baseTouchMax, double & basePosition, bool & basePositionError, bool & antennaTouchMin, bool & antennaTouchMax, double & antennaPosition, bool & antennaPositionError, bool & antennaTouch1, bool & antennaTouch2, bool & antennaTouch3, bool & antennaTouch4, int32_t & antennaDistance1, int32_t & antennaDistance2, int32_t & antennaDistance3, int32_t & antennaDistance4){		try {
+virtual void GetMotorStatus(const bool & isBase, bool & touchMin, bool & touchMax, double & position, bool & positionError){		try {
 		::DBus::CallMessage call;
-		call.member("GetStatus");
+		::DBus::MessageIter wi = call.writer();
+
+		wi << isBase;
+		call.member("GetMotorStatus");
 		::DBus::Message ret = invoke_method (call);
 		::DBus::MessageIter ri = ret.reader();
 
-		ri >> baseTouchMin;
-		ri >> baseTouchMax;
-		ri >> basePosition;
-		ri >> basePositionError;
-		ri >> antennaTouchMin;
-		ri >> antennaTouchMax;
-		ri >> antennaPosition;
-		ri >> antennaPositionError;
-		ri >> antennaTouch1;
-		ri >> antennaTouch2;
-		ri >> antennaTouch3;
-		ri >> antennaTouch4;
-		ri >> antennaDistance1;
-		ri >> antennaDistance2;
-		ri >> antennaDistance3;
-		ri >> antennaDistance4;
+		ri >> touchMin;
+		ri >> touchMax;
+		ri >> position;
+		ri >> positionError;
+		} catch (::DBus::Error & err){
+			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
+				throw ::TBS::Services::RuntimeServiceException(err.message());
+			} else {
+				throw ::TBS::Services::ChannelServiceException(err.what());
+			}
+		}
+	}
+
+virtual std::vector< TBS::Services::Tuple< bool, int32_t > > GetAntenaStatus(){		try {
+		::DBus::CallMessage call;
+		call.member("GetAntenaStatus");
+		::DBus::Message ret = invoke_method (call);
+		::DBus::MessageIter ri = ret.reader();
+
+		std::vector< TBS::Services::Tuple< bool, int32_t > > _argout;
+		ri >> _argout;
+		return _argout;
 		} catch (::DBus::Error & err){
 			if (strcmp(err.name(), DBUS_ERROR_FAILED) == 0){
 				throw ::TBS::Services::RuntimeServiceException(err.message());

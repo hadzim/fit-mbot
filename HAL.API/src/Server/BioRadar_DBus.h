@@ -36,7 +36,8 @@ namespace HAL {
 		register_method(BioRadar_DBusServer, GoMinAntenna, _GoMinAntenna_mstub);
 		register_method(BioRadar_DBusServer, GoMaxAntenna, _GoMaxAntenna_mstub);
 		register_method(BioRadar_DBusServer, GoRelAntenna, _GoRelAntenna_mstub);
-		register_method(BioRadar_DBusServer, GetStatus, _GetStatus_mstub);
+		register_method(BioRadar_DBusServer, GetMotorStatus, _GetMotorStatus_mstub);
+		register_method(BioRadar_DBusServer, GetAntenaStatus, _GetAntenaStatus_mstub);
 
 				}
 				virtual ~BioRadar_DBusServer(){
@@ -152,44 +153,36 @@ impl->GoRelAntenna(_speed);
 			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.what());
 		} 
 	}
-	::DBus::Message _GetStatus_mstub(const ::DBus::CallMessage &call){
+	::DBus::Message _GetMotorStatus_mstub(const ::DBus::CallMessage &call){
 		try {
-		call.reader();
-		bool _baseTouchMin;
-		bool _baseTouchMax;
-		double _basePosition;
-		bool _basePositionError;
-		bool _antennaTouchMin;
-		bool _antennaTouchMax;
-		double _antennaPosition;
-		bool _antennaPositionError;
-		bool _antennaTouch1;
-		bool _antennaTouch2;
-		bool _antennaTouch3;
-		bool _antennaTouch4;
-		int32_t _antennaDistance1;
-		int32_t _antennaDistance2;
-		int32_t _antennaDistance3;
-		int32_t _antennaDistance4;
-impl->GetStatus(_baseTouchMin, _baseTouchMax, _basePosition, _basePositionError, _antennaTouchMin, _antennaTouchMax, _antennaPosition, _antennaPositionError, _antennaTouch1, _antennaTouch2, _antennaTouch3, _antennaTouch4, _antennaDistance1, _antennaDistance2, _antennaDistance3, _antennaDistance4);
+		::DBus::MessageIter ri = call.reader();
+		bool _isBase;
+ri >> _isBase;
+		bool _touchMin;
+		bool _touchMax;
+		double _position;
+		bool _positionError;
+impl->GetMotorStatus(_isBase, _touchMin, _touchMax, _position, _positionError);
 		::DBus::ReturnMessage reply(call);
 		::DBus::MessageIter wi = reply.writer();
-		wi <<  _baseTouchMin;
-		wi <<  _baseTouchMax;
-		wi <<  _basePosition;
-		wi <<  _basePositionError;
-		wi <<  _antennaTouchMin;
-		wi <<  _antennaTouchMax;
-		wi <<  _antennaPosition;
-		wi <<  _antennaPositionError;
-		wi <<  _antennaTouch1;
-		wi <<  _antennaTouch2;
-		wi <<  _antennaTouch3;
-		wi <<  _antennaTouch4;
-		wi <<  _antennaDistance1;
-		wi <<  _antennaDistance2;
-		wi <<  _antennaDistance3;
-		wi <<  _antennaDistance4;
+		wi <<  _touchMin;
+		wi <<  _touchMax;
+		wi <<  _position;
+		wi <<  _positionError;
+		return reply;
+		} catch (Poco::Exception &ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.message().c_str());
+		} catch (std::exception & ex){
+			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.what());
+		} 
+	}
+	::DBus::Message _GetAntenaStatus_mstub(const ::DBus::CallMessage &call){
+		try {
+		call.reader();
+		std::vector< TBS::Services::Tuple< bool, int32_t > > _antenaSensors = impl->GetAntenaStatus();
+		::DBus::ReturnMessage reply(call);
+		::DBus::MessageIter wi = reply.writer();
+		wi <<  _antenaSensors;
 		return reply;
 		} catch (Poco::Exception &ex){
 			return ::DBus::ErrorMessage(call, DBUS_ERROR_FAILED, ex.message().c_str());
