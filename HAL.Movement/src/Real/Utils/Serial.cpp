@@ -1,5 +1,7 @@
 // Serial.cpp
 
+#ifdef _WIN32
+
 //#include "stdafx.h"
 #include "Serial.h"
 #include <windows.h>
@@ -165,3 +167,4 @@ int CSerial::ReadData( void *buffer, int limit )
 
 }
 
+#endif

@@ -5,6 +5,8 @@
  *      Author: JV
  */
 
+#ifdef _WIN32
+
 #ifndef SerialWrapper2_H_
 #define SerialWrapper2_H_
 #include <vector>
@@ -31,3 +33,5 @@ private:
 
 } /* namespace MBot */
 #endif /* SerialWrapper2_H_ */
+
+#endif

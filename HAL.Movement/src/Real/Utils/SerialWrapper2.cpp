@@ -5,6 +5,8 @@
  *      Author: JV
  */
 
+#ifdef _WIN32
+
 #include "SerialWrapper2.h"
 #include <Poco/Thread.h>
 #include <iostream>
@@ -91,3 +93,5 @@ SerialWrapper2::VectorBuffer SerialWrapper2::receive(SerialWrapper2::ListBuffer 
 
 
 } /* namespace MBot */
+
+#endif

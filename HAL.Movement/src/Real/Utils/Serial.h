@@ -1,5 +1,7 @@
 // Serial.h
 
+#ifdef _WIN32
+
 #ifndef __SERIAL_H__
 #define __SERIAL_H__
 #include <windows.h>
@@ -40,4 +42,5 @@ protected:
 
 };
 
+#endif
 #endif

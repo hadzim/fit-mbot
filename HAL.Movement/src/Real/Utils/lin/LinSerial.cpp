@@ -16,7 +16,7 @@ LinSerial::LinSerial(int nPort, int nBaud) :
 #ifdef _WIN32
 	port -=1;
 #else
-	port = 16 //dev/ttyUSB0
+	port = 16; //dev/ttyUSB0
 #endif
 	if (RS232_OpenComport(port, nBaud)) {
 		throw Poco::Exception("cannot open serial port");
