@@ -45,9 +45,7 @@ namespace TBS {
 						}
 						virtual void run(){
 							try {
-								LDEBUG("Event") << "OutputEventCommandCheckable run " << this->getName() << " is empty?" << (event.empty() ? "1" : "0") << LE;
 								event.notify(object, value);
-								LDEBUG("Event") << "OutputEventCommandCheckable run " << this->getName() << " finished"<< LE;
 								check->set();
 							} catch (Poco::Exception & e){
 								LERROR("Event") << "OutputEventCommandCheckable ERROR: " << this->getName() << " finished exc "<< e.displayText() << LE;
