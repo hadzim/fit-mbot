@@ -61,7 +61,7 @@ namespace jsonrpc {
 			}
 	};
 
-	// class template:
+	// class template for long long:
 	template<>
 	class InternalConvertor<long long int> {
 		public:
