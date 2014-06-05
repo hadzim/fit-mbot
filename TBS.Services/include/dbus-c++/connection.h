@@ -33,6 +33,8 @@
 #include "message.h"
 #include "pendingcall.h"
 
+#include "Poco/Mutex.h"
+
 namespace DBus
 {
 
@@ -462,6 +464,7 @@ private:
   int _timeout;
 
   friend class ObjectAdaptor; // needed in order to register object paths for a connection
+  Poco::Mutex m;
 };
 
 } /* namespace DBus */

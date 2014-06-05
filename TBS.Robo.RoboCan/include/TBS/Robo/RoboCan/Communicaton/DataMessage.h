@@ -26,11 +26,11 @@ namespace TBS {
 						bool getFailed() const;
 						bool isComplete() const;
 						void addMessage(const RoboCanMessage & m);
-
+						int getSize() const;
 						RoboCanMessageData getData(int channel);
 
 						static bool isData(Poco::UInt8 value);
-						static int getSize(Poco::UInt8 value);
+						static int getDataMessageSize(Poco::UInt8 value);
 					private:
 						static int getIndex(Poco::UInt8 value);
 					private:

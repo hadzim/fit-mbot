@@ -23,7 +23,7 @@ namespace TBS {
 			 * */
 			class ModuleCommandTask: public ModuleTask<AckMessage> {
 				public:
-					ModuleCommandTask(const InternalCanModule & module, const CanMessage & cmd);
+					ModuleCommandTask(std::string commandName, const InternalCanModule & module, const CanMessage & cmd);
 					virtual ~ModuleCommandTask();
 					//raised from NW thread when pure ACK OK arrived
 					Poco::BasicEvent<AckMessage> Acked;
@@ -38,7 +38,7 @@ namespace TBS {
 			 * */
 			class ModuleCommandAnyAckTask: public ModuleTask<AckMessage> {
 				public:
-					ModuleCommandAnyAckTask(const InternalCanModule & module, const CanMessage & cmd);
+					ModuleCommandAnyAckTask(std::string taskname, const InternalCanModule & module, const CanMessage & cmd);
 					virtual ~ModuleCommandAnyAckTask();
 
 				private:

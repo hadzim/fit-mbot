@@ -18,6 +18,7 @@ namespace TBS{ namespace Services{ namespace Introspection{ class Class; struct 
 
 namespace HAL { 
 	namespace API { 
+		namespace Movement { 
 	   /** [interface] IMovement:  */
        class GEN_SERVICE_API IMovement {
 			public:
@@ -26,7 +27,7 @@ namespace HAL {
 				virtual ~IMovement(){}
 				
 				static std::string name(){
-					static std::string n = "HAL.API.Movement";
+					static std::string n = "HAL.API.Movement.Movement";
 					return n;
 				}
 				static const ::TBS::Services::Introspection::Class & introspection();
@@ -74,6 +75,7 @@ int64_t posRight;
 
 				
 			};
+ } 
  } 
  } 
 

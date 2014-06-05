@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<node name="HAL.API.BioRadar">
+  
+  <interface name="HAL.API.BioRadar.BioRadar">
+   
+    <method name="Enable">
+    </method>
+    
+    <method name="Disable">
+    </method>
+    
+    <method name="GoMinBase">
+    </method>
+    
+    <method name="GoMaxBase">
+    </method>
+    
+    <method name="GoRelBase">
+    	<arg type="d" name="speed" direction="in"/>
+    </method>
+    
+    <method name="GoMinAntenna">
+    </method>
+    
+    <method name="GoMaxAntenna">
+    </method>
+    
+    <method name="GoRelAntenna">
+    	<arg type="d" name="speed" direction="in"/>
+    </method>
+    
+    
+    <method name="GetMotorStatus">
+      <arg type="b" name="isBase" direction="in"/>
+      <arg type="b" name="touchMin" direction="out"/>
+      <arg type="b" name="touchMax" direction="out"/>
+      
+      <arg type="d" name="position" direction="out"/>
+      <arg type="b" name="positionError" direction="out"/>
+    </method>
+    
+    <method name="GetAntenaStatus">
+      <arg type="a(bi)" name="antenaSensors" direction="out" comment="array of structs(isTouch,distance)" />
+    </method>
+    
+    
+  </interface>
+  
+  
+</node>

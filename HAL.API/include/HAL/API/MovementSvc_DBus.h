@@ -24,7 +24,8 @@ namespace TBS {
 
 namespace HAL { 
 	namespace API { 
-		namespace DBus { 
+		namespace Movement { 
+			namespace DBus { 
        class GEN_SERVICE_API Client {
 			public:
 				typedef Poco::SharedPtr <Client> Ptr;
@@ -35,13 +36,13 @@ namespace HAL {
 				Client();
 				~Client();
 				
-				HAL::API::IMovement & Movement();
+				HAL::API::Movement::IMovement & Movement();
 
 				
 		private: 
 				TBS::Services::ICommChannelHolder::Ptr ch;
 				std::auto_ptr<TBS::Services::CommunicationChannelHolder> comChannelHolder;
-				HAL::API::IMovement::Ptr movement_;
+				HAL::API::Movement::IMovement::Ptr movement_;
 
 			};
 			
@@ -56,12 +57,13 @@ namespace HAL {
 				~Server();
 				
 			public:
-				TBS::Services::IServer::Ptr createMovement(HAL::API::IMovement::Ptr impl);
+				TBS::Services::IServer::Ptr createMovement(HAL::API::Movement::IMovement::Ptr impl);
 
 				
 			private:
 				TBS::Services::ICommChannelHolder::Ptr ch;
 		};
+ } 
  } 
  } 
  } 

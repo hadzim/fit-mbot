@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules") 
+
 project (HALlibs)
  
 SET(CMAKE_CXX_FLAGS "-std=c++0x") 
@@ -17,9 +20,13 @@ set(PROJECT_ROOT ${PROJECT_SOURCE_DIR})
  
 add_subdirectory(TBS)
 add_subdirectory(TBS.Services)
+add_subdirectory(TBS.Robo)
+add_subdirectory(TBS.Robo.RoboCan)
 add_subdirectory(HAL.API)
-add_subdirectory(HAL)
+add_subdirectory(HAL.Movement)
+add_subdirectory(HAL.CanModules)
 add_subdirectory(HAL.Client)
+add_subdirectory(HAL.CvClient)
 add_subdirectory(HAL.JoystickClient)
 add_subdirectory(HAL.Observer)
 add_subdirectory(HAL.Remote)

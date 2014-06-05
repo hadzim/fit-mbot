@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<node name="HAL.API.Camera">
+  
+  <interface name="HAL.API.Camera.Camera">
+   
+    <method name="Enable">
+    </method>
+    
+    <method name="Disable">
+    </method>
+    
+    <method name="GoMinEngine">
+    </method>
+    
+    <method name="GoMaxEngine">
+    </method>
+    
+    <method name="GoRelEngine">
+    	<arg type="d" name="speed" direction="in"/>
+    </method>
+    
+    <method name="GoMinServo1">
+    </method>
+    
+    <method name="GoMaxServo1">
+    </method>
+    
+    <method name="GoRelServo1">
+    	<arg type="d" name="speed" direction="in"/>
+    </method>
+    
+    <method name="GoMinServo2">
+    </method>
+    
+    <method name="GoMaxServo2">
+    </method>
+    
+    <method name="GoRelServo2">
+    	<arg type="d" name="speed" direction="in"/>
+    </method>
+    
+  </interface>
+  
+  
+</node>

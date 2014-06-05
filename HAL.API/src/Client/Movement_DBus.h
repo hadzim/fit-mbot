@@ -21,12 +21,13 @@
 
 namespace HAL { 
 	namespace API { 
-		namespace Stub { 
-       class Movement_DBusClient : public ::DBus::InterfaceProxy, public HAL::API::IMovement {
+		namespace Movement { 
+			namespace Stub { 
+       class Movement_DBusClient : public ::DBus::InterfaceProxy, public HAL::API::Movement::IMovement {
 			public:
 				typedef Poco::SharedPtr <Movement_DBusClient> Ptr;
 				
-				Movement_DBusClient() : ::DBus::InterfaceProxy("com.HAL.API.Movement"){
+				Movement_DBusClient() : ::DBus::InterfaceProxy("com.HAL.API.Movement.Movement"){
 							connect_signal(Movement_DBusClient, StatusChanged, _StatusChanged_sigstub);
 
 				}
@@ -34,8 +35,8 @@ namespace HAL {
 				}
 
 				
-				static const std::string & dbuspath(){ static std::string val = "/com/HAL/API"; return val; }
-				static const std::string & dbusname(){ static std::string val = "com.HAL.API.Movement"; return val; }
+				static const std::string & dbuspath(){ static std::string val = "/com/HAL/API/Movement"; return val; }
+				static const std::string & dbusname(){ static std::string val = "com.HAL.API.Movement.Movement"; return val; }
 				
 				
  //methods 
@@ -129,6 +130,7 @@ virtual void GetStatus(double & speedLeft, double & speedRight, int64_t & posLef
 	}
 
 			};
+ } 
  } 
  } 
  } 

@@ -15,7 +15,7 @@ using namespace std;
 double curSpeedL = 0;
 double curSpeedR = 0;
 
-HAL::API::DBus::Client::Ptr client;
+HAL::API::Movement::DBus::Client::Ptr client;
 
 class SDLLoop {
 public:
@@ -177,7 +177,7 @@ void onJoystick(Joystick::Coord & c) {
 
 int main(int argc, char** argv) {
 	try {
-		client = new HAL::API::DBus::Client();
+		client = new HAL::API::Movement::DBus::Client();
 		{
 			SDLLoop loop;
 			{

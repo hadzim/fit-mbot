@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 		std::cout << "HAL Client Starts" << std::endl;
 		TBS::initLogs("hal.client", 6);
 		{
-			HAL::API::DBus::Client::Ptr client = new HAL::API::DBus::Client();
+			HAL::API::Movement::DBus::Client::Ptr client = new HAL::API::Movement::DBus::Client();
 			while (1){
 				std::string str;
 				std::cin >> str;
