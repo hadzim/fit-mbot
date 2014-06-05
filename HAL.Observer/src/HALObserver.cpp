@@ -22,7 +22,7 @@ HALObserver::~HALObserver() {
 
 }
 
-void onSpeedChanged(HAL::API::IMovement::StatusChangedArg & arg){
+void onSpeedChanged(HAL::API::Movement::IMovement::StatusChangedArg & arg){
 	std::cout << "Speed: (" << arg.speedLeft << " " << arg.speedRight << ") Odometry: (" << arg.posLeft << ", " << arg.posRight << ")" << std::endl;
 }
 
