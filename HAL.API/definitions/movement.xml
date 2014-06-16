@@ -22,13 +22,13 @@
       <arg type="x" name="posLeft" direction="out"/>
       <arg type="x" name="posRight" direction="out"/>
     </method>
-    
+
     <signal name="StatusChanged">
       <arg type="d" name="speedLeft" />
       <arg type="d" name="speedRight" />
       <arg type="x" name="posLeft" />
       <arg type="x" name="posRight" />
     </signal>
-   
+
   </interface>
 </node>

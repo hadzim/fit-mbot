@@ -24,7 +24,7 @@ namespace HAL {
 			public:
 				typedef Poco::SharedPtr <Client> Ptr;
 				
-				Client(const TBS::Services::JsonClientChannel & ch);
+				Client(const TBS::Services::JsonClientParams & ch);
 				~Client();
 				
 				
@@ -33,7 +33,7 @@ namespace HAL {
 
 				
 		private: 
-				TBS::Services::JsonClientChannel ch;
+				TBS::Services::JsonClientParams ch;
 				HAL::API::Movement::IMovement::Ptr movement_;
 
 			};
@@ -42,7 +42,12 @@ namespace HAL {
 		class GEN_SERVICE_API Server {
 			public:
 				typedef Poco::SharedPtr<Server> Ptr;
-				Server(const TBS::Services::JsonServerChannel & ch);
+				
+				static Server::Ptr createJsonServer(const TBS::Services::JsonServerParams & p);
+				static Server::Ptr createJsonpServer(const TBS::Services::JsonServerParams & p);
+				static Server::Ptr createWsServer(const TBS::Services::JsonServerParams & p);
+				static Server::Ptr createRawServer(const TBS::Services::JsonServerParams & p);
+				
 				~Server();
 				
 				void start();
@@ -52,6 +57,7 @@ namespace HAL {
 
 				
 			private:
+				Server(TBS::Services::ICommChannelHolder::Ptr ch);
 				TBS::Services::ICommChannelHolder::Ptr channel;
 		};
  } 

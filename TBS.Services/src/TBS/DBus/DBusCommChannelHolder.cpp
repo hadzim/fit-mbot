@@ -17,26 +17,26 @@ namespace TBS {
 
 		DBusCommChannelHolder::DBusCommChannelHolder(std::string name) :
 				t("DBus" + name) {
-
+			std::cout << "DBusCommChannelHolder C" << std::endl;
 		}
 
 		DBusCommChannelHolder::~DBusCommChannelHolder() {
-			std::cout << "dbus destuct entered" << std::endl;
+			std::cout << "DBusCommChannelHolder D" << std::endl;
 			this->stop();
-			std::cout << "dbus destuct after stop" << std::endl;
+			//std::cout << "dbus destuct after stop" << std::endl;
 		}
 
 		void DBusCommChannelHolder::start() {
-			std::cout << "dbus thread started" << std::endl;
+			//std::cout << "dbus thread started" << std::endl;
 			t.start(*this);
 			running = true;
 		}
 
 		void DBusCommChannelHolder::stop() {
-			std::cout << "dbus thread stop" << std::endl;
+			//std::cout << "dbus thread stop" << std::endl;
 			running = false;
 			dispatcher_.leave();
-			std::cout << "dbus thread stop done" << std::endl;
+			//std::cout << "dbus thread stop done" << std::endl;
 		}
 
 		bool DBusCommChannelHolder::isRunning() {
@@ -57,8 +57,7 @@ namespace TBS {
 			}
 		}
 		::DBus::BusDispatcher & DBusCommChannelHolder::dispatcher(){
-			std::cout << "get dispatcher" << std::endl;
-
+			
 			return this->dispatcher_;
 		}
 

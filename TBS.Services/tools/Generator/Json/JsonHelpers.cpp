@@ -28,6 +28,7 @@ std::string JsonHelpers::generateConvertor(TBS::Services::Introspection::Interfa
 	str << "class InternalConvertor<" << fullname <<"> { " << std::endl;
 	str << "	public:" << std::endl;
 	str << "		static " << fullname << " json2Cpp(const Json::Value & val) {" << std::endl;
+	str << "		   using namespace " << Generator::fullNamepace(i.namesp) << ";" << std::endl;
 	str << "		   " << fullname << " var;" << std::endl;
 	for (TBS::Services::Introspection::Argument::List::iterator m = s.members.begin(); m != s.members.end(); m++){
 		str << "		   		var." << m->name << " =  Convertor::json2Cpp< " << Generator::argType(*m, false) << " > (val[\"" << m->name << "\"]);" << std::endl;
@@ -35,7 +36,8 @@ std::string JsonHelpers::generateConvertor(TBS::Services::Introspection::Interfa
 	str << "			return var;" << std::endl;
 	str << "		}" << std::endl;
 	str << "		static Json::Value cpp2Json(const " << fullname << " & val) {" << std::endl;
-	str << "		    Json::Value retval(Json::objectValue);" << std::endl;
+	str << "		    using namespace " << Generator::fullNamepace(i.namesp) << ";" << std::endl;
+	str << "		    ::Json::Value retval(::Json::objectValue);" << std::endl;
 	for (TBS::Services::Introspection::Argument::List::iterator m = s.members.begin(); m != s.members.end(); m++){
 		str << "		    retval[\"" << m->name << "\"] = Convertor::cpp2Json< " << Generator::argType(*m, false) << " >(val." << m->name << ");"  << std::endl;
 	}
@@ -99,7 +101,6 @@ std::string JsonHelpers::toString(jsonrpc::jsontype_t type) {
 			break;
 		case jsonrpc::JSON_NULL:
 			result = "jsonrpc::JSON_NULL";
-			break;
 	}
 	return result;
 }

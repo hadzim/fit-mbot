@@ -320,6 +320,25 @@ Value::Value( Int value )
    value_.int_ = value;
 }
 
+Value::Value( Poco::Int32 value )
+   : type_( intValue )
+   , comments_( 0 )
+# ifdef JSON_VALUE_USE_INTERNAL_MAP
+   , itemIsUsed_( 0 )
+#endif
+{
+   value_.int_ = (Int)value;
+}
+
+Value::Value( Poco::UInt32 value )
+	: type_( uintValue )
+	, comments_( 0 )
+# ifdef JSON_VALUE_USE_INTERNAL_MAP
+, itemIsUsed_( 0 )
+#endif
+{
+value_.uint_ =  (UInt)value;
+}
 
 Value::Value( UInt value )
    : type_( uintValue )
@@ -363,7 +382,7 @@ Value::Value( const char *beginValue,
 #endif
 {
    value_.string_ = valueAllocator()->duplicateStringValue( beginValue, 
-                                                            UInt(endValue - beginValue) );
+		   Poco::UInt32(endValue - beginValue) );
 }
 
 
@@ -871,7 +890,7 @@ Value::isConvertibleTo( ValueType other ) const
 
 
 /// Number of values in array or object
-Value::UInt 
+Poco::UInt32
 Value::size() const
 {
    switch ( type_ )
@@ -950,20 +969,20 @@ Value::clear()
 }
 
 void 
-Value::resize( UInt newSize )
+Value::resize( Poco::UInt32 newSize )
 {
    JSON_ASSERT( type_ == nullValue  ||  type_ == arrayValue );
    if ( type_ == nullValue )
       *this = Value( arrayValue );
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
-   UInt oldSize = size();
+   Poco::UInt32 oldSize = size();
    if ( newSize == 0 )
       clear();
    else if ( newSize > oldSize )
       (*this)[ newSize - 1 ];
    else
    {
-      for ( UInt index = newSize; index < oldSize; ++index )
+      for ( Poco::UInt32 index = newSize; index < oldSize; ++index )
          value_.map_->erase( index );
       assert( size() == newSize );
    }
@@ -974,7 +993,7 @@ Value::resize( UInt newSize )
 
 
 Value &
-Value::operator[]( UInt index )
+Value::operator[]( Poco::UInt32 index )
 {
    JSON_ASSERT( type_ == nullValue  ||  type_ == arrayValue );
    if ( type_ == nullValue )
@@ -995,7 +1014,7 @@ Value::operator[]( UInt index )
 
 
 const Value &
-Value::operator[]( UInt index ) const
+Value::operator[]( Poco::UInt32 index ) const
 {
    JSON_ASSERT( type_ == nullValue  ||  type_ == arrayValue );
    if ( type_ == nullValue )
@@ -1045,7 +1064,7 @@ Value::resolveReference( const char *key,
 
 
 Value 
-Value::get( UInt index, 
+Value::get( Poco::UInt32 index,
             const Value &defaultValue ) const
 {
    const Value *value = &((*this)[index]);
@@ -1054,7 +1073,7 @@ Value::get( UInt index,
 
 
 bool 
-Value::isValidIndex( UInt index ) const
+Value::isValidIndex( Poco::UInt32 index ) const
 {
    return index < size();
 }
@@ -1517,7 +1536,7 @@ PathArgument::PathArgument()
 }
 
 
-PathArgument::PathArgument( Value::UInt index )
+PathArgument::PathArgument( Poco::UInt32 index )
    : index_( index )
    , kind_( kindIndex )
 {
@@ -1573,9 +1592,9 @@ Path::makePath( const std::string &path,
             addPathInArg( path, in, itInArg, PathArgument::kindIndex );
          else
          {
-            Value::UInt index = 0;
+        	Poco::UInt32 index = 0;
             for ( ; current != end && *current >= '0'  &&  *current <= '9'; ++current )
-               index = index * 10 + Value::UInt(*current - '0');
+               index = index * 10 + Poco::UInt32(*current - '0');
             args_.push_back( index );
          }
          if ( current == end  ||  *current++ != ']' )

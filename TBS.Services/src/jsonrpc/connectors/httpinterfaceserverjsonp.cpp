@@ -34,6 +34,10 @@
 #include "Poco/File.h"
 #include <fstream>
 
+#include "TBS/Log.h"
+
+#include "HttpServerHelpers.h"
+
 namespace jsonrpc {
 
 
@@ -41,9 +45,8 @@ namespace jsonrpc {
 	class JsonpMultiRootHandler: public Poco::Net::HTTPRequestHandler {
 		public:
 
-			JsonpMultiRootHandler(ServiceHandlers & serviceHandlers, HttpServerParams p) :
+			JsonpMultiRootHandler(ServiceHandlers & serviceHandlers, TBS::Services::JsonServerParams p) :
 					handlerProvider(serviceHandlers), p(p) {
-				std::cout << "create jsonp root handler: " << p.port << std::endl;
 			}
 
 			static std::string parseResponse(std::string respOriginalStr){
@@ -92,66 +95,14 @@ namespace jsonrpc {
 				std::string errorMessage = "";
 				try {
 
-					std::string serviceName = request.getURI();
+					LTRACE("Service.Jsonp") << "requset: " << request.getURI() << LE;
 
-					bool isRoot = serviceName == "/";
-
-					std::cout << "SERVER service name: " << serviceName << std::endl;
-					std::cout << "SERVER request length: " << request.getContentLength() << std::endl;
-					std::cout << "SERVER request method: " << request.getMethod() << std::endl;
-					std::cout << "SERVER request chunked: " << request.getChunkedTransferEncoding() << std::endl;
-					std::cout << "SERVER request type: " << request.getContentType() << std::endl;
-					std::cout << "SERVER request host: " << request.getHost() << std::endl;
-
-					if (p.allowCrossDomain && !isRoot) {
-						try {
-							response.set("Access-Control-Allow-Origin", request.get("Origin"));
-						} catch (Poco::Exception & e){
-							response.set("Access-Control-Allow-Origin", "*");
-						}
-						response.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-						response.set("Access-Control-Max-Age", "1000");
-						response.set("Access-Control-Allow-Headers", "origin, x-csrftoken, content-type, accept, authorization");
-					}
-					if (request.getMethod() == "OPTIONS"){
-						//std::cout << "options to be done" << std::endl;
-						response.send();
-						//std::cout << "options done" << std::endl;
+					HttpServerHelpers::ReturnType ret = HttpServerHelpers::preprocess(p, request, response);
+					if (ret == HttpServerHelpers::RequestFinished){
 						return;
 					}
 
-					if (p.isProtected) {
-						//std::cout << "protected" << std::endl;
-						if (!request.hasCredentials()) {
-							std::cout << "protected - no credentials" << std::endl;
-							response.requireAuthentication("TBS Service Authentication");
-							response.setContentLength(0);
-							response.send();
-							return;
-						} else {
-							//std::cout << "protected - credentials" << std::endl;
-							Poco::Net::HTTPBasicCredentials cred(request);
-							std::string user = cred.getUsername();
-							std::string pwd = cred.getPassword();
-
-							std::string userTarget = p.username;
-							std::string pwdTarget = p.passwordMd5Hash;
-
-							std::cout << "protected - match" << user << ":" << userTarget << " and apss " << md5Hash(pwd) << " vs " << pwdTarget  << std::endl;
-
-							if (user != userTarget || md5Hash(pwd) != pwdTarget) {
-								std::cout << "protected - bad credentials" << std::endl;
-
-								response.requireAuthentication("TBS Service Authentication");
-								response.setContentLength(0);
-								response.send();
-								return;
-							}
-						}
-
-					} else {
-						//std::cout << "not protected" << std::endl;
-					}
+					std::string serviceName = request.getURI();
 
 					if (serviceName.find('/') == 0) {
 						serviceName = serviceName.substr(1);
@@ -161,8 +112,16 @@ namespace jsonrpc {
 						serviceName = serviceName.substr(0, question);
 					}
 
+					for (auto i = p.getRequestHandlers().begin(); i != p.getRequestHandlers().end(); i++){
+						std::cout << "try special handling for " << serviceName << std::endl;
+						if ((*i)->canHandle(serviceName)){
+							std::cout << "SPECIAL HANDLING of " << serviceName << std::endl;
+							(*i)->handle(request, response);
+							return;
+						}
+					}
 
-					std::cout << "service name: " << serviceName << std::endl;
+					//std::cout << "service name: " << serviceName << std::endl;
 
 					Poco::Net::HTMLForm form(request, request.stream());
 
@@ -177,7 +136,8 @@ namespace jsonrpc {
 					 std::string callbackFnc = form["callback"];
 
 					for (Poco::Net::HTMLForm::ConstIterator i = form.begin(); i != form.end(); i++){
-						std::cout << "param: " << i->first << " value: " << i->second << std::endl;
+						LTRACE("Service.Jsonp") << "param: " << i->first << " value: " << i->second << LE;
+						//std::cout << "param: " << i->first << " value: " << i->second << std::endl;
 						if (i->first == "callback" || i->first == "_" || i->first == "method"){
 							continue;
 						}
@@ -189,6 +149,7 @@ namespace jsonrpc {
 
 
 					std::cout << "requset: " << jsonstrrequest << std::endl;
+					LTRACE("Service.Jsonp") << "requset: " << jsonstrrequest << LE;
 
 					//this->handlerProvider.GetHandler()
 					std::string rsp;
@@ -200,7 +161,7 @@ namespace jsonrpc {
 
 					rsp = callbackFnc + "(" + rsp + ")";
 
-					std::cout << "response: " << rsp << std::endl;
+					LTRACE("Service.Jsonp") << "response: " << rsp << LE;
 
 					response.setContentType("application/json");
 					response.sendBuffer(rsp.data(), rsp.length());
@@ -217,12 +178,12 @@ namespace jsonrpc {
 			}
 		private:
 			ServiceHandlers & handlerProvider;
-			HttpServerParams p;
+			TBS::Services::JsonServerParams p;
 	};
 
 	class JsonpMultiRequestHandlerFactory: public Poco::Net::HTTPRequestHandlerFactory {
 		public:
-			JsonpMultiRequestHandlerFactory(ServiceHandlers & handlerProvider, const HttpServerParams & p) :
+			JsonpMultiRequestHandlerFactory(ServiceHandlers & handlerProvider, const TBS::Services::JsonServerParams & p) :
 					handlerProvider(handlerProvider), p(p) {
 				//std::cout < "hfactory " << &handlerProvider << std::endl;
 			}
@@ -233,33 +194,46 @@ namespace jsonrpc {
 			}
 		private:
 			ServiceHandlers & handlerProvider;
-			HttpServerParams p;
+			TBS::Services::JsonServerParams p;
 	};
 
-	JsonpHttpInterfaceServer::JsonpHttpInterfaceServer(const HttpServerParams & p) :
+	JsonpHttpInterfaceServer::JsonpHttpInterfaceServer(const TBS::Services::JsonServerParams & p) :
 			p(p) {
+
+		LTRACE("Service.Jsonp") << "construct " << LE;
 
 		Poco::Net::HTTPServerParams* pParams = new Poco::Net::HTTPServerParams;
 		pParams->setMaxQueued(100);
 		pParams->setMaxThreads(2);
-
-		Poco::Net::ServerSocket svs(p.port); // set-up a server socket
-		srv = std::auto_ptr<Poco::Net::HTTPServer>(new Poco::Net::HTTPServer(new JsonpMultiRequestHandlerFactory(handlers_, p), svs, pParams));
-		std::cout << "multi server listens on " << srv->port() << std::endl;
-
+		if (p.isHttps()) {
+			std::cout << "service via https: PK: " << p.getHttpsPrivateKey() << " CT:" << p.getHttpsCertificate() << std::endl;
+			Poco::Net::Context::Ptr context = new Poco::Net::Context(Poco::Net::Context::SERVER_USE, p.getHttpsPrivateKey(), p.getHttpsCertificate(), "");
+			// disable session cache because of Firefox (less memory consuming than session cache enabling)
+			context->disableStatelessSessionResumption();
+			Poco::Net::SecureServerSocket svs(p.port(), 64, context);
+			srv = std::unique_ptr<Poco::Net::HTTPServer>(new Poco::Net::HTTPServer(new JsonpMultiRequestHandlerFactory(handlers_, p), svs, pParams));
+			std::cout << "multi https server listens on " << srv->port() << std::endl;
+		} else {
+			Poco::Net::ServerSocket svs(p.port()); // set-up a server socket
+			srv = std::unique_ptr<Poco::Net::HTTPServer>(new Poco::Net::HTTPServer(new JsonpMultiRequestHandlerFactory(handlers_, p), svs, pParams));
+			std::cout << "multi server listens on " << srv->port() << std::endl;
+		}
 	}
 
 	JsonpHttpInterfaceServer::~JsonpHttpInterfaceServer() {
+		LTRACE("Service.Jsonp") << "destruct " << LE;
 		srv->stop();
 	}
 
 	bool JsonpHttpInterfaceServer::StartListening() {
+		LTRACE("Service.Jsonp") << "start listening: " << LE;
 		std::cout << "multi server start listening " << std::endl;
 		srv->start();
 		return true;
 	}
 
 	bool JsonpHttpInterfaceServer::StopListening() {
+		LTRACE("Service.Jsonp") << "stop listening: " << LE;
 		std::cout << "multi server stop listening " << std::endl;
 		srv->stop();
 		return true;

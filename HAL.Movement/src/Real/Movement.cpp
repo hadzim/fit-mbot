@@ -13,7 +13,7 @@ namespace MBot {
 
 //slow is 50000
 //max is 200 000
-const double MAXSPEED = 800000;
+const double MAXSPEED = 1000000;
 
 Poco::Int64 relativeSpeedToAbsolute(double speed){
 	if (speed > 1) speed = 1;

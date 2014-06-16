@@ -34,7 +34,6 @@
 #include "dispatcher_p.h"
 #include "server_p.h"
 #include "connection_p.h"
-#include "TBS/Log.h"
 
 DBus::Dispatcher *DBus::default_dispatcher = NULL;
 
@@ -206,17 +205,16 @@ void Dispatcher::dispatch_pending(Connection::PrivatePList &toDispatch) {
 		while (i != toDispatch.end()) {
 			j = i;
 			++j;
-			LTRACE("dbus") << "dispatch: " << (ConnectionManager::PtrType)(*i) << LE;
-			if (ConnectionManager::instance().isDeleted((ConnectionManager::PtrType) *i)) {
-				LTRACE("dbus") << "dispatch skip because of deleted" << (ConnectionManager::PtrType)(*i) << LE;
+
+			if (ConnectionManager::instance().isDeleted((intptr_t)*i)) {
+				debug_log("skip because of deleted");
 				toDispatch.erase(i);
 			} else {
-				LTRACE("dbus") << "dispatch performed " << (ConnectionManager::PtrType)(*i) << LE;
-				if ((*i)->do_dispatch()){
+
+				if ((*i)->do_dispatch())
 					toDispatch.erase(i);
-				} else {
-					LTRACE("dbus") << "dispatch error " << (ConnectionManager::PtrType)(*i) << LE;
-				}
+				else
+					debug_log("dispatch_pending_private: do_dispatch error");
 			}
 			i = j;
 		}

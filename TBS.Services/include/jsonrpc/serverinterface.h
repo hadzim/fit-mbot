@@ -15,7 +15,6 @@
 #include <vector>
 
 #include "rpcprotocolserver.h"
-#include "serverconnector.h"
 #include "ServiceHandlers.h"
 
 namespace jsonrpc

@@ -12,7 +12,8 @@
 
 #include "Real/HALFactory.h"
 #include "TBS/Log.h"
-#include "HAL/API/BioRadarSvc_DBus.h"
+#include "HAL/API/BioRadarSvc_Json.h"
+#include "HAL/API/api.h"
 
 namespace HAL {
 
@@ -84,10 +85,13 @@ int HALService::main(const std::vector<std::string>& args) {
 			f = new MBot::HALFactory();
 		}
 
-		HAL::API::BioRadar::DBus::Server::Ptr srv = new HAL::API::BioRadar::DBus::Server();
+		TBS::Services::JsonServerParams p(HAL::API::Communication::BioRadarPort);
+		HAL::API::BioRadar::Json::Server::Ptr srv = HAL::API::BioRadar::Json::Server::createJsonServer(p);
 		{
 			TBS::Services::IServer::Ptr bioRadar = srv->createBioRadar(f->createBioRadar());
+			srv->start();
 			waitForTerminationRequest();
+			srv->stop();
 		}
 	}
 

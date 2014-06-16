@@ -91,7 +91,7 @@ private:
 
     if ((*__ref) < 0)
     {
-      //debug_log("%p: refcount dropped below zero!", __ref);
+      debug_log("%p: refcount dropped below zero!", __ref);
     }
 
     if (noref())
@@ -108,7 +108,6 @@ private:
 /*
  *   Reference counting pointers (emulate boost::shared_ptr)
  */
-
 
 template <class T>
 class RefPtrI		// RefPtr to incomplete type

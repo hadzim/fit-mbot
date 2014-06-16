@@ -5,8 +5,10 @@
 #include <iostream>
 #include <Poco/NumberParser.h>
 #include <Poco/Delegate.h>
-#include "HAL/API/MovementSvc_DBus.h"
-#include "HAL/API/BioRadarSvc_DBus.h"
+#include "HAL/API/MovementClient.h"
+#include "HAL/API/BioRadarSvc_Json.h"
+#include "HAL/API/BioRadar.h"
+#include "HAL/API/api.h"
 
 #include "TBS/Log.h"
 
@@ -16,8 +18,8 @@ using namespace std;
 double curSpeedL = 0;
 double curSpeedR = 0;
 
-HAL::API::Movement::DBus::Client::Ptr client;
-HAL::API::BioRadar::DBus::Client::Ptr bioRadarClient;
+HAL::API::MovementClient::Ptr client;
+HAL::API::BioRadar::Json::Client::Ptr bioRadarClient;
 
 static void onMouse( int event, int x, int y, int, void* )
 {
@@ -112,8 +114,9 @@ int main( int argc, char** argv )
 		namedWindow( "bioradar", 0 );
 		setMouseCallback( "bioradar", onMouse2, 0 );
 
-		bioRadarClient = new HAL::API::BioRadar::DBus::Client();
-		client = new HAL::API::Movement::DBus::Client();
+		TBS::Services::JsonClientParams p("localhost", HAL::API::Communication::BioRadarPort, TBS::Services::JsonClientParams::JsonHttp);
+		bioRadarClient = new HAL::API::BioRadar::Json::Client(p);
+		client = new HAL::API::MovementClient();
 		client->Movement().StatusChanged += Poco::delegate(&updateSpeed);
 		for(;;)
 		{
@@ -198,12 +201,12 @@ int main( int argc, char** argv )
 					double position;
 					bool positionError;
 
-					bioRadarClient->BioRadar().GetMotorStatus(false, touchMin, touchMax, position, positionError);
+					HAL::API::BioRadar::MotorInfo mi = bioRadarClient->BioRadar().GetMotorStatus(false);
 
-					std::cout << "Antena touch min: " << (touchMin ? 1 : 0) << std::endl;
-					std::cout << "Antena touch max: " << (touchMax ? 1 : 0) << std::endl;
-					std::cout << "Antena position: " << (position) << std::endl;
-					std::cout << "Antena error: " << (positionError ? 1 : 0) << std::endl;
+					std::cout << "Antena touch min: " << (mi.touchMin ? 1 : 0) << std::endl;
+					std::cout << "Antena touch max: " << (mi.touchMax ? 1 : 0) << std::endl;
+					std::cout << "Antena position: " << (mi.position) << std::endl;
+					std::cout << "Antena error: " << (mi.positionError ? 1 : 0) << std::endl;
 				}
 			} catch (Poco::Exception & e){
 

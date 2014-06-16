@@ -19,31 +19,16 @@ namespace MBot {
 
 	class BioRadar: public HAL::API::BioRadar::IBioRadar, public Poco::Runnable {
 		public:
-			struct MotorStatus {
-					bool touchMin;
-					bool touchMax;
 
-					double position;
-					bool positionError;
-
-					MotorStatus();
-			};
-
-			struct AntennaSensor {
-					bool touch;
-					int distance;
-
-					AntennaSensor();
-			};
 
 			struct Status {
-					MotorStatus base;
-					MotorStatus antenna;
+					HAL::API::BioRadar::MotorInfo base;
+					HAL::API::BioRadar::MotorInfo antenna;
 
-					AntennaSensor antenna1;
-					AntennaSensor antenna2;
-					AntennaSensor antenna3;
-					AntennaSensor antenna4;
+					HAL::API::BioRadar::TouchInfo antenna1;
+					HAL::API::BioRadar::TouchInfo antenna2;
+					HAL::API::BioRadar::TouchInfo antenna3;
+					HAL::API::BioRadar::TouchInfo antenna4;
 
 
 			};
@@ -62,13 +47,9 @@ namespace MBot {
 			void GoMaxBase();
 			void GoRelBase(const double & speed);
 
-			void GetMotorStatus(const bool & isBase, bool & touchMin, bool & touchMax, double & position, bool & positionError);
+	        virtual HAL::API::BioRadar::MotorInfo GetMotorStatus(const bool & isBase);
 
-			/**
-			 *
-			 * [out] std::vector< TBS::Services::Tuple< bool, int32_t > > antenaSensors: array of structs(isTouch,distance)
-			 */
-			std::vector<TBS::Services::Tuple<bool, int32_t> > GetAntenaStatus();
+	        virtual std::vector< HAL::API::BioRadar::TouchInfo > GetAntenaStatus();
 
 		private:
 

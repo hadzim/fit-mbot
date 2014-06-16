@@ -57,32 +57,20 @@ namespace jsonrpc {
 				return val.asInt();
 			}
 			static Json::Value cpp2Json(const int & val) {
+				Json::Value v((Json::Int)val); return v;
+			}
+	};
+
+
+	// class template:
+	template<>
+	class InternalConvertor<Poco::Int64> {
+		public:
+			static Poco::Int64 json2Cpp(const Json::Value & val) {
+				return val.asInt();
+			}
+			static Json::Value cpp2Json(const Poco::Int64 & val) {
 				CPP2JSONBODY
-			}
-	};
-
-
-	// class template for long long:
-	template<>
-	class InternalConvertor<long int> {
-		public:
-			static int json2Cpp(const Json::Value & val) {
-				return val.asInt();
-			}
-			static Json::Value cpp2Json(const long int & val) {
-				Json::Value v((int)val); return v;
-			}
-	};
-
-	// class template for long long:
-	template<>
-	class InternalConvertor<long long int> {
-		public:
-			static int json2Cpp(const Json::Value & val) {
-				return val.asInt();
-			}
-			static Json::Value cpp2Json(const long long int & val) {
-				Json::Value v((int)val); return v;
 			}
 	};
 

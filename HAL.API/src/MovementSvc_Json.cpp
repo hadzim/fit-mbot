@@ -15,31 +15,46 @@ namespace HAL {
 	namespace API { 
 		namespace Movement { 
 			namespace Json { 
-	   Client::Client(const TBS::Services::JsonClientChannel & ch) : 
+	   Client::Client(const TBS::Services::JsonClientParams & ch) : 
 	       ch(ch){
 	   }
 	   Client::~Client(){}
+	   
 	   HAL::API::Movement::IMovement & Client::Movement(){
-   if (!movement_) {      movement_ =  new HAL::API::Movement::Stub::Movement_JsonClient(::TBS::Services::convert(ch));
+   if (!movement_) {      movement_ =  new HAL::API::Movement::Stub::Movement_JsonClient(TBS::Services::createClientConnector(HAL::API::Movement::IMovement::name(), ch));
    }   return *movement_;
 }
 
 	   
 	   
-	   Server::Server(const TBS::Services::JsonServerChannel & ch) : 
-	   	   channel(new TBS::Services::JsonCommChannelHolder(ch)){
+	   Server::Ptr Server::createJsonServer(const TBS::Services::JsonServerParams & p){
+		   return new Server(new TBS::Services::JsonCommChannelHolder(p));
+	   }
+	   Server::Ptr Server::createJsonpServer(const TBS::Services::JsonServerParams & p){
+		   return new Server(new TBS::Services::JsonpCommChannelHolder(p));
+	   }
+	   Server::Ptr Server::createWsServer(const TBS::Services::JsonServerParams & p){
+		   return new Server(new TBS::Services::WsCommChannelHolder(p));
+	   }
+	   Server::Ptr Server::createRawServer(const TBS::Services::JsonServerParams & p){
+		   return new Server(new TBS::Services::RawCommChannelHolder(p));
+	   }
+	   
+	   
+	   Server::Server(TBS::Services::ICommChannelHolder::Ptr ch) : 
+	   	   channel(ch){
 		   
 	    } 
 	    Server::~Server(){}
 	    void Server::start(){ 
-	   	   channel.cast<TBS::Services::JsonCommChannelHolder>()->interface.StartListening();
+	   	   channel.cast<TBS::Services::AJsonCommChannelHolder>()->getInterface().StartListening();
 	    } 
 	    void Server::stop(){ 
-	   	   channel.cast<TBS::Services::JsonCommChannelHolder>()->interface.StopListening();
+	   	   channel.cast<TBS::Services::AJsonCommChannelHolder>()->getInterface().StopListening();
 	    } 
 	    
 	   TBS::Services::IServer::Ptr Server::createMovement(HAL::API::Movement::IMovement::Ptr impl){
-   return new TBS::Services::JsonServerImpl<HAL::API::Movement::IMovement, HAL::API::Movement::Stub::Movement_JsonServer>(this->channel.cast<TBS::Services::JsonCommChannelHolder>()->interface, impl);
+   return new TBS::Services::JsonServerImpl<HAL::API::Movement::IMovement, HAL::API::Movement::Stub::Movement_JsonServer>(this->channel.cast<TBS::Services::AJsonCommChannelHolder>()->getInterface(), impl);
 }
 
  } 

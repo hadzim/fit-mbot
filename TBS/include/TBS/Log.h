@@ -111,7 +111,8 @@ namespace TBS {
 		};
 
 		TBS_API void initLogs(std::string logName, int level, std::string logDir = "");
-		TBS_API void initLogs(std::string logName, int level, std::string logDir, LogHistory history);
+		TBS_API void initLogs(std::string logName, int level, std::string logDir, LogHistory history, Poco::Channel * channel = NULL);
+
 
 		TBS_API void separeLog(std::string logName, std::string fileName, int level = 8);
 		TBS_API void separateIdentLog(std::string logName = "ident.log");

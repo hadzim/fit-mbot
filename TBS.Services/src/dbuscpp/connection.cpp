@@ -40,15 +40,13 @@
 #include "server_p.h"
 #include "message_p.h"
 #include "pendingcall_p.h"
-
-#include "TBS/Log.h"
+#include <iostream>
 
 using namespace DBus;
 
 Connection::Private::Private(DBusConnection *c, Server::Private *s)
   : conn(c) , dispatcher(NULL), server(s)
 {
-	LTRACE("dbus") << "construct private 1 " << (ConnectionManager::PtrType)this << LE;
 	 debug_log("construct on %p", c);
   init();
 }
@@ -56,7 +54,6 @@ Connection::Private::Private(DBusConnection *c, Server::Private *s)
 Connection::Private::Private(DBusBusType type)
   : dispatcher(NULL), server(NULL)
 {
-	LTRACE("dbus") << "construct private 2 " << (ConnectionManager::PtrType)this << LE;
 
   InternalError e;
 
@@ -70,8 +67,9 @@ Connection::Private::Private(DBusBusType type)
 
 Connection::Private::~Private()
 {
-  LTRACE("dbus") << "destruct private " << (ConnectionManager::PtrType)this << LE;
-  ConnectionManager::instance().setAsDeleted((ConnectionManager::PtrType)this);
+
+  ConnectionManager::instance().setAsDeleted((intptr_t)this);
+  debug_log("terminating connection 0x%08x", conn);
 
   detach_server();
 
@@ -95,13 +93,13 @@ void Connection::Private::init()
   debug_log("init1 %p", conn);
 
   dbus_connection_ref(conn);
-
+/*
   debug_log("init2 %p", conn);
 
-  //dbus_connection_ref(conn);	//todo: the library has to own another reference
+  dbus_connection_ref(conn);	//todo: the library has to own another reference
 
-  //debug_log("init3 %p", conn);
-
+  debug_log("init3 %p", conn);
+*/
   disconn_filter = new Callback<Connection::Private, bool, const Message &>(
     this, &Connection::Private::disconn_filter_function
   );
@@ -223,7 +221,7 @@ Connection Connection::ActivationBus()
 Connection::Connection(const char *address, bool priv)
   : _timeout(-1)
 {
-	LTRACE("dbus") << "connection new " << this << LE;
+
   InternalError e;
   DBusConnection *conn = priv
                          ? dbus_connection_open_private(address, e)
@@ -241,26 +239,25 @@ Connection::Connection(const char *address, bool priv)
 Connection::Connection(Connection::Private *p)
   : _pvt(p), _timeout(-1)
 {
-	LTRACE("dbus") << "connection private " << this << LE;
+
   setup(default_dispatcher);
 }
 
 Connection::Connection(const Connection &c)
   : _pvt(c._pvt), _timeout(c._timeout)
 {
-	LTRACE("dbus") << "connection cpy " << this << LE;
+
   dbus_connection_ref(_pvt->conn);
 }
 
 Connection::~Connection()
 {
-	LTRACE("dbus") << "~connection " << this << LE;
+
   dbus_connection_unref(_pvt->conn);
 }
 
 Dispatcher *Connection::setup(Dispatcher *dispatcher)
 {
-	LTRACE("dbus") << "setup" << LE;
   debug_log("registering stubs for connection %p", _pvt->conn);
 
   if (!dispatcher) dispatcher = default_dispatcher;
@@ -301,7 +298,6 @@ bool Connection::operator == (const Connection &c) const
 
 bool Connection::register_bus()
 {
-	LTRACE("dbus") << "register_bus" << LE;
   InternalError e;
 
   bool r = dbus_bus_register(_pvt->conn, e);
@@ -313,20 +309,17 @@ bool Connection::register_bus()
 
 bool Connection::connected() const
 {
-	LTRACE("dbus") << "connected" << LE;
   return dbus_connection_get_is_connected(_pvt->conn);
 }
 
 void Connection::disconnect()
 {
-	LTRACE("dbus") << "disconnect" << LE;
 //	dbus_connection_disconnect(_pvt->conn); // disappeared in 0.9x
   dbus_connection_close(_pvt->conn);
 }
 
 void Connection::exit_on_disconnect(bool exit)
 {
-	LTRACE("dbus") << "exit on disconnect" << LE;
   dbus_connection_set_exit_on_disconnect(_pvt->conn, exit);
 }
 
@@ -342,13 +335,11 @@ const char *Connection::unique_name() const
 
 void Connection::flush()
 {
-	LTRACE("dbus") << "flush" << LE;
   dbus_connection_flush(_pvt->conn);
 }
 
 void Connection::add_match(const char *rule)
 {
-	LTRACE("dbus") << "add match" << LE;
   InternalError e;
 
   dbus_bus_add_match(_pvt->conn, rule, e);
@@ -361,7 +352,6 @@ void Connection::add_match(const char *rule)
 void Connection::remove_match(const char	*rule,
                               bool		throw_on_error)
 {
-	LTRACE("dbus") << "remove match" << LE;
   InternalError e;
 
   dbus_bus_remove_match(_pvt->conn, rule, e);
@@ -381,34 +371,25 @@ void Connection::remove_match(const char	*rule,
 
 bool Connection::add_filter(MessageSlot &s)
 {
-	LTRACE("dbus") << "add filter" << LE;
   debug_log("%s: adding filter", unique_name());
   return dbus_connection_add_filter(_pvt->conn, Private::message_filter_stub, &s, NULL);
 }
 
 void Connection::remove_filter(MessageSlot &s)
 {
-	LTRACE("dbus") << "remove filter" << LE;
   debug_log("%s: removing filter", unique_name());
   dbus_connection_remove_filter(_pvt->conn, Private::message_filter_stub, &s);
 }
 
 bool Connection::send(const Message &msg, unsigned int *serial)
 {
-	LTRACE("dbus") << "send" << LE;
   return dbus_connection_send(_pvt->conn, msg._pvt->msg, serial);
 }
 
 Message Connection::send_blocking(Message &msg, int timeout)
 {
-Poco::Mutex::ScopedLock l(m);
-
   DBusMessage *reply;
   InternalError e;
-
-  static int cnt = 0;
-  LTRACE("dbus") << "send bloking: " << this << "cnt: " << cnt++ << LE;
-
 
   if (this->_timeout != -1)
   {
@@ -421,14 +402,11 @@ Poco::Mutex::ScopedLock l(m);
 
   if (e) throw Error(e);
 
-  LTRACE("dbus") << "done" << LE;
-
   return Message(new Message::Private(reply), false);
 }
 
 PendingCall Connection::send_async(Message &msg, int timeout)
 {
-	LTRACE("dbus") << "send_async" << LE;
   DBusPendingCall *pending;
 
   if (!dbus_connection_send_with_reply(_pvt->conn, msg._pvt->msg, &pending, timeout))
@@ -440,7 +418,6 @@ PendingCall Connection::send_async(Message &msg, int timeout)
 
 void Connection::request_name(const char *name, int flags)
 {
-	LTRACE("dbus") << "request_name" << LE;
   InternalError e;
 
   debug_log("%s: registering bus name %s", unique_name(), name);
@@ -469,7 +446,6 @@ void Connection::request_name(const char *name, int flags)
 
 unsigned long Connection::sender_unix_uid(const char *sender)
 {
-	LTRACE("dbus") << "sender_unix_uid" << LE;
   InternalError e;
 
   unsigned long ul = dbus_bus_get_unix_user(_pvt->conn, sender, e);
@@ -497,7 +473,6 @@ const std::vector<std::string>& Connection::names()
 
 bool Connection::start_service(const char *name, unsigned long flags)
 {
-	LTRACE("dbus") << "start_service" << LE;
   InternalError e;
 
   bool b = dbus_bus_start_service_by_name(_pvt->conn, name, flags, NULL, e);

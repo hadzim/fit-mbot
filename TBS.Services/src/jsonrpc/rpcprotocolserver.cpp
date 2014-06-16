@@ -9,7 +9,7 @@
 
 #include "jsonrpc/rpcprotocolserver.h"
 #include "jsonrpc/errors.h"
-#include "jsonrpc/server.h"
+
 
 #include <iostream>
 

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <Poco/NumberParser.h>
 #include <Poco/Delegate.h>
-#include "HAL/API/MovementSvc_DBus.h"
+#include "HAL/API/MovementClient.h"
 
 #include <SDL/SDL.h>
 
@@ -15,7 +15,7 @@ using namespace std;
 double curSpeedL = 0;
 double curSpeedR = 0;
 
-HAL::API::Movement::DBus::Client::Ptr client;
+HAL::API::MovementClient::Ptr client;
 
 class SDLLoop {
 public:
@@ -177,7 +177,7 @@ void onJoystick(Joystick::Coord & c) {
 
 int main(int argc, char** argv) {
 	try {
-		client = new HAL::API::Movement::DBus::Client();
+		client = new HAL::API::MovementClient();
 		{
 			SDLLoop loop;
 			{

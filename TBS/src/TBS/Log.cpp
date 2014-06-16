@@ -47,7 +47,11 @@
 namespace TBS {
 
 	std::string logBasename(const std::string& fullname){
+#ifdef _WIN32
+		size_t last_delim = fullname.rfind('\\');
+#else
 		size_t last_delim = fullname.rfind('/');
+#endif
 		if (last_delim == std::string::npos) return fullname;
 		else return fullname.substr(last_delim+1);
 	}
@@ -172,7 +176,7 @@ namespace TBS {
 				}
 
 
-				static void initLogsInternally(std::string logName, int level, std::string logDir, Nullable<LogHistory> history = Nullable<LogHistory>()){
+				static void initLogsInternally(std::string logName, int level, std::string logDir, Nullable<LogHistory> history = Nullable<LogHistory>(), Poco::Channel * channel = NULL){
 					std::string logFile =  logName + std::string (".log");
 					std::string logFile0 = logName + std::string (".log.0");
 
@@ -221,6 +225,10 @@ namespace TBS {
 					Poco::AutoPtr<ColorConsoleChannel> pColor(new ColorConsoleChannel());
 					pSplitter->addChannel(pColor);
 
+					if (channel != NULL){
+						pSplitter->addChannel(channel);
+					}
+
 
 					Poco::Logger::root().setChannel(pSplitter);
 					Poco::Logger::get("TS").setChannel(pSplitter);
@@ -234,8 +242,8 @@ namespace TBS {
 				void initLogs(std::string logName, int level, std::string logDir){
 					initLogsInternally(logName, level, logDir);
 				}
-				void initLogs(std::string logName, int level, std::string logDir, LogHistory history){
-					initLogsInternally(logName, level, logDir, history);
+				void initLogs(std::string logName, int level, std::string logDir, LogHistory history, Poco::Channel * channel){
+					initLogsInternally(logName, level, logDir, history, channel);
 				}
 
 

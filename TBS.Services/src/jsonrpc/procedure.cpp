@@ -92,12 +92,10 @@ namespace jsonrpc {
 		map<string, jsontype_t>::iterator it = this->parametersName.begin();
 		bool ok = true;
 		while (ok == true && it != this->parametersName.end()) {
-			std::cout << "param: " << it->first.c_str() << std::endl;
 			if (!parameters.isMember(it->first.c_str())) {
 				std::cout << "not found: " << std::endl;
 				ok = false;
 			} else {
-				std::cout << "validate found: " << std::endl;
 				ok = this->ValidateSingleParameter(it->second, parameters[it->first], fixParam);
 			}
 			it++;

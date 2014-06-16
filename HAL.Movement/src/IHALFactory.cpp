@@ -5,7 +5,7 @@
  *      Author: JV
  */
 
-#include "IHALFactory.h".h"
+#include "IHALFactory.h"
 
 namespace MBot {
 
