@@ -38,7 +38,8 @@ namespace MBot {
 	TBS::Robo::RoboCan::ModuleCommandTask::Ptr BioRadarMotorModule::taskEnable(bool enable) const {
 		TBS::Robo::RoboCan::RoboCanMessageData data;
 		data.setUSHORT(enable ? 1 : 0);
-		return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask(enable ? "Enable" : "Disable", this->getInternalModule(), this->getInternalModule().composeCommand((int)Enable, data));
+		return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask(enable ? "Enable" : "Disable", this->getInternalModule(),
+				this->getInternalModule().composeCommand((int) Enable, data));
 	}
 
 	BioRadarPositionTask::BioRadarPositionTask(std::string name, const TBS::Robo::RoboCan::InternalCanModule & module) :
@@ -65,6 +66,52 @@ namespace MBot {
 
 	BioRadarPositionTask::Ptr BioRadarMagneticModule::taskConsumePosition() const {
 		return new BioRadarPositionTask(n, this->getInternalModule());
+	}
+
+	BioRadarTouchTask::BioRadarTouchTask(std::string name, const TBS::Robo::RoboCan::InternalCanModule & module) :
+			TBS::Robo::RoboCan::ConsumingDataModuleTask(name, module) {
+		this->DataMessageReady += Poco::delegate(this, &BioRadarTouchTask::onDataReady);
+	}
+	BioRadarTouchTask::~BioRadarTouchTask() {
+		this->DataMessageReady -= Poco::delegate(this, &BioRadarTouchTask::onDataReady);
+	}
+
+	void BioRadarTouchTask::onDataReady(TBS::Robo::RoboCan::DataMessage & msg) {
+		try {
+			Positions p;
+
+			TBS::Robo::RoboCan::RoboCanMessageData::UChar4 val = msg.getData(0).getUCHAR4();
+
+			p.p1.touch = val.uchar1 ? true : false;
+			p.p2.touch = val.uchar2 ? true : false;
+			p.p3.touch = val.uchar3 ? true : false;
+			p.p4.touch = val.uchar4 ? true : false;
+
+			p.p1.distance = msg.getData(1).getSHORT2().short1;
+			p.p2.distance = msg.getData(1).getSHORT2().short2;
+
+			p.p3.distance = msg.getData(2).getSHORT2().short1;
+			p.p4.distance = msg.getData(2).getSHORT2().short2;
+
+			PositionChanged(this, p);
+
+		} catch (Poco::Exception & e){
+			std::cout << "err: " << e.displayText() << std::endl;
+		} catch (std::exception & e){
+			std::cout << "err: " << e.what() << std::endl;
+		} catch (...){
+			std::cout << "err: ??" << std::endl;
+		}
+	}
+
+	BioRadarTouchModule::BioRadarTouchModule(const std::string & name, TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule) :
+			TBS::Robo::RoboCan::CanModule(name, node, numberWithinModule), n(name) {
+	}
+	BioRadarTouchModule::~BioRadarTouchModule() {
+	}
+
+	BioRadarTouchTask::Ptr BioRadarTouchModule::taskConsumeTouchData() const {
+		return new BioRadarTouchTask(n, this->getInternalModule());
 	}
 
 }

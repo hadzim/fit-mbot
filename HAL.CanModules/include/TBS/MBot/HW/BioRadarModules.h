@@ -54,6 +54,38 @@ namespace MBot {
 			std::string n;
 	};
 
+	class BioRadarTouchTask: public TBS::Robo::RoboCan::ConsumingDataModuleTask {
+		public:
+			typedef Poco::SharedPtr<BioRadarTouchTask> Ptr;
+			BioRadarTouchTask(std::string name, const TBS::Robo::RoboCan::InternalCanModule & module);
+			virtual ~BioRadarTouchTask();
+
+			struct Position {
+					bool touch;
+					int distance;
+			};
+			struct Positions {
+					Position p1;
+					Position p2;
+					Position p3;
+					Position p4;
+			};
+			Poco::BasicEvent<Positions> PositionChanged;
+		private:
+			void onDataReady(TBS::Robo::RoboCan::DataMessage & msg);
+	};
+
+	class BioRadarTouchModule: public TBS::Robo::RoboCan::CanModule {
+
+		public:
+			BioRadarTouchModule(const std::string & name, TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule);
+			virtual ~BioRadarTouchModule();
+
+			BioRadarTouchTask::Ptr taskConsumeTouchData() const;
+		private:
+			std::string n;
+	};
+
 }
 
 #endif /* BIORADARMODULES_H_ */

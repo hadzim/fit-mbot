@@ -17,8 +17,13 @@ namespace MBot {
 			baseNode("BioRadarBase", 2, nw, canChannel), baseMotorModule("BioRadar.Base.Motor", &baseNode, 1), baseMagneticModule("BioRadar.Base.Magnetic",
 					&baseNode, 2),
 
-			antennaNode("BioRadarAntenna", 3, nw, canChannel), antennaMotorModule("BioRadar.Antenna.Motor", &antennaNode, 1), antennaMagneticModule(
-					"BioRadar.Antenna.Magnetic", &antennaNode, 2),
+			antennaNode("BioRadarAntenna", 3, nw, canChannel),
+
+			antennaMotorModule("BioRadar.Antenna.Motor", &antennaNode, 1),
+
+			antennaMagneticModule("BioRadar.Antenna.Magnetic", &antennaNode, 2),
+
+			antennaTouchModule("BioRadar.Antenna.Touch", &antennaNode, 3),
 
 			speed(20), maxRelDurationTimeInMs(250), t("BioRadarWorker"), finished(false), enabled(false) {
 		LDEBUG("HAL")<< "BioRadar constructed" << LE;
@@ -105,16 +110,28 @@ namespace MBot {
 		this->currentStatus.antenna.positionError = pos.isError;
 	}
 
+	void BioRadar::onAntennaTouchChanged(BioRadarTouchTask::Positions & pos){
+		Poco::Mutex::ScopedLock l(m);
+		//std::cout << "antenna touch changed: "  << std::endl;
+		std::cout << "p1: " << pos.p1.distance << " itouch? " << (pos.p1.touch ? 1 : 0) << std::endl;
+		//std::cout << "p2: " << pos.p2.distance << " itouch? " << (pos.p2.touch ? 1 : 0) << std::endl;
+		//std::cout << "p3: " << pos.p3.distance << " itouch? " << (pos.p3.touch ? 1 : 0) << std::endl;
+		//std::cout << "p4: " << pos.p4.distance << " itouch? " << (pos.p4.touch ? 1 : 0) << std::endl;
+	}
+
 	void BioRadar::run() {
 
 		BioRadarPositionTask::Ptr tBase = baseMagneticModule.taskConsumePosition();
 		tBase->PositionChanged += Poco::delegate(this, &BioRadar::onBasePositionChanged);
 		BioRadarPositionTask::Ptr tAntenna = antennaMagneticModule.taskConsumePosition();
 		tAntenna->PositionChanged += Poco::delegate(this, &BioRadar::onAntennaPositionChanged);
+		BioRadarTouchTask::Ptr tAntennaTouch = antennaTouchModule.taskConsumeTouchData();
+		tAntennaTouch->PositionChanged += Poco::delegate(this, &BioRadar::onAntennaTouchChanged);
 
 		std::cout << "start" << std::endl;
 		tBase->start();
 		tAntenna->start();
+		tAntennaTouch->start();
 
 		while (!finished) {
 			if (enabled) {
@@ -129,7 +146,9 @@ namespace MBot {
 
 		tBase->PositionChanged -= Poco::delegate(this, &BioRadar::onBasePositionChanged);
 		tAntenna->PositionChanged -= Poco::delegate(this, &BioRadar::onAntennaPositionChanged);
+		tAntennaTouch->PositionChanged -= Poco::delegate(this, &BioRadar::onAntennaTouchChanged);
 
+		tAntennaTouch->cancel();
 		tAntenna->cancel();
 		tBase->cancel();
 	}

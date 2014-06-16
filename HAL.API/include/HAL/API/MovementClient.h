@@ -9,10 +9,12 @@
 #define MOVEMENTCLIENT_H_
 #include "Poco/Runnable.h"
 #include "MovementSvc_Json.h"
+#include <TBS/Services/Services.h>
+
 namespace HAL {
 namespace API {
 
-class MovementClient : private Poco::Runnable {
+class GEN_SERVICE_API MovementClient : private Poco::Runnable {
 public:
 
 	typedef Poco::SharedPtr <MovementClient> Ptr;
@@ -26,8 +28,9 @@ private:
 private:
 	Movement::Json::Client::Ptr client;
 	Poco::Thread t;
-	volatile bool finished;
 	int pollingFreq;
+	volatile bool finished;
+
 };
 
 } /* namespace API */

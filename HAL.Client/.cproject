@@ -42,6 +42,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TBS.Services/include}&quot;"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.other.other.1925748254" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.783447525" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.so.debug.866576909" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.so.debug">
@@ -133,7 +134,7 @@
 									<listOptionValue builtIn="false" value="TBS.lib"/>
 								</option>
 								<option id="org.eclipse.cdt.msvc.link.option.debug.2038325622" name="Generate Debug Info (/debug)" superClass="org.eclipse.cdt.msvc.link.option.debug" value="true" valueType="boolean"/>
-								<option id="org.eclipse.cdt.msvc.link.option.libpath.1739330433" superClass="org.eclipse.cdt.msvc.link.option.libpath" valueType="stringList">
+								<option id="org.eclipse.cdt.msvc.link.option.libpath.1739330433" name="Additional Libpath (/libpath)" superClass="org.eclipse.cdt.msvc.link.option.libpath" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Libs/lib/vs/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TBS/TBS.dll.vs}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TBS.Services/TBS.Services.dll.vs}&quot;"/>

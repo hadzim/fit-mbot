@@ -46,26 +46,22 @@ void ConsumingDataModuleTask::packetRetrieved(CanMessage & m) {
 
 	try {
 		RoboCanMessage message(m);
-		std::cout << "DATA packet retrieved: can id: " << m.canID << " command: " << (int)message.getCmd() << " channel: " << (int)message.getChannel() << std::endl;
+		//std::cout << "DATA packet retrieved: can id: " << m.canID << " command: " << (int)message.getCmd() << " channel: " << (int)message.getChannel() << std::endl;
 		if (DataMessage::isData(message.getCmd())) {
 			try {
 
 				if (currentMessage.isEmpty()) {
-					std::cout << "Module " << this->getName()
-							<< " first data message" << std::endl;
+					//std::cout << "Module " << this->getName() << " first data message" << std::endl;
 					currentMessage.set(DataMessage(message));
-					std::cout << "Module " << this->getName()
-												<< " size is: " << currentMessage.ref().getSize() << std::endl;
+					//std::cout << "Module " << this->getName() 	<< " size is: " << currentMessage.ref().getSize() << std::endl;
 				} else {
-					std::cout << "Module " << this->getName()
-							<< " next data message - size is: " << currentMessage.ref().getSize() << std::endl;
+					//std::cout << "Module " << this->getName() << " next data message - size is: " << currentMessage.ref().getSize() << std::endl;
 
 					currentMessage.ref().addMessage(message);
 				}
 
 				if (currentMessage.ref().isComplete()) {
-					std::cout << "Module " << this->getName()
-							<< " complete data message" << std::endl;
+					//std::cout << "Module " << this->getName() << " complete data message" << std::endl;
 
 					//std::cout << "val: " << currentMessage.ref().getData(0).getUSHORT2().short1 << " is error: " << currentMessage.ref().getData(0).getUSHORT2().short2 << std::endl;
 

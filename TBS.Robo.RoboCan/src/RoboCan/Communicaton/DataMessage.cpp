@@ -6,7 +6,7 @@
  */
 
 #include "TBS/Robo/RoboCan/Communicaton/DataMessage.h"
-
+#include <iostream>
 namespace TBS {
 	namespace Robo {
 		namespace RoboCan {
@@ -58,8 +58,16 @@ namespace TBS {
 				}
 
 				RoboCanMessageData DataMessage::getData(int channel) {
+					std::cout << "channel: " << channel << " size is " << messages.size() << std::endl;
 					RoboCanMessageData mData;
+					if (messages.size() <= channel || channel < 0){
+						throw Poco::Exception("wrong channel index");
+					}
+					if (messages.at(channel).isEmpty()){
+						throw Poco::Exception("data on channel are not filled");
+					}
 					mData.readFromMessage(messages.at(channel).getConstReference());
+					std::cout << "channel: " << channel << " size is " << messages.size() << "done" << std::endl;
 					return mData;
 				}
 
