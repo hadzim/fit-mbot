@@ -75,6 +75,7 @@ namespace MBot {
 			virtual void run();
 			void onBasePositionChanged(BioRadarPositionTask::Position & pos);
 			void onAntennaPositionChanged(BioRadarPositionTask::Position & pos);
+			void onAntennaTouchChanged(BioRadarTouchTask::Positions & pos);
 		private:
 
 			TBS::Task::OneActiveTaskExectution baseExecution;
@@ -86,6 +87,7 @@ namespace MBot {
 			TBS::Robo::RoboCan::CanNode antennaNode;
 			MBot::BioRadarMotorModule antennaMotorModule;
 			MBot::BioRadarMagneticModule antennaMagneticModule;
+			MBot::BioRadarTouchModule antennaTouchModule;
 
 			int speed;
 			int maxRelDurationTimeInMs;
