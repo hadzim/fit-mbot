@@ -1,5 +1,11 @@
 #include "TBS/Services/Json/JsonServices.h"
-#include "jsonrpc/connectors/httpinterfaceserver.h"
+#include "jsonrpc/connectors/helpers.h"
+#include <fstream>
+#include <iostream>
+#include "Poco/File.h"
+#include <Poco/StreamCopier.h>
+#include <iosfwd>
+#include "Poco/Net/HTTPServerResponse.h"
 /*
  * JsonServices.cpp
  *
@@ -12,97 +18,130 @@ namespace TBS {
 
 		std::string computeMD5hash(std::string plainPassword) {
 			return jsonrpc::md5Hash(plainPassword);
+			//return jsonrpc::md5Hash(plainPassword);
 		}
 
-		JsonClientChannel::JsonClientChannel(std::string hostName, int port) :
-				hostName_(hostName), port_(port), isHttps_(false), isProtected_(false) {
+		JsonClientParams::JsonClientParams(std::string hostName, int port, JsonProtocol protocol_) :
+				hostName_(hostName), port_(port), protocol_(protocol_), isHttps_(false), isProtected_(false) {
 
 		}
 
-		std::string JsonClientChannel::hostName() const {
+		std::string JsonClientParams::hostName() const {
 			return hostName_;
 		}
 
-		int JsonClientChannel::port() const {
+		int JsonClientParams::port() const {
 			return port_;
 		}
 
-		void JsonClientChannel::setHttps(bool https) {
+		JsonClientParams::JsonProtocol JsonClientParams::protocol() const{
+			return protocol_;
+		}
+
+		void JsonClientParams::setHttps(bool https) {
 			this->isHttps_ = https;
 		}
-		void JsonClientChannel::setProtected(const std::string & userName, const std::string & password) {
+		void JsonClientParams::setProtected(const std::string & userName, const std::string & password) {
 			this->isProtected_ = true;
 			this->userName_ = userName;
 			this->password_ = password;
 		}
-		bool JsonClientChannel::isHttps() const {
+		bool JsonClientParams::isHttps() const {
 			return isHttps_;
 		}
 
-		bool JsonClientChannel::isProtected() const {
+		bool JsonClientParams::isProtected() const {
 			return this->isProtected_;
 		}
-		std::string JsonClientChannel::getUserName() const {
+		std::string JsonClientParams::getUserName() const {
 			return this->userName_;
 		}
-		std::string JsonClientChannel::getPassword() const {
+		std::string JsonClientParams::getPassword() const {
 			return this->password_;
 		}
 
-		JsonServerChannel::JsonServerChannel(int port) :
-				port_(port), allowCrossDomain_(false), isHttps_(false), isProtected_(false), hasDocumentation_(false) {
+		JsonServerParams::JsonServerParams(int port) :
+				port_(port), allowCrossDomain_(false), isHttps_(false), isProtected_(false) {
 		}
 
-		void JsonServerChannel::allowCrossDomain(bool cd) {
+
+		RequestHandler::~RequestHandler(){
+
+		}
+
+		void JsonServerParams::allowCrossDomain(bool cd) {
 			this->allowCrossDomain_ = cd;
 		}
-		bool JsonServerChannel::isCrossDomainAllowed() const {
+		bool JsonServerParams::isCrossDomainAllowed() const {
 			return this->allowCrossDomain_;
 		}
 
-		int JsonServerChannel::port() const {
+		int JsonServerParams::port() const {
 			return port_;
 		}
 
-		void JsonServerChannel::setHttps(const std::string & privateKey, const std::string & certificate) {
+		void JsonServerParams::setHttps(const std::string & privateKey, const std::string & certificate) {
 			this->isHttps_ = true;
 			this->httpsPrivateKey_ = privateKey;
 			this->httpsCertificate_ = certificate;
 		}
-		void JsonServerChannel::setProtected(const std::string & userName, const std::string & passwordHash) {
+		void JsonServerParams::setProtected(const std::string & userName, const std::string & passwordHash) {
 			this->isProtected_ = true;
 			this->userName_ = userName;
 			this->passwordMD5Hash_ = passwordHash;
 		}
-		bool JsonServerChannel::isHttps() const {
+		bool JsonServerParams::isHttps() const {
 			return isHttps_;
 		}
-		std::string JsonServerChannel::getHttpsPrivateKey() const {
+		std::string JsonServerParams::getHttpsPrivateKey() const {
 			return this->httpsPrivateKey_;
 		}
-		std::string JsonServerChannel::getHttpsCertificate() const {
+		std::string JsonServerParams::getHttpsCertificate() const {
 			return this->httpsCertificate_;
 		}
 
-		bool JsonServerChannel::isProtected() const {
+		bool JsonServerParams::isProtected() const {
 			return this->isProtected_;
 		}
-		std::string JsonServerChannel::getUserName() const {
+		std::string JsonServerParams::getUserName() const {
 			return this->userName_;
 		}
-		std::string JsonServerChannel::getPasswordHash() const {
+		std::string JsonServerParams::getPasswordHash() const {
 			return this->passwordMD5Hash_;
 		}
 
-		void JsonServerChannel::setDocumentation(std::string doc) {
-			this->hasDocumentation_ = true;
-			this->documentation = doc;
+		void JsonServerParams::addSpecialRequestHandler(RequestHandler::Ptr rh){
+			this->specialHandlers.push_back(rh);
 		}
-		bool JsonServerChannel::hasDocumentation() const {
-			return hasDocumentation_;
+
+		RequestHandler::PtrList & JsonServerParams::getRequestHandlers(){
+			return this->specialHandlers;
 		}
-		std::string JsonServerChannel::getDocumentation() const {
-			return documentation;
+
+		FileStreamRequestHandler::FileStreamRequestHandler(std::string url, std::string filePath,std::string contentType)
+			: url(url), fname(filePath), contentType(contentType){
+
+		}
+
+		FileStreamRequestHandler::~FileStreamRequestHandler(){
+
+		}
+
+		bool FileStreamRequestHandler::canHandle(std::string query){
+			return this->url == query;
+		}
+		void FileStreamRequestHandler::handle(Poco::Net::HTTPServerRequest & request, Poco::Net::HTTPServerResponse & response){
+			Poco::File f(fname);
+			if (!f.exists()){
+				throw Poco::Exception("File " + fname + " does not exists");
+			}
+			std::cout << "docu real " << fname << std::endl;
+			response.setContentType(this->contentType);
+			response.setChunkedTransferEncoding(true);
+			std::ostream & o = response.send();
+			std::ifstream docf(fname.c_str());
+			Poco::StreamCopier::copyStream(docf, o);
+			return;
 		}
 
 	}

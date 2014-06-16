@@ -10,7 +10,7 @@
 #include <Poco/Delegate.h>
 #include "Poco/Thread.h"
 
-#include "HAL/API/MovementSvc_DBus.h"
+#include "HAL/API/MovementClient.h"
 
 namespace HAL {
 
@@ -37,7 +37,7 @@ int HALObserver::main(const std::vector<std::string>& args) {
 	{
 
 		{
-			HAL::API::Movement::DBus::Client::Ptr client = new HAL::API::Movement::DBus::Client();
+			HAL::API::MovementClient::Ptr client = new HAL::API::MovementClient();
 			client->Movement().StatusChanged += Poco::delegate(&onSpeedChanged);
 			waitForTerminationRequest();
 			client->Movement().StatusChanged -= Poco::delegate(&onSpeedChanged);

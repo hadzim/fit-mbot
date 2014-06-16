@@ -9,16 +9,27 @@
 #define JSONSERVICES_H_
 
 #include <string>
-
+#include <Poco/Net/HTTPRequest.h>
+#include <Poco/Net/HTTPResponse.h>
+#include <Poco/SharedPtr.h>
+#include <vector>
+#include "Poco/Net/HTTPServerResponse.h"
+#include "Poco/Net/HTTPServerRequest.h"
 
 namespace TBS {
 	namespace Services {
 
 		std::string computeMD5hash(std::string plainPassword);
 
-		class JsonClientChannel {
+		class JsonClientParams {
 			public:
-				JsonClientChannel(std::string hostName, int port);
+				enum JsonProtocol{
+					JsonHttp,
+					JsonWs,
+					JsonRaw
+				};
+
+				JsonClientParams(std::string hostName, int port, JsonProtocol protocol);
 				std::string hostName() const;
 				int port() const;
 
@@ -30,9 +41,12 @@ namespace TBS {
 				bool isProtected() const;
 				std::string getUserName() const;
 				std::string getPassword() const;
+
+				JsonProtocol protocol() const;
 			private:
 				std::string hostName_;
 				int port_;
+				JsonProtocol protocol_;
 
 				bool isHttps_;
 
@@ -41,9 +55,34 @@ namespace TBS {
 				std::string password_;
 		};
 
-		class JsonServerChannel {
+		class RequestHandler {
 			public:
-				JsonServerChannel(int port);
+				typedef Poco::SharedPtr <RequestHandler> Ptr;
+				typedef std::vector <Ptr> PtrList;
+
+				virtual ~RequestHandler();
+
+				virtual bool canHandle(std::string query) = 0;
+				virtual void handle(Poco::Net::HTTPServerRequest & request, Poco::Net::HTTPServerResponse & response) = 0;
+		};
+
+		class FileStreamRequestHandler : public RequestHandler {
+			public:
+				FileStreamRequestHandler(std::string url, std::string filePath, std::string contentType = "text/html");
+				virtual ~FileStreamRequestHandler();
+
+				virtual bool canHandle(std::string query);
+				virtual void handle(Poco::Net::HTTPServerRequest & request, Poco::Net::HTTPServerResponse & response);
+			private:
+				std::string url;
+				std::string fname;
+				std::string contentType;
+
+		};
+
+		class JsonServerParams {
+			public:
+				JsonServerParams(int port);
 				int port() const;
 
 				void allowCrossDomain(bool cd);
@@ -51,8 +90,6 @@ namespace TBS {
 
 				void setHttps(const std::string & privateKey, const std::string & certificate);
 				void setProtected(const std::string & userName, const std::string & passwordHash);
-
-				void setDocumentation(std::string doc);
 
 				bool isHttps() const;
 				std::string getHttpsPrivateKey() const;
@@ -62,9 +99,8 @@ namespace TBS {
 				std::string getUserName() const;
 				std::string getPasswordHash() const;
 
-				bool hasDocumentation() const;
-				std::string getDocumentation() const;
-
+				void addSpecialRequestHandler(RequestHandler::Ptr rh);
+				RequestHandler::PtrList & getRequestHandlers();
 			private:
 				int port_;
 
@@ -78,39 +114,9 @@ namespace TBS {
 				std::string userName_;
 				std::string passwordMD5Hash_;
 
-				bool hasDocumentation_;
-				std::string documentation;
-
-		};
-/*
-		class MyClient {
-			public:
-				typedef Poco::SharedPtr<MyClient> Ptr;
-				MyClient(const JsonClientChannel &);
-
-			public:
-				TBS::TSeries::Services::HWIO::IServices & Services();
-
-			private:
-				JsonClientChannel ch;
-				TBS::TSeries::Services::HWIO::IServices::Ptr services_;
-
+				RequestHandler::PtrList specialHandlers;
 		};
 
-		class MyServer {
-			public:
-				typedef Poco::SharedPtr<MyServer> Ptr;
-				MyServer(int port);
-
-			public:
-				IServer::Ptr createServices(TBS::TSeries::Services::HWIO::IServices::Ptr interface);
-
-			private:
-
-				int port;
-				ICommChannelHolder::Ptr channel;
-		};
-*/
 	}
 }
 #endif /* JSONSERVICES_H_ */

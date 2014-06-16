@@ -1,6 +1,20 @@
 <?xml version="1.0" ?>
 <node name="HAL.API.BioRadar">
   
+  <struct name='TouchInfo'>
+  		<arg type="b" name="isTouch" />
+  		<arg type="d" name="distance" />
+  </struct>
+  
+  <struct name='MotorInfo'>
+	  <arg type="b" name="touchMin"/>
+      <arg type="b" name="touchMax"/>
+      
+      <arg type="d" name="position"/>
+      <arg type="b" name="positionError"/>
+  </struct>
+  
+  
   <interface name="HAL.API.BioRadar.BioRadar">
    
     <method name="Enable">
@@ -32,15 +46,11 @@
     
     <method name="GetMotorStatus">
       <arg type="b" name="isBase" direction="in"/>
-      <arg type="b" name="touchMin" direction="out"/>
-      <arg type="b" name="touchMax" direction="out"/>
-      
-      <arg type="d" name="position" direction="out"/>
-      <arg type="b" name="positionError" direction="out"/>
+      <arg type="[MotorInfo]" name="info" direction="out"/>
     </method>
     
     <method name="GetAntenaStatus">
-      <arg type="a(bi)" name="antenaSensors" direction="out" comment="array of structs(isTouch,distance)" />
+      <arg type="a[TouchInfo]" name="antenaSensors" direction="out" comment="array of structs(isTouch,distance)" />
     </method>
     
     

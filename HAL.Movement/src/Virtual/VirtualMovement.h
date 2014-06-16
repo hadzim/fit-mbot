@@ -11,11 +11,16 @@
 #include <iostream>
 namespace MBot {
 
-class VirtualMovement: public HAL::API::Movement::IMovement {
+class VirtualMovement: public HAL::API::Movement::IMovement,
+		public Poco::Runnable {
 
 public:
 	VirtualMovement() :
-			speedLeft(0.0), speedRight(0.0), posLeft(0), posRight(0) {
+			t("bgmovement"), finished(false), speedLeft(0.0), speedRight(0.0), posLeft(
+					0), posRight(0) {
+
+		this->t.start(*this);
+
 		std::cout << "CONSTRUCT called" << std::endl;
 		this->updateSpeed(0, 0);
 	}
@@ -26,7 +31,9 @@ public:
 
 	virtual void Move(const double & speedLeft, const double & speedRight) {
 		std::cout << "MOVE called" << std::endl;
+
 		this->updateSpeed(speedLeft, speedRight);
+		Poco::Thread::sleep(200);
 	}
 
 	virtual void Stop() {
@@ -34,45 +41,59 @@ public:
 	}
 
 	virtual void SetPosition(const int64_t & posLeft,
-				const int64_t & posRight){
+			const int64_t & posRight) {
 		this->posLeft = posLeft;
 		this->posRight = posRight;
 		this->Stop();
 	}
 
-
-	virtual void GetStatus(double & speedLeft, double & speedRight, int64_t & posLeft, int64_t & posRight) {
+	virtual void GetStatus(double & speedLeft, double & speedRight,
+			int64_t & posLeft, int64_t & posRight) {
 		Poco::Mutex::ScopedLock l(m);
 		speedLeft = this->speedLeft;
 		speedRight = this->speedRight;
 		posLeft = this->posLeft;
 		posRight = this->posRight;
 	}
+
+	virtual void run() {
+		while (!finished) {
+			StatusChangedArg a;
+			{
+				Poco::Mutex::ScopedLock l(m);
+
+				a.speedLeft = this->speedLeft;
+				a.speedRight = this->speedRight;
+
+				a.posLeft = this->posLeft;
+				a.posRight = this->posRight;
+
+				std::cout << "Ntf: (" << this->speedLeft << " " << this->speedRight << ") odo: " << this->posLeft << " " << this->posRight << std::endl;
+			}
+
+			this->StatusChanged.notify(this, a);
+			Poco::Thread::sleep(501);
+		}
+	}
+
 private:
 	void updateSpeed(double left, double right) {
 
-		StatusChangedArg a;
 		{
 			Poco::Mutex::ScopedLock l(m);
 			this->speedLeft = left;
 			this->speedRight = right;
 
-			this->posLeft += left;
-			this->posRight += right;
+			this->posLeft += left * 10;
+			this->posRight += right * 10;
 
-			a.speedLeft = left;
-			a.speedRight = right;
-
-			a.posLeft = this->posLeft;
-			a.posRight = this->posRight;
-
-			std::cout << "Speed: (" << left << " " << right
-					<< ")" << std::endl;
 		}
-
-		//this->StatusChanged.notify(this, a);
+		std::cout << "Speed: (" << left << " " << right << ") odo: " << this->posLeft << " " << this->posRight << std::endl;
 	}
 private:
+
+	Poco::Thread t;
+	bool finished;
 	Poco::Mutex m;
 	double speedLeft;
 	double speedRight;

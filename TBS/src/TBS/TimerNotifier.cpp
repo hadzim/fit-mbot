@@ -149,7 +149,7 @@ namespace TBS {
 					}
 					try {
 						//raise event
-						it->timer->Timer(this, diff);
+						it->timer->Timer(diff);
 
 					} catch (Poco::Exception & e){
 						LCRITICAL("Timer") << "Unhandled timer exception: " << e.displayText() << LE;

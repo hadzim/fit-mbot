@@ -10,7 +10,8 @@
 #include <Poco/Delegate.h>
 #include "Poco/Thread.h"
 
-#include "HAL/API/MovementSvc_DBus.h"
+#include "HAL/API/api.h"
+#include "HAL/API/MovementSvc_Json.h"
 #include "Virtual/VirtualHALFactory.h"
 #include "Real/HALFactory.h"
 #include "TBS/Log.h"
@@ -67,7 +68,7 @@ int HALService::main(const std::vector<std::string>& args) {
 		return EXIT_OK;
 	}
 
-	TBS::initLogs("hal", 6);
+	TBS::initLogs("hal", 8);
 
 	std::cout << "-----------" << std::endl;
 	std::cout << "HAL Service" << std::endl;
@@ -83,10 +84,14 @@ int HALService::main(const std::vector<std::string>& args) {
 			f = new MBot::HALFactory();
 		}
 
-		HAL::API::Movement::DBus::Server::Ptr srv = new HAL::API::Movement::DBus::Server();
+		TBS::Services::JsonServerParams p(HAL::API::Communication::MovementPort);
+
+		HAL::API::Movement::Json::Server::Ptr srv = HAL::API::Movement::Json::Server::createJsonServer(p);
 		{
 			TBS::Services::IServer::Ptr movement = srv->createMovement(f->createMovement());
+			srv->start();
 			waitForTerminationRequest();
+			srv->stop();
 		}
 	}
 

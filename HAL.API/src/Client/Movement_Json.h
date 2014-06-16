@@ -11,6 +11,7 @@
 #include <map>
 #include <memory>
 #include <jsonrpc/rpc.h>
+#include <TBS/Services/Json/JsonServices.h>
 ///includes
 #include "HAL/API/Movement.h"
 
@@ -23,11 +24,8 @@ namespace HAL {
 			public:
 				typedef Poco::SharedPtr <Movement_JsonClient> Ptr;
 				
-				Movement_JsonClient(jsonrpc::AbstractClientConnector* param){
-					this->client = std::auto_ptr<jsonrpc::Client>(new jsonrpc::Client(param));
-				}
-				Movement_JsonClient(const jsonrpc::HttpClientParams & p){
-					this->client = std::auto_ptr<jsonrpc::Client>(new jsonrpc::Client(new jsonrpc::HttpInterfaceClient(HAL::API::Movement::IMovement::name(), p)));
+				Movement_JsonClient(jsonrpc::AbstractClientConnector::Ptr param){
+					this->client = std::unique_ptr<jsonrpc::Client>(new jsonrpc::Client(param));
 				}
 				virtual ~Movement_JsonClient() {
 				 }
@@ -71,7 +69,7 @@ posRight = jsonrpc::Convertor::json2Cpp<int64_t >(pOut["posRight"]);
 				//TODO
 				
 		private: 
-				std::auto_ptr<jsonrpc::Client> client;
+				std::unique_ptr<jsonrpc::Client> client;
 			};
  } 
  } 

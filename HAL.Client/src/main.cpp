@@ -7,16 +7,40 @@
 
 #include <iostream>
 #include <Poco/NumberParser.h>
-#include "HAL/API/MovementSvc_DBus.h"
+#include "HAL/API/MovementClient.h"
 #include "TBS/Log.h"
+#include <Poco/Delegate.h>
+
+void onSpeedChanged(HAL::API::Movement::IMovement::StatusChangedArg & arg){
+	std::cout << "Speed: (" << arg.speedLeft << " " << arg.speedRight << ") Odometry: (" << arg.posLeft << ", " << arg.posRight << ")" << std::endl;
+}
 
 int main(int argc, char **argv) {
 
 	try {
 		std::cout << "HAL Client Starts" << std::endl;
-		TBS::initLogs("hal.client", 6);
+		TBS::initLogs("hal.client", 4);
 		{
-			HAL::API::Movement::DBus::Client::Ptr client = new HAL::API::Movement::DBus::Client();
+			HAL::API::MovementClient::Ptr client = new HAL::API::MovementClient();
+			client->Movement().StatusChanged += Poco::delegate(&onSpeedChanged);
+
+			double act = 0.0;
+
+			while (1){
+
+				try {
+					client->Movement().Move(act, act);
+					act += 0.01;
+					if (act > 1.0) act = 0;
+					std::cout << "Ok" << std::endl;
+				} catch (Poco::Exception & e){
+					std::cout << "Exc: " << e.displayText() << std::endl;
+				}
+
+			}
+
+
+			/*
 			while (1){
 				std::string str;
 				std::cin >> str;
@@ -35,7 +59,7 @@ int main(int argc, char **argv) {
 					std::cout << "Exc: " << e.displayText() << std::endl;
 				}
 
-			}
+			}*/
 		}
 
 		std::cout << "HAL Client Stops" << std::endl;

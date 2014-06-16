@@ -44,6 +44,17 @@ string Generator::fullClassName(const vector<string> & namespaces, std::string n
 	return s.str();
 }
 
+string Generator::fullNamepace(const vector<string> & namespaces) {
+	std::stringstream s;
+	for (vector<string>::const_iterator i = namespaces.begin(); i != namespaces.end(); i++) {
+		s << *i;
+		if (i + 1 != namespaces.end()) {
+			s<< "::";
+		}
+	}
+	return s.str();
+}
+
 string Generator::generateNamespaceStart(vector<string> & namespaces) {
 	std::stringstream s;
 	int tabCnt = 0;

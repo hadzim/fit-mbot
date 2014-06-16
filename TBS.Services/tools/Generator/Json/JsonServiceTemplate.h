@@ -10,6 +10,12 @@
 "
 */
 
+/*
+ * <className>(const ::TBS::Services::JsonClientParams & p){\n\
+					this->client = std::unique_ptr<jsonrpc::Client>(new jsonrpc::Client(new jsonrpc::HttpInterfaceClient(<interfaceName>::name(), p)));\n\
+				}\n\
+
+ * */
 
 
 #define TEMPLATE_STUB "\
@@ -36,14 +42,14 @@
 			public:\n\
 				typedef Poco::SharedPtr <Client> Ptr;\n\
 				\n\
-				Client(const TBS::Services::JsonClientChannel & ch);\n\
+				Client(const TBS::Services::JsonClientParams & ch);\n\
 				~Client();\n\
 				\n\
 				\n //methods \n\
 				<clients>\n\
 				\n\
 		private: \n\
-				TBS::Services::JsonClientChannel ch;\n\
+				TBS::Services::JsonClientParams ch;\n\
 				<private>\n\
 			};\n\
 			\n\
@@ -51,7 +57,12 @@
 		class GEN_SERVICE_API Server {\n\
 			public:\n\
 				typedef Poco::SharedPtr<Server> Ptr;\n\
-				Server(const TBS::Services::JsonServerChannel & ch);\n\
+				\n\
+				static Server::Ptr createJsonServer(const TBS::Services::JsonServerParams & p);\n\
+				static Server::Ptr createJsonpServer(const TBS::Services::JsonServerParams & p);\n\
+				static Server::Ptr createWsServer(const TBS::Services::JsonServerParams & p);\n\
+				static Server::Ptr createRawServer(const TBS::Services::JsonServerParams & p);\n\
+				\n\
 				~Server();\n\
 				\n\
 				void start();\n\
@@ -60,6 +71,7 @@
 				<servers>\n\
 				\n\
 			private:\n\
+				Server(TBS::Services::ICommChannelHolder::Ptr ch);\n\
 				TBS::Services::ICommChannelHolder::Ptr channel;\n\
 		};\n\
 <namespaceEnd>\n\
@@ -79,23 +91,38 @@
 <convertors>\n\
 \n\
 <namespaceStart>\
-	   Client::Client(const TBS::Services::JsonClientChannel & ch) : \n\
+	   Client::Client(const TBS::Services::JsonClientParams & ch) : \n\
 	       ch(ch){\n\
 	   }\n\
 	   Client::~Client(){}\n\
+	   \n\
 	   <clientMethods>\n\
 	   \n\
 	   \n\
-	   Server::Server(const TBS::Services::JsonServerChannel & ch) : \n\
-	   	   channel(new <channel>(ch)){\n\
+	   Server::Ptr Server::createJsonServer(const TBS::Services::JsonServerParams & p){\n\
+		   return new Server(new TBS::Services::JsonCommChannelHolder(p));\n\
+	   }\n\
+	   Server::Ptr Server::createJsonpServer(const TBS::Services::JsonServerParams & p){\n\
+		   return new Server(new TBS::Services::JsonpCommChannelHolder(p));\n\
+	   }\n\
+	   Server::Ptr Server::createWsServer(const TBS::Services::JsonServerParams & p){\n\
+		   return new Server(new TBS::Services::WsCommChannelHolder(p));\n\
+	   }\n\
+	   Server::Ptr Server::createRawServer(const TBS::Services::JsonServerParams & p){\n\
+		   return new Server(new TBS::Services::RawCommChannelHolder(p));\n\
+	   }\n\
+	   \n\
+	   \n\
+	   Server::Server(TBS::Services::ICommChannelHolder::Ptr ch) : \n\
+	   	   channel(ch){\n\
 		   \n\
 	    } \n\
 	    Server::~Server(){}\n\
 	    void Server::start(){ \n\
-	   	   channel.cast<<channel>>()->interface.StartListening();\n\
+	   	   channel.cast<TBS::Services::AJsonCommChannelHolder>()->getInterface().StartListening();\n\
 	    } \n\
 	    void Server::stop(){ \n\
-	   	   channel.cast<<channel>>()->interface.StopListening();\n\
+	   	   channel.cast<TBS::Services::AJsonCommChannelHolder>()->getInterface().StopListening();\n\
 	    } \n\
 	    \n\
 	   <serverMethods>\n\

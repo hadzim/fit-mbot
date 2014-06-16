@@ -11,16 +11,7 @@
 
 namespace MBot {
 
-	BioRadar::MotorStatus::MotorStatus(){
-		touchMin = false;
-		touchMax =  false;
-		position = 0.0;
-		positionError = false;
-	}
-	BioRadar::AntennaSensor::AntennaSensor(){
-		touch = false;
-		distance = 0;
-	}
+
 
 	BioRadar::BioRadar(TBS::NotificationWorker::Ptr nw, TBS::Robo::RoboCan::IChannel::Ptr canChannel) :
 			baseNode("BioRadarBase", 2, nw, canChannel), baseMotorModule("BioRadar.Base.Motor", &baseNode, 1), baseMagneticModule("BioRadar.Base.Magnetic",
@@ -84,27 +75,20 @@ namespace MBot {
 			}
 		}
 
-	void BioRadar::GetMotorStatus(const bool & isBase, bool & touchMin, bool & touchMax, double & position, bool & positionError) {
+	HAL::API::BioRadar::MotorInfo BioRadar::GetMotorStatus(const bool & isBase){
 		Poco::Mutex::ScopedLock l(m);
-
-		MotorStatus s = isBase ? this->currentStatus.base : this->currentStatus.antenna;
-
-		position = s.position;
-		positionError = s.positionError;
-		touchMin = s.touchMin;
-		touchMax = s.touchMax;
+		return isBase ? this->currentStatus.base : this->currentStatus.antenna;
 	}
 
-	/**
-	 *
-	 * [out] std::vector< TBS::Services::Tuple< bool, int32_t > > antenaSensors: array of structs(isTouch,distance)
-	 */
-	std::vector<TBS::Services::Tuple<bool, int32_t> > BioRadar::GetAntenaStatus() {
-		std::vector<TBS::Services::Tuple<bool, int32_t> > status;
+	std::vector< HAL::API::BioRadar::TouchInfo > BioRadar::GetAntenaStatus(){
+		Poco::Mutex::ScopedLock l(m);
+		std::vector< HAL::API::BioRadar::TouchInfo > status;
+		status.push_back(this->currentStatus.antenna1);
+		status.push_back(this->currentStatus.antenna2);
+		status.push_back(this->currentStatus.antenna3);
+		status.push_back(this->currentStatus.antenna4);
 		return status;
 	}
-
-
 
 	void BioRadar::onBasePositionChanged(BioRadarPositionTask::Position & pos) {
 		Poco::Mutex::ScopedLock l(m);

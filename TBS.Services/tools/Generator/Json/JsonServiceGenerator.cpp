@@ -15,12 +15,10 @@
 #include <Poco/SharedPtr.h>
 #include <sstream>
 #include "JsonHelpers.h"
-JsonServiceGenerator::JsonServiceGenerator(std::string ifile, Info & info,  bool jsonp) : jsonp(jsonp) {
+JsonServiceGenerator::JsonServiceGenerator(std::string ifile, Info & info) {
 	Interface i = parseXml(ifile);
 
-std::cout << "is jsonp? " << jsonp << std::endl;
-
-	std::string name = jsonp ? "Jsonp" : "Json";
+	std::string name = "Json";
 
 	{
 		std::string stub = generateHStub(i, info);
@@ -84,18 +82,17 @@ std::string JsonServiceGenerator::generateHStub(Interface & i, Info & info) {
 
 std::string JsonServiceGenerator::generateCppStub(Interface & i, Info & info) {
 
-	std::string channel = jsonp ? "TBS::Services::JsonpCommChannelHolder" : "TBS::Services::JsonCommChannelHolder";
-
+	//std::string channel = jsonp ? "TBS::Services::JsonpCommChannelHolder" : "TBS::Services::JsonCommChannelHolder";
 
 	string tmp = TEMPLATE_CPP_STUB;
 
-	std::string aname = jsonp ? "Jsonp" : "Json";
+	std::string aname = "Json";
 
 	replaceAll(tmp, "<includes>", "#include \"" + info.getServiceHeader(aname) + "\"\n" + "#include \"" + info.getClientHeader("Json") + "\"\n" + "#include \"" + info.getServerHeader("Json") + "\"\n");
 
 	replaceAll(tmp, "<convertors>", JsonHelpers::generateConvertor(i));
 
-	replaceAll(tmp, "<channel>", channel);
+
 
 	vector<string> fullnmspc = i.namesp;
 	fullnmspc.push_back("Json");
@@ -117,7 +114,7 @@ std::string JsonServiceGenerator::generateCppStub(Interface & i, Info & info) {
 		cNamespace.push_back("Stub");
 
 		clientMethods << "   if (!" << variable(c->name) << ") {";
-		clientMethods << "      " << variable(c->name) << " =  new " << fullClassName(cNamespace, c->name) + "_JsonClient(::TBS::Services::convert(ch));" << endl;
+		clientMethods << "      " << variable(c->name) << " =  new " << fullClassName(cNamespace, c->name) + "_JsonClient(TBS::Services::createClientConnector(" + fullClassName(c->namesp, "I" + c->name) +"::name(), ch));" << endl;
 		clientMethods << "   }";
 		clientMethods << "   return *" << variable(c->name) << ";" << endl;
 		clientMethods << "}" << endl;
@@ -125,7 +122,7 @@ std::string JsonServiceGenerator::generateCppStub(Interface & i, Info & info) {
 		serversMethods << generateServerMethodSignature(*c, "Server::") << "{" << endl;
 
 
-		serversMethods << "   return new TBS::Services::JsonServerImpl<" << fullClassName(c->namesp, "I" + c->name) << ", " << fullClassName(cNamespace, c->name) << "_JsonServer>(this->channel.cast<" << channel << ">()->interface, impl);" << std::endl;
+		serversMethods << "   return new TBS::Services::JsonServerImpl<" << fullClassName(c->namesp, "I" + c->name) << ", " << fullClassName(cNamespace, c->name) << "_JsonServer>(this->channel.cast<TBS::Services::AJsonCommChannelHolder>()->getInterface(), impl);" << std::endl;
 
 		serversMethods << "}" << endl;
 	}

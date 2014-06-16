@@ -14,6 +14,52 @@
 namespace TBS{ namespace Services{ namespace Introspection{ class Class; struct Struct; } } } 
 
 
+namespace HAL { 
+	namespace API { 
+		namespace BioRadar { 
+       struct MotorInfo {
+				
+				static std::string name(){
+					static std::string n = "MotorInfo";
+					return n;
+				}
+				static const ::TBS::Services::Introspection::Struct & introspection();
+				
+ //members 
+						bool touchMin;
+		bool touchMax;
+		double position;
+		bool positionError;
+
+				
+			};
+ } 
+ } 
+ } 
+
+
+namespace HAL { 
+	namespace API { 
+		namespace BioRadar { 
+       struct TouchInfo {
+				
+				static std::string name(){
+					static std::string n = "TouchInfo";
+					return n;
+				}
+				static const ::TBS::Services::Introspection::Struct & introspection();
+				
+ //members 
+						bool isTouch;
+		double distance;
+
+				
+			};
+ } 
+ } 
+ } 
+
+
 
 
 namespace HAL { 
@@ -79,18 +125,15 @@ namespace HAL {
 		/** 
 		  * [method] GetMotorStatus: 
 		  * [in] bool isBase: 
-		  * [out] bool touchMin: 
-		  * [out] bool touchMax: 
-		  * [out] double position: 
-		  * [out] bool positionError: 
+		  * [out] MotorInfo info: 
 		  */ 
-		        virtual void GetMotorStatus(const bool & isBase, bool & touchMin, bool & touchMax, double & position, bool & positionError) = 0;
+		        virtual MotorInfo GetMotorStatus(const bool & isBase) = 0;
 
 		/** 
 		  * [method] GetAntenaStatus: 
-		  * [out] std::vector< TBS::Services::Tuple< bool, int32_t > > antenaSensors: array of structs(isTouch,distance)
+		  * [out] std::vector< TouchInfo > antenaSensors: array of structs(isTouch,distance)
 		  */ 
-		        virtual std::vector< TBS::Services::Tuple< bool, int32_t > > GetAntenaStatus() = 0;
+		        virtual std::vector< TouchInfo > GetAntenaStatus() = 0;
 
 				
  //signals 
