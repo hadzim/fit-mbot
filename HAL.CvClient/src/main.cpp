@@ -196,11 +196,6 @@ int main( int argc, char** argv )
 			try {
 				if ( (c & 255) == 'r'){
 
-					bool touchMin;
-					bool touchMax;
-					double position;
-					bool positionError;
-
 					HAL::API::BioRadar::MotorInfo mi = bioRadarClient->BioRadar().GetMotorStatus(false);
 
 					std::cout << "Antena touch min: " << (mi.touchMin ? 1 : 0) << std::endl;

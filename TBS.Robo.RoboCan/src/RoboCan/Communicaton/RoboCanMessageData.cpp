@@ -7,6 +7,7 @@
 
 #include "TBS/Robo/RoboCan/Communicaton/RoboCanMessageData.h"
 #include <Poco/Exception.h>
+#include <iostream>
 namespace TBS {
 	namespace Robo {
 		namespace RoboCan {
@@ -44,12 +45,13 @@ namespace TBS {
 
 			void RoboCanMessageData::checkLength(int length) const {
 				if (this->length != length) {
-					throw new Poco::Exception("RoboCan length missmatch");
+					throw Poco::Exception("RoboCan length missmatch");
 				}
 			}
 			void RoboCanMessageData::checkType(RoboCanMessage::eDataType type) const {
 				if (this->dataType != type) {
-					throw new Poco::Exception("RoboCan dataType missmatch");
+					std::cout << "Should be: " << (int)type << " but is " << this->dataType << std::endl;
+					throw Poco::Exception("RoboCan dataType missmatch");
 				}
 			}
 
