@@ -80,20 +80,18 @@ namespace MBot {
 			}
 		}
 
-	HAL::API::BioRadar::MotorInfo BioRadar::GetMotorStatus(const bool & isBase){
+
+	void BioRadar::GetStatus(HAL::API::BioRadar::MotorInfo & baseMotor, HAL::API::BioRadar::MotorInfo & antenaMotor, std::vector< HAL::API::BioRadar::TouchInfo > & antenaSensors){
 		Poco::Mutex::ScopedLock l(m);
-		return isBase ? this->currentStatus.base : this->currentStatus.antenna;
+		baseMotor = this->currentStatus.base;
+		antenaMotor = this->currentStatus.antenna;
+		antenaSensors.push_back(this->currentStatus.antenna1);
+		antenaSensors.push_back(this->currentStatus.antenna2);
+		antenaSensors.push_back(this->currentStatus.antenna3);
+		antenaSensors.push_back(this->currentStatus.antenna4);
 	}
 
-	std::vector< HAL::API::BioRadar::TouchInfo > BioRadar::GetAntenaStatus(){
-		Poco::Mutex::ScopedLock l(m);
-		std::vector< HAL::API::BioRadar::TouchInfo > status;
-		status.push_back(this->currentStatus.antenna1);
-		status.push_back(this->currentStatus.antenna2);
-		status.push_back(this->currentStatus.antenna3);
-		status.push_back(this->currentStatus.antenna4);
-		return status;
-	}
+
 
 	void BioRadar::onBasePositionChanged(BioRadarPositionTask::Position & pos) {
 		Poco::Mutex::ScopedLock l(m);
@@ -110,13 +108,17 @@ namespace MBot {
 		this->currentStatus.antenna.positionError = pos.isError;
 	}
 
+	static void storePos(BioRadarTouchTask::Position & from, HAL::API::BioRadar::TouchInfo & to){
+		to.distance = from.distance;
+		to.isTouch = from.touch;
+	}
+
 	void BioRadar::onAntennaTouchChanged(BioRadarTouchTask::Positions & pos){
 		Poco::Mutex::ScopedLock l(m);
-		//std::cout << "antenna touch changed: "  << std::endl;
-		std::cout << "p1: " << pos.p1.distance << " itouch? " << (pos.p1.touch ? 1 : 0) << std::endl;
-		//std::cout << "p2: " << pos.p2.distance << " itouch? " << (pos.p2.touch ? 1 : 0) << std::endl;
-		//std::cout << "p3: " << pos.p3.distance << " itouch? " << (pos.p3.touch ? 1 : 0) << std::endl;
-		//std::cout << "p4: " << pos.p4.distance << " itouch? " << (pos.p4.touch ? 1 : 0) << std::endl;
+		storePos(pos.p1, this->currentStatus.antenna1);
+		storePos(pos.p2, this->currentStatus.antenna2);
+		storePos(pos.p3, this->currentStatus.antenna3);
+		storePos(pos.p4, this->currentStatus.antenna4);
 	}
 
 	void BioRadar::run() {
@@ -135,8 +137,11 @@ namespace MBot {
 
 		while (!finished) {
 			if (enabled) {
+
+				//TBS::Robo::RoboCan::ModuleDataTask::Ptr base = baseMotorModule.taskGetData();
+				//base->start();
 				//TODO
-				std::cout << "running" << std::endl;
+				//std::cout << "running" << std::endl;
 			}
 
 			Poco::Thread::sleep(250);

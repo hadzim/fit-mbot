@@ -75,16 +75,15 @@ namespace HAL {
 
             this->client->CallMethod("GoRelAntenna", pIn);
         }
-        MotorInfo GetMotorStatus(const bool & isBase){
-            ::Json::Value pIn;
-            pIn["isBase"] = jsonrpc::Convertor::cpp2Json< bool >(isBase); 
-
-            return jsonrpc::Convertor::json2Cpp<MotorInfo >(this->client->CallMethod("GetMotorStatus", pIn));
-        }
-        std::vector< TouchInfo > GetAntenaStatus(){
+        void GetStatus(MotorInfo & baseMotor, MotorInfo & antenaMotor, std::vector< TouchInfo > & antenaSensors){
             ::Json::Value pIn;
             pIn = ::Json::nullValue;
-            return jsonrpc::Convertor::json2Cpp<std::vector< TouchInfo > >(this->client->CallMethod("GetAntenaStatus", pIn));
+            ::Json::Value pOut = this->client->CallMethod("GetStatus", pIn);
+
+baseMotor = jsonrpc::Convertor::json2Cpp<MotorInfo >(pOut["baseMotor"]); 
+antenaMotor = jsonrpc::Convertor::json2Cpp<MotorInfo >(pOut["antenaMotor"]); 
+antenaSensors = jsonrpc::Convertor::json2Cpp<std::vector< TouchInfo > >(pOut["antenaSensors"]); 
+
         }
 
 				

@@ -1,0 +1,1 @@
+cmd_/home/dron/Downloads/systec_can/systec_can.ko := ld -r -m elf_i386 -T /usr/src/linux-headers-3.8.0-34-generic/scripts/module-common.lds --build-id  -o /home/dron/Downloads/systec_can/systec_can.ko /home/dron/Downloads/systec_can/systec_can.o /home/dron/Downloads/systec_can/systec_can.mod.o

@@ -15,9 +15,13 @@
 #include "../ServiceHandlers.h"
 #include "TBS/Services/Json/JsonServices.h"
 
-#include "Poco/Net/WebSocket.h"
+
 #include <memory>
 #include "jsonrpc/AbstractServerConnector.h"
+
+#ifndef NOWEBSCOKETS
+
+#include "Poco/Net/WebSocket.h"
 
 namespace jsonrpc
 {
@@ -64,4 +68,26 @@ namespace jsonrpc
     };
 
 } /* namespace jsonrpc */
+
+#else
+namespace jsonrpc
+{
+	class WsInterfaceServer: public AbstractServerConnector
+    {
+        public:
+
+    		WsInterfaceServer(const TBS::Services::JsonServerParams & p){}
+            virtual ~WsInterfaceServer(){}
+
+            virtual bool StartListening(){}
+            virtual bool StopListening(){}
+
+            ServiceHandlers & handlers(){
+            	throw Poco::Exception("not implemented");
+            }
+
+    };
+}
+#endif
+
 #endif /* HTTPSERVERCONNECTOR_H_ */

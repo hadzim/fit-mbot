@@ -19,7 +19,6 @@
 
 #include <memory>
 #include "TBS/Services/Json/JsonServices.h"
-#include "Poco/Net/WebSocket.h"
 
 
 namespace jsonrpc

@@ -15,6 +15,8 @@ set(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR})
  
+add_definitions(-DNOWEBSCOKETS)
+
 #include_directories("${PROJECT_INCLUDE_DIR}")
 #include_directories("${PROJECT_SOURCE_DIR}")
  

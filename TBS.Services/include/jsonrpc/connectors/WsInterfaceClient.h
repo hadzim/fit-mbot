@@ -10,6 +10,8 @@
 #ifndef WSHTTPCLIENTINT_H_
 #define WSHTTPCLIENTINT_H_
 
+#include "Poco/Version.h"
+
 #include "../clientconnector.h"
 #include "../exception.h"
 
@@ -19,6 +21,9 @@
 
 #include <memory>
 #include "TBS/Services/Json/JsonServices.h"
+
+#ifndef NOWEBSCOKETS
+
 #include "Poco/Net/WebSocket.h"
 
 
@@ -55,4 +60,31 @@ namespace jsonrpc
     };
 
 } /* namespace jsonrpc */
+
+#else
+
+namespace jsonrpc
+{
+
+
+    class WsInterfaceClient : public AbstractClientConnector
+    {
+        public:
+    		WsInterfaceClient(const  std::string & interfaceName, const TBS::Services::JsonClientParams & p){}
+            virtual ~WsInterfaceClient(){}
+
+            virtual void SendMessage(const std::string& message, std::string& result){
+
+            }
+
+
+        private:
+
+    };
+
+} /* namespace jsonrpc */
+
+#endif
+
 #endif /* HTTPCLIENT_H_ */
+

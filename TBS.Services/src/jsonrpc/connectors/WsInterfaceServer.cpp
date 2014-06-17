@@ -8,6 +8,9 @@
  ************************************************************************/
 
 #include "jsonrpc/connectors/WsInterfaceServer.h"
+
+#ifndef NOWEBSCOKETS
+
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
@@ -165,3 +168,5 @@ namespace jsonrpc {
 	}
 
 } /* namespace jsonrpc */
+
+#endif
