@@ -52,7 +52,7 @@ namespace TBS {
 
 	void SimpleTimer::onTimer(TimerArg & a) {
 
-		this->Timer(a);
+		this->Timer(this, a);
 		if (isOneShot){
 			isRunning_ = false;
 		}
