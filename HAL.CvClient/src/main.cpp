@@ -196,12 +196,16 @@ int main( int argc, char** argv )
 			try {
 				if ( (c & 255) == 'r'){
 
-					HAL::API::BioRadar::MotorInfo mi = bioRadarClient->BioRadar().GetMotorStatus(false);
+					HAL::API::BioRadar::MotorInfo base;
+					HAL::API::BioRadar::MotorInfo antena;
+					std::vector <HAL::API::BioRadar::TouchInfo> touchInfo;
 
-					std::cout << "Antena touch min: " << (mi.touchMin ? 1 : 0) << std::endl;
-					std::cout << "Antena touch max: " << (mi.touchMax ? 1 : 0) << std::endl;
-					std::cout << "Antena position: " << (mi.position) << std::endl;
-					std::cout << "Antena error: " << (mi.positionError ? 1 : 0) << std::endl;
+					bioRadarClient->BioRadar().GetStatus(base, antena, touchInfo);
+
+					std::cout << "Antena touch min: " << (antena.touchMin ? 1 : 0) << std::endl;
+					std::cout << "Antena touch max: " << (antena.touchMax ? 1 : 0) << std::endl;
+					std::cout << "Antena position: " << (antena.position) << std::endl;
+					std::cout << "Antena error: " << (antena.positionError ? 1 : 0) << std::endl;
 				}
 			} catch (Poco::Exception & e){
 

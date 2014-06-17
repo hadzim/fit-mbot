@@ -10,7 +10,6 @@
 #ifndef WSHTTPCLIENTINT_H_
 #define WSHTTPCLIENTINT_H_
 
-#include "Poco/Version.h"
 
 #include "../clientconnector.h"
 #include "../exception.h"
