@@ -19,7 +19,7 @@
 #include <memory>
 #include "jsonrpc/AbstractServerConnector.h"
 
-#ifndef NOWEBSCOKETS
+#ifndef OLDPOCO13
 
 #include "Poco/Net/WebSocket.h"
 

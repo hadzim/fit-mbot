@@ -21,7 +21,7 @@
 #include <memory>
 #include "TBS/Services/Json/JsonServices.h"
 
-#ifndef NOWEBSCOKETS
+#ifndef OLDPOCO13
 
 #include "Poco/Net/WebSocket.h"
 

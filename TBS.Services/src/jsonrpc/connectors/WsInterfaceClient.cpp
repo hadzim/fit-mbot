@@ -10,7 +10,7 @@
 #include "jsonrpc/connectors/WsInterfaceClient.h"
 
 
-#ifndef NOWEBSCOKETS
+#ifndef OLDPOCO13
 
 #include <string>
 #include <string.h>
