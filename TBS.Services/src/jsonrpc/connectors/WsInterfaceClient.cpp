@@ -8,6 +8,10 @@
  ************************************************************************/
 
 #include "jsonrpc/connectors/WsInterfaceClient.h"
+
+
+#ifndef OLDPOCO13
+
 #include <string>
 #include <string.h>
 #include <cstdlib>
@@ -97,3 +101,5 @@ namespace jsonrpc {
 		LTRACE("json") << "done: result is " << result  << LE;
 	}
 } /* namespace jsonrpc */
+
+#endif

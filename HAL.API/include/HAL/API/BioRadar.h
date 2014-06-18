@@ -123,17 +123,12 @@ namespace HAL {
 		        virtual void GoRelAntenna(const double & speed) = 0;
 
 		/** 
-		  * [method] GetMotorStatus: 
-		  * [in] bool isBase: 
-		  * [out] MotorInfo info: 
-		  */ 
-		        virtual MotorInfo GetMotorStatus(const bool & isBase) = 0;
-
-		/** 
-		  * [method] GetAntenaStatus: 
+		  * [method] GetStatus: 
+		  * [out] MotorInfo baseMotor: 
+		  * [out] MotorInfo antenaMotor: 
 		  * [out] std::vector< TouchInfo > antenaSensors: array of structs(isTouch,distance)
 		  */ 
-		        virtual std::vector< TouchInfo > GetAntenaStatus() = 0;
+		        virtual void GetStatus(MotorInfo & baseMotor, MotorInfo & antenaMotor, std::vector< TouchInfo > & antenaSensors) = 0;
 
 				
  //signals 

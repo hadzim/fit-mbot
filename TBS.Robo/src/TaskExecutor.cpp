@@ -67,7 +67,7 @@ namespace TBS {
 
 		TaskWrapper::TaskWrapper(Task::Ptr t) :
 				t(t), active(true) {
-			LERROR("app") << "wrap task " << t->getName() << LE;
+			LTRACE("app") << "wrap task " << t->getName() << LE;
 
 			t->Finished += Poco::delegate(this, &TaskWrapper::onFinished);
 			t->start();
@@ -98,7 +98,7 @@ namespace TBS {
 		}
 
 		void OneActiveTaskExectution::addTask(Task::Ptr t) {
-			LWARNING("app") << "add task " << t->getName() << LE;
+			LTRACE("app") << "add task " << t->getName() << LE;
 			Poco::Mutex::ScopedLock l(m);
 			//cancel all old tasks
 			this->cancelAll();

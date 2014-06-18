@@ -50,13 +50,9 @@ cnmspc.push_back("BioRadar");
 	c.methods.push_back(m);
 }
 {
-	::TBS::Services::Introspection::Method m("GetMotorStatus", "");
-  m.inArguments.push_back(::TBS::Services::Introspection::Argument("isBase", "b", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("info", "[MotorInfo]", ""));
-	c.methods.push_back(m);
-}
-{
-	::TBS::Services::Introspection::Method m("GetAntenaStatus", "");
+	::TBS::Services::Introspection::Method m("GetStatus", "");
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("baseMotor", "[MotorInfo]", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("antenaMotor", "[MotorInfo]", ""));
   m.outArguments.push_back(::TBS::Services::Introspection::Argument("antenaSensors", "a[TouchInfo]", "array of structs(isTouch,distance)"));
 	c.methods.push_back(m);
 }

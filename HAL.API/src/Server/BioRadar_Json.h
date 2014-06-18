@@ -33,8 +33,7 @@ namespace HAL {
             this->bindAndAddMethod(new jsonrpc::Procedure("GoMinAntenna", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &BioRadar_JsonServer::GoMinAntennaI);
             this->bindAndAddMethod(new jsonrpc::Procedure("GoMaxAntenna", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &BioRadar_JsonServer::GoMaxAntennaI);
             this->bindAndAddMethod(new jsonrpc::Procedure("GoRelAntenna", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL, NULL), &BioRadar_JsonServer::GoRelAntennaI);
-            this->bindAndAddMethod(new jsonrpc::Procedure("GetMotorStatus", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_OBJECT, "isBase",jsonrpc::JSON_BOOLEAN, NULL), &BioRadar_JsonServer::GetMotorStatusI);
-            this->bindAndAddMethod(new jsonrpc::Procedure("GetAntenaStatus", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_ARRAY,  NULL), &BioRadar_JsonServer::GetAntenaStatusI);
+            this->bindAndAddMethod(new jsonrpc::Procedure("GetStatus", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &BioRadar_JsonServer::GetStatusI);
 
 					}
 					
@@ -78,14 +77,17 @@ namespace HAL {
             this->GoRelAntenna(jsonrpc::Convertor::json2Cpp< double >(request["speed"]));
         }
 
-        inline virtual void GetMotorStatusI(const ::Json::Value& request, ::Json::Value& response) 
+        inline virtual void GetStatusI(const ::Json::Value& request, ::Json::Value& response) 
         {
-            response = jsonrpc::Convertor::cpp2Json< MotorInfo >(this->GetMotorStatus(jsonrpc::Convertor::json2Cpp< bool >(request["isBase"])));
-        }
+        	MotorInfo tmpvar_baseMotor;
+MotorInfo tmpvar_antenaMotor;
+std::vector< TouchInfo > tmpvar_antenaSensors;
 
-        inline virtual void GetAntenaStatusI(const ::Json::Value& request, ::Json::Value& response) 
-        {
-            response = jsonrpc::Convertor::cpp2Json< std::vector< TouchInfo > >(this->GetAntenaStatus());
+        	this->GetStatus(tmpvar_baseMotor, tmpvar_antenaMotor, tmpvar_antenaSensors);
+        	response["baseMotor"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_baseMotor);
+response["antenaMotor"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_antenaMotor);
+response["antenaSensors"] = jsonrpc::Convertor::cpp2Json<std::vector< TouchInfo > >(tmpvar_antenaSensors);
+
         }
 
 
@@ -121,12 +123,8 @@ namespace HAL {
         	 interfaceImpl->GoRelAntenna(speed);
         }
 
-        MotorInfo GetMotorStatus(const bool & isBase){
-        	return interfaceImpl->GetMotorStatus(isBase);
-        }
-
-        std::vector< TouchInfo > GetAntenaStatus(){
-        	return interfaceImpl->GetAntenaStatus();
+        void GetStatus(MotorInfo & baseMotor, MotorInfo & antenaMotor, std::vector< TouchInfo > & antenaSensors){
+        	 interfaceImpl->GetStatus(baseMotor, antenaMotor, antenaSensors);
         }
 
 

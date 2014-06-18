@@ -47,9 +47,7 @@ namespace MBot {
 			void GoMaxBase();
 			void GoRelBase(const double & speed);
 
-	        virtual HAL::API::BioRadar::MotorInfo GetMotorStatus(const bool & isBase);
-
-	        virtual std::vector< HAL::API::BioRadar::TouchInfo > GetAntenaStatus();
+			 virtual void GetStatus(HAL::API::BioRadar::MotorInfo & baseMotor, HAL::API::BioRadar::MotorInfo & antenaMotor, std::vector< HAL::API::BioRadar::TouchInfo > & antenaSensors);
 
 		private:
 

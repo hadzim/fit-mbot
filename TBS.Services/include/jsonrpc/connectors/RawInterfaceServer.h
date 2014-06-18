@@ -15,7 +15,6 @@
 #include "../ServiceHandlers.h"
 #include "TBS/Services/Json/JsonServices.h"
 
-#include "Poco/Net/WebSocket.h"
 #include <memory>
 #include "jsonrpc/AbstractServerConnector.h"
 

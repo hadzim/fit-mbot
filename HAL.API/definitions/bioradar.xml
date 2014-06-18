@@ -44,15 +44,11 @@
     </method>
     
     
-    <method name="GetMotorStatus">
-      <arg type="b" name="isBase" direction="in"/>
-      <arg type="[MotorInfo]" name="info" direction="out"/>
-    </method>
-    
-    <method name="GetAntenaStatus">
+    <method name="GetStatus">
+      <arg type="[MotorInfo]" name="baseMotor" direction="out"/>
+      <arg type="[MotorInfo]" name="antenaMotor" direction="out"/>
       <arg type="a[TouchInfo]" name="antenaSensors" direction="out" comment="array of structs(isTouch,distance)" />
     </method>
-    
     
   </interface>
   

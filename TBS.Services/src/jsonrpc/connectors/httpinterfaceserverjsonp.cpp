@@ -209,7 +209,9 @@ namespace jsonrpc {
 			std::cout << "service via https: PK: " << p.getHttpsPrivateKey() << " CT:" << p.getHttpsCertificate() << std::endl;
 			Poco::Net::Context::Ptr context = new Poco::Net::Context(Poco::Net::Context::SERVER_USE, p.getHttpsPrivateKey(), p.getHttpsCertificate(), "");
 			// disable session cache because of Firefox (less memory consuming than session cache enabling)
+#ifndef OLDPOCO13
 			context->disableStatelessSessionResumption();
+#endif
 			Poco::Net::SecureServerSocket svs(p.port(), 64, context);
 			srv = std::unique_ptr<Poco::Net::HTTPServer>(new Poco::Net::HTTPServer(new JsonpMultiRequestHandlerFactory(handlers_, p), svs, pParams));
 			std::cout << "multi https server listens on " << srv->port() << std::endl;
