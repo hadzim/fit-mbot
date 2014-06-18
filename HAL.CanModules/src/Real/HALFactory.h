@@ -18,6 +18,7 @@ public:
 	virtual ~HALFactory();
 
 	virtual HAL::API::BioRadar::IBioRadar::Ptr createBioRadar();
+	virtual HAL::API::Camera::ICamera::Ptr createCamera();
 private:
 	TBS::NotificationWorker::Ptr nw;
 	TBS::Robo::RoboCan::UsbChannel::Ptr canChannel;

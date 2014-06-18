@@ -11,6 +11,7 @@
 #include "ObjectFactory.h"
 #include <Poco/SharedPtr.h>
 #include "HAL/API/BioRadar.h"
+#include "HAL/API/Camera.h"
 
 namespace MBot {
 
@@ -20,6 +21,7 @@ public:
 	virtual ~IHALFactory() {
 	}
 	virtual HAL::API::BioRadar::IBioRadar::Ptr createBioRadar() = 0;
+	virtual HAL::API::Camera::ICamera::Ptr createCamera() = 0;
 
 
 };

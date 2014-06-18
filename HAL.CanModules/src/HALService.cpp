@@ -13,6 +13,7 @@
 #include "Real/HALFactory.h"
 #include "TBS/Log.h"
 #include "HAL/API/BioRadarSvc_Json.h"
+#include "HAL/API/CameraSvc_Json.h"
 #include "HAL/API/api.h"
 
 namespace HAL {
@@ -70,7 +71,7 @@ int HALService::main(const std::vector<std::string>& args) {
 	TBS::initLogs("hal", 4);
 
 	std::cout << "-----------" << std::endl;
-	std::cout << "HAL Service" << std::endl;
+	std::cout << "HAL Service json" << std::endl;
 	std::cout << "-----------" << std::endl;
 
 	std::cout << std::endl;
@@ -85,13 +86,19 @@ int HALService::main(const std::vector<std::string>& args) {
 			f = new MBot::HALFactory();
 		}
 
-		TBS::Services::JsonServerParams p(HAL::API::Communication::BioRadarPort);
-		HAL::API::BioRadar::Json::Server::Ptr srv = HAL::API::BioRadar::Json::Server::createJsonServer(p);
+		TBS::Services::JsonServerParams bp(HAL::API::Communication::BioRadarPort);
+		HAL::API::BioRadar::Json::Server::Ptr bioRadarSrv = HAL::API::BioRadar::Json::Server::createJsonServer(bp);
+
+		TBS::Services::JsonServerParams cp(HAL::API::Communication::CameraPort);
+		HAL::API::Camera::Json::Server::Ptr cameraSrv = HAL::API::Camera::Json::Server::createJsonServer(cp);
 		{
-			TBS::Services::IServer::Ptr bioRadar = srv->createBioRadar(f->createBioRadar());
-			srv->start();
+			TBS::Services::IServer::Ptr bioRadar = bioRadarSrv->createBioRadar(f->createBioRadar());
+			TBS::Services::IServer::Ptr camera = cameraSrv->createCamera(f->createCamera());
+			bioRadarSrv->start();
+			cameraSrv->start();
 			waitForTerminationRequest();
-			srv->stop();
+			bioRadarSrv->stop();
+			cameraSrv->stop();
 		}
 	}
 

@@ -87,11 +87,11 @@ namespace MBot {
 			p.p3.touch = val.uchar3 ? true : false;
 			p.p4.touch = val.uchar4 ? true : false;
 
-			p.p1.distance = msg.getData(1).getSHORT2().short1;
-			p.p2.distance = msg.getData(1).getSHORT2().short2;
+			p.p1.distance = msg.getData(1).getUSHORT2().short1;
+			p.p2.distance = msg.getData(1).getUSHORT2().short2;
 
-			p.p3.distance = msg.getData(2).getSHORT2().short1;
-			p.p4.distance = msg.getData(2).getSHORT2().short2;
+			p.p3.distance = msg.getData(2).getUSHORT2().short1;
+			p.p4.distance = msg.getData(2).getUSHORT2().short2;
 
 			PositionChanged(this, p);
 

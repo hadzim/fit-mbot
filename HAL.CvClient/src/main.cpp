@@ -8,6 +8,7 @@
 #include "HAL/API/MovementClient.h"
 #include "HAL/API/BioRadarSvc_Json.h"
 #include "HAL/API/BioRadar.h"
+#include "HAL/API/CameraSvc_Json.h"
 #include "HAL/API/api.h"
 
 #include "TBS/Log.h"
@@ -20,6 +21,7 @@ double curSpeedR = 0;
 
 HAL::API::MovementClient::Ptr client;
 HAL::API::BioRadar::Json::Client::Ptr bioRadarClient;
+HAL::API::Camera::Json::Client::Ptr cameraClient;
 
 static void onMouse( int event, int x, int y, int, void* )
 {
@@ -114,8 +116,12 @@ int main( int argc, char** argv )
 		namedWindow( "bioradar", 0 );
 		setMouseCallback( "bioradar", onMouse2, 0 );
 
-		TBS::Services::JsonClientParams p("localhost", HAL::API::Communication::BioRadarPort, TBS::Services::JsonClientParams::JsonHttp);
-		bioRadarClient = new HAL::API::BioRadar::Json::Client(p);
+		TBS::Services::JsonClientParams bp("localhost", HAL::API::Communication::BioRadarPort, TBS::Services::JsonClientParams::JsonHttp);
+		bioRadarClient = new HAL::API::BioRadar::Json::Client(bp);
+
+		TBS::Services::JsonClientParams cp("localhost", HAL::API::Communication::CameraPort, TBS::Services::JsonClientParams::JsonHttp);
+		cameraClient = new HAL::API::Camera::Json::Client(cp);
+
 		client = new HAL::API::MovementClient();
 		client->Movement().StatusChanged += Poco::delegate(&updateSpeed);
 		for(;;)
@@ -164,10 +170,10 @@ int main( int argc, char** argv )
 				static int lastInRow = 0;
 				if ( (c & 255) == 'w'){
 					lastInRow++;
-					speed = 50;
+					speed = 20;
 					bioRadarClient->BioRadar().GoRelAntenna(speed);
 				} else if( (c & 255) == 's'){
-					speed = -50;
+					speed = -20;
 					lastInRow++;
 					bioRadarClient->BioRadar().GoRelAntenna(speed);
 				} else {
@@ -177,7 +183,7 @@ int main( int argc, char** argv )
 					}
 					lastInRow = 0;
 				}
-				std::cout << "tst " << tst.elapsed() / 1000 << "ms - speed: " << speed << std::endl;
+				//std::cout << "tst " << tst.elapsed() / 1000 << "ms - speed: " << speed << std::endl;
 				tst.update();
 			} catch (Poco::Exception & e){
 
@@ -193,6 +199,7 @@ int main( int argc, char** argv )
 
 			}
 
+
 			try {
 				if ( (c & 255) == 'r'){
 
@@ -206,6 +213,85 @@ int main( int argc, char** argv )
 			} catch (Poco::Exception & e){
 
 			}
+
+			try {
+							if ( (c & 255) == 'o'){
+								cameraClient->Camera().Enable();
+							} else if( (c & 255) == 'p'){
+								cameraClient->Camera().Disable();
+							}
+						} catch (Poco::Exception & e){
+
+						}
+
+			try {
+				static int speed = 0;
+				static int lastInRow = 0;
+				if ( (c & 255) == '+'){
+					lastInRow++;
+					speed = 100;
+					cameraClient->Camera().GoRelEngine(speed);
+				} else if( (c & 255) == '-'){
+					speed = -100;
+					lastInRow++;
+					cameraClient->Camera().GoRelEngine(speed);
+				} else {
+					speed = 0;
+					if (lastInRow > 1){
+						cameraClient->Camera().GoRelEngine(0);
+					}
+					lastInRow = 0;
+				}
+			} catch (Poco::Exception & e){
+
+			}
+
+			try {
+				static int speed = 0;
+				static int lastInRow = 0;
+				if ( (c & 255) == '4'){
+					lastInRow++;
+					speed = 100;
+					cameraClient->Camera().GoRelServo1(speed);
+				} else if( (c & 255) == '6'){
+					speed = -100;
+					lastInRow++;
+					cameraClient->Camera().GoRelServo1(speed);
+				} else {
+					speed = 0;
+					if (lastInRow > 1){
+						cameraClient->Camera().GoRelServo1(0);
+					}
+					lastInRow = 0;
+				}
+			} catch (Poco::Exception & e){
+
+			}
+
+			try {
+							static int speed = 0;
+							static int lastInRow = 0;
+							if ( (c & 255) == '8'){
+								lastInRow++;
+								speed = 100;
+								cameraClient->Camera().GoRelServo2(speed);
+							} else if( (c & 255) == '2'){
+								speed = -100;
+								lastInRow++;
+								cameraClient->Camera().GoRelServo2(speed);
+							} else {
+								speed = 0;
+								if (lastInRow > 1){
+									cameraClient->Camera().GoRelServo2(0);
+								}
+								lastInRow = 0;
+							}
+						} catch (Poco::Exception & e){
+
+						}
+
+
+
 
 		}
 		client->Movement().StatusChanged -= Poco::delegate(&updateSpeed);

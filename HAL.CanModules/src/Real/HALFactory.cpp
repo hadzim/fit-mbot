@@ -7,25 +7,29 @@
 
 #include "HALFactory.h"
 #include "BioRadar.h"
-
+#include "Camera.h"
 
 namespace MBot {
 
-HALFactory::HALFactory() {
-	LDEBUG("HAL") << "createfactory" << LE;
-	nw = new TBS::NotificationWorker("Can");
-	canChannel = new TBS::Robo::RoboCan::UsbChannel();
-	LDEBUG("HAL") << "createfactory done" << LE;
-}
+	HALFactory::HALFactory() {
+		LDEBUG("HAL")<< "createfactory" << LE;
+			nw = new TBS::NotificationWorker("Can");
+			canChannel = new TBS::Robo::RoboCan::UsbChannel();
+			LDEBUG("HAL") << "createfactory done" << LE;
+		}
 
-HALFactory::~HALFactory() {
+	HALFactory::~HALFactory() {
 
-}
+	}
 
-HAL::API::BioRadar::IBioRadar::Ptr HALFactory::createBioRadar(){
-	LDEBUG("HAL") << "createBioRadarBase" << LE;
-	return new BioRadar(nw, canChannel);
-	//return new Movement();
-}
+	HAL::API::BioRadar::IBioRadar::Ptr HALFactory::createBioRadar() {
+		LDEBUG("HAL")<< "createBioRadar" << LE;
+			return new BioRadar(nw, canChannel);
+		}
 
-} /* namespace MBot */
+	HAL::API::Camera::ICamera::Ptr HALFactory::createCamera() {
+		LDEBUG("HAL")<< "createCamera" << LE;
+			return new Camera(nw, canChannel);
+		}
+
+	} /* namespace MBot */

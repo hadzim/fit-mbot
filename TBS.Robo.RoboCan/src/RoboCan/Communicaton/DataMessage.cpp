@@ -58,7 +58,7 @@ namespace TBS {
 				}
 
 				RoboCanMessageData DataMessage::getData(int channel) {
-					std::cout << "channel: " << channel << " size is " << messages.size() << std::endl;
+					//std::cout << "channel: " << channel << " size is " << messages.size() << std::endl;
 					RoboCanMessageData mData;
 					if (messages.size() <= channel || channel < 0){
 						throw Poco::Exception("wrong channel index");
@@ -67,7 +67,7 @@ namespace TBS {
 						throw Poco::Exception("data on channel are not filled");
 					}
 					mData.readFromMessage(messages.at(channel).getConstReference());
-					std::cout << "channel: " << channel << " size is " << messages.size() << "done" << std::endl;
+					//std::cout << "channel: " << channel << " size is " << messages.size() << "done" << std::endl;
 					return mData;
 				}
 
