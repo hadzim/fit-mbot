@@ -1,0 +1,25 @@
+
+import tbs ;
+
+project HAL_Client 
+	:
+		requirements
+		<include>include
+		<include>src
+	    <library>$(TBS)/TBS.Services//TBS@Services
+	    <library>$(TBS)/HAL.API//HAL@API
+		<use>$(TBS)//PocoLibrarySet
+		<library>$(TBS)//PocoNetSSL
+    	<library>$(TBS)/TBS//TBS
+		<link>shared
+	:
+		usage-requirements
+		<include>include
+	;
+
+
+path-constant proj-dir : . ;
+tbs.obj-build common-sources : $(proj-dir) : [ tbs.glob-tree $(proj-dir)/src : *.cpp ] ; 
+exe HAL_Client : common-sources : <tag>@tbs.dot-from-at ;
+
+tbs.installation : HAL_Client : . ;

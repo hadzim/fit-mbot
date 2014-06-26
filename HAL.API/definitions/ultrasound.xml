@@ -2,7 +2,7 @@
 <node name="HAL.API.UltraSound">
   
   <struct name='TouchInfo'>
-  		<arg type="d" name="distance" />
+  		<arg type="i" name="distance" />
   </struct>
   <struct name='TouchSensors'>
   		<arg type="[TouchInfo]" name="left" />
@@ -11,15 +11,13 @@
   
   <interface name="HAL.API.UltraSound.UltraSound">
    
-    <method name="Enable">
-    </method>
-    
-    <method name="Disable">
+    <method name="Reconnect">
     </method>
     
     <method name="GetStatus">
       <arg type="[TouchSensors]" name="frontSensors" direction="out"/>
       <arg type="[TouchSensors]" name="backSensors" direction="out"/>
+      <arg type="b" name="isValid" direction="out"/>
     </method>
     
   </interface>

@@ -91,6 +91,16 @@ namespace HAL {
 
             this->client->CallMethod("GoRelServo2", pIn);
         }
+        void LightOn(){
+            ::Json::Value pIn;
+            pIn = ::Json::nullValue;
+            this->client->CallMethod("LightOn", pIn);
+        }
+        void LightOff(){
+            ::Json::Value pIn;
+            pIn = ::Json::nullValue;
+            this->client->CallMethod("LightOff", pIn);
+        }
 
 				
  //signals 

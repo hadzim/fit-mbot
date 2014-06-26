@@ -9,6 +9,7 @@
 #include <Poco/Thread.h>
 #include <iostream>
 #include "lin/LinSerial.h"
+#include "TBS/Log.h"
 namespace TBS {
 	namespace Serial {
 
@@ -29,6 +30,7 @@ namespace TBS {
 			}
 		}
 		SerialWrapper::VectorBuffer SerialWrapper::receive() {
+
 			SerialWrapper::VectorBuffer finalBuffer;
 			const int limit = 100;
 			unsigned char buffer[limit];

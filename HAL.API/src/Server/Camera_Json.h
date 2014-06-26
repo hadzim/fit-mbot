@@ -36,6 +36,8 @@ namespace HAL {
             this->bindAndAddMethod(new jsonrpc::Procedure("GoMinServo2", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Camera_JsonServer::GoMinServo2I);
             this->bindAndAddMethod(new jsonrpc::Procedure("GoMaxServo2", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Camera_JsonServer::GoMaxServo2I);
             this->bindAndAddMethod(new jsonrpc::Procedure("GoRelServo2", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL, NULL), &Camera_JsonServer::GoRelServo2I);
+            this->bindAndAddMethod(new jsonrpc::Procedure("LightOn", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Camera_JsonServer::LightOnI);
+            this->bindAndAddMethod(new jsonrpc::Procedure("LightOff", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Camera_JsonServer::LightOffI);
 
 					}
 					
@@ -94,6 +96,16 @@ namespace HAL {
             this->GoRelServo2(jsonrpc::Convertor::json2Cpp< double >(request["speed"]));
         }
 
+        inline virtual void LightOnI(const ::Json::Value& request, ::Json::Value& response) 
+        {
+            this->LightOn();
+        }
+
+        inline virtual void LightOffI(const ::Json::Value& request, ::Json::Value& response) 
+        {
+            this->LightOff();
+        }
+
 
 					        void Enable(){
         	 interfaceImpl->Enable();
@@ -137,6 +149,14 @@ namespace HAL {
 
         void GoRelServo2(const double & speed){
         	 interfaceImpl->GoRelServo2(speed);
+        }
+
+        void LightOn(){
+        	 interfaceImpl->LightOn();
+        }
+
+        void LightOff(){
+        	 interfaceImpl->LightOff();
         }
 
 
