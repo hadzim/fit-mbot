@@ -39,6 +39,12 @@
     	<arg type="d" name="speed" direction="in"/>
     </method>
     
+     <method name="LightOn">
+     </method>
+    
+    <method name="LightOff">
+    </method>
+    
   </interface>
   
   

@@ -28,6 +28,19 @@ namespace MBot {
 			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const;
 	};
 
+	class LightModule: public TBS::Robo::RoboCan::CanModule {
+
+				enum Commands {
+					Enable = 34
+				};
+
+			public:
+				LightModule(const std::string & name, TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule);
+				virtual ~LightModule();
+
+				TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const;
+		};
+
 
 }
 

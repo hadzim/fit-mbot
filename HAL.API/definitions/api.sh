@@ -8,4 +8,5 @@ JS_PATH="../js"
 ./../../TBS.Services/TBS.Services.Generator.lin/TBS.Services.Generator --def=movement.xml --name=Movement --src=$SRC_PATH/ --include=$INCLUDE_PATH/ --relative=$RELATIVE_PATH/ --javascript=../js --generate=json
 ./../../TBS.Services/TBS.Services.Generator.lin/TBS.Services.Generator --def=bioradar.xml --name=BioRadar --src=$SRC_PATH/ --include=$INCLUDE_PATH/ --relative=$RELATIVE_PATH/ --javascript=../js --generate=json
 ./../../TBS.Services/TBS.Services.Generator.lin/TBS.Services.Generator --def=camera.xml   --name=Camera   --src=$SRC_PATH/ --include=$INCLUDE_PATH/ --relative=$RELATIVE_PATH/ --javascript=../js --generate=json
+./../../TBS.Services/TBS.Services.Generator.lin/TBS.Services.Generator --def=ultrasound.xml --name=UltraSound --src=$SRC_PATH/ --include=$INCLUDE_PATH/ --relative=$RELATIVE_PATH/ --javascript=../js --generate=json
 

@@ -92,6 +92,16 @@ namespace HAL {
 		  */ 
 		        virtual void GoRelServo2(const double & speed) = 0;
 
+		/** 
+		  * [method] LightOn: 
+		  */ 
+		        virtual void LightOn() = 0;
+
+		/** 
+		  * [method] LightOff: 
+		  */ 
+		        virtual void LightOff() = 0;
+
 				
  //signals 
 				

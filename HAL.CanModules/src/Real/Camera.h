@@ -42,6 +42,9 @@ namespace MBot {
 			void GoMaxServo2();
 			void GoRelServo2(const double & speed);
 
+			void LightOn();
+			void LightOff();
+
 		private:
 
 			void run();
@@ -53,10 +56,12 @@ namespace MBot {
 			TBS::Task::OneActiveTaskExectution motorExecution;
 			TBS::Task::OneActiveTaskExectution servo1Execution;
 			TBS::Task::OneActiveTaskExectution servo2Execution;
+			TBS::Task::OneActiveTaskExectution lightExecution;
 
 			MBot::CameraMotorModule motorModule;
 			MBot::CameraMotorModule servo1Module;
 			MBot::CameraMotorModule servo2Module;
+			MBot::LightModule lightModule;
 
 			int speed;
 			int maxRelDurationTimeInMs;

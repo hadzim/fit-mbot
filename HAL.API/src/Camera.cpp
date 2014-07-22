@@ -62,6 +62,14 @@ cnmspc.push_back("Camera");
   m.inArguments.push_back(::TBS::Services::Introspection::Argument("speed", "d", ""));
 	c.methods.push_back(m);
 }
+{
+	::TBS::Services::Introspection::Method m("LightOn", "");
+	c.methods.push_back(m);
+}
+{
+	::TBS::Services::Introspection::Method m("LightOff", "");
+	c.methods.push_back(m);
+}
 return c;
 
 		}
