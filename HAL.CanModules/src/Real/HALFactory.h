@@ -19,6 +19,7 @@ public:
 
 	virtual HAL::API::BioRadar::IBioRadar::Ptr createBioRadar();
 	virtual HAL::API::Camera::ICamera::Ptr createCamera();
+	virtual HAL::API::Manipulator::IManipulator::Ptr createManipulator();
 private:
 	TBS::NotificationWorker::Ptr nw;
 	TBS::Robo::RoboCan::UsbChannel::Ptr canChannel;

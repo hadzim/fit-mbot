@@ -17,6 +17,7 @@ public:
 	static const int BioRadarPort = 9192;
 	static const int CameraPort = 9193;
 	static const int UltraSoundPort = 9194;
+	static const int ManipulatorPort = 9195;
 };
 
 }

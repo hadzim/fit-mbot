@@ -75,7 +75,7 @@ void UsbChannel::sendCanMessage(
 void UsbChannel::onFrame(CANFrame::Ptr & f) {
 	TBS::Robo::RoboCan::CanMessage message = messageFromFrame(f);
 	//std::cout << std::endl;
-	//std::cout << "recv: " << message.toString() << std::endl;
+	std::cout << "recv: " << message.toString() << std::endl;
 	//std::cout << std::endl;
 	this->MessageRetrieved.notify(this, message);
 }

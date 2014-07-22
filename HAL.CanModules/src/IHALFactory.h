@@ -12,6 +12,7 @@
 #include <Poco/SharedPtr.h>
 #include "HAL/API/BioRadar.h"
 #include "HAL/API/Camera.h"
+#include "HAL/API/Manipulator.h"
 
 namespace MBot {
 
@@ -22,6 +23,8 @@ public:
 	}
 	virtual HAL::API::BioRadar::IBioRadar::Ptr createBioRadar() = 0;
 	virtual HAL::API::Camera::ICamera::Ptr createCamera() = 0;
+
+	virtual HAL::API::Manipulator::IManipulator::Ptr createManipulator() = 0;
 
 
 };

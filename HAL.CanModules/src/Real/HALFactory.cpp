@@ -9,6 +9,8 @@
 #include "BioRadar.h"
 #include "Camera.h"
 
+#include "Manipulator.h"
+
 namespace MBot {
 
 	HALFactory::HALFactory() {
@@ -31,5 +33,9 @@ namespace MBot {
 		LDEBUG("HAL")<< "createCamera" << LE;
 			return new Camera(nw, canChannel);
 		}
+
+	HAL::API::Manipulator::IManipulator::Ptr HALFactory::createManipulator(){
+		return new Manipulator(nw, canChannel);
+	}
 
 	} /* namespace MBot */

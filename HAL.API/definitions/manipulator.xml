@@ -1,51 +1,46 @@
 <?xml version="1.0" ?>
 <node name="HAL.API.Manipulator">
   
-  <interface name="HAL.API.Manipulator.Rotation">
+  <interface name="HAL.API.Manipulator.Manipulator">
    
-    <method name="Rotate">
+    <method name="Enable">
+    </method>
+    
+    <method name="Disable">
+    </method>
+   
+    <method name="StartRotation">
       <arg type="d" name="speed" direction="in"/>
     </method>
     
-    <method name="Stop">
+    <method name="StopRotation">
     </method>
     
-  </interface>
-  
-  <interface name="HAL.API.Manipulator.Joint1">
-   
-    <method name="Rotate">
+    <method name="StartJoint1">
       <arg type="d" name="speed" direction="in"/>
     </method>
     
-    <method name="Stop">
+    <method name="StopJoint1">
     </method>
     
-  </interface>
-  
-  <interface name="HAL.API.Manipulator.Joint2">
-   
-    <method name="Rotate">
+    <method name="StartJoint2">
       <arg type="d" name="speed" direction="in"/>
     </method>
     
-    <method name="Stop">
+    <method name="StopJoint2">
     </method>
     
-  </interface>
-  
-  <interface name="HAL.API.Manipulator.Holder">
-   
-    <method name="Hold">
+    <method name="StartHolder">
       <arg type="d" name="speed" direction="in"/>
     </method>
     
-    <method name="Stop">
+    <method name="StopHolder">
     </method>
     
-    <method name="SetThreshold">
+    <method name="SetHolderThreshold">
       <arg type="d" name="threshold" direction="in"/>
     </method>
     
   </interface>
+  
 </node>

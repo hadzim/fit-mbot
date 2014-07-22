@@ -14,6 +14,7 @@
 #include "TBS/Log.h"
 #include "HAL/API/BioRadarSvc_Json.h"
 #include "HAL/API/CameraSvc_Json.h"
+#include "HAL/API/ManipulatorSvc_Json.h"
 #include "HAL/API/api.h"
 
 namespace HAL {
@@ -91,14 +92,20 @@ int HALService::main(const std::vector<std::string>& args) {
 
 		TBS::Services::JsonServerParams cp(HAL::API::Communication::CameraPort);
 		HAL::API::Camera::Json::Server::Ptr cameraSrv = HAL::API::Camera::Json::Server::createJsonServer(cp);
+
+		TBS::Services::JsonServerParams ma(HAL::API::Communication::ManipulatorPort);
+		HAL::API::Manipulator::Json::Server::Ptr manipSrv = HAL::API::Manipulator::Json::Server::createJsonServer(ma);
 		{
 			TBS::Services::IServer::Ptr bioRadar = bioRadarSrv->createBioRadar(f->createBioRadar());
 			TBS::Services::IServer::Ptr camera = cameraSrv->createCamera(f->createCamera());
+			TBS::Services::IServer::Ptr manip = manipSrv->createManipulator(f->createManipulator());
 			bioRadarSrv->start();
 			cameraSrv->start();
+			manipSrv->start();
 			waitForTerminationRequest();
 			bioRadarSrv->stop();
 			cameraSrv->stop();
+			manipSrv->stop();
 		}
 	}
 
