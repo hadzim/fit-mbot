@@ -7,7 +7,7 @@
 
 #ifndef MOVEMENTIMPL_H_
 #define MOVEMENTIMPL_H_
-#include "SerialWrapper.h"
+#include "TBS/Serial/SerialWrapper.h"
 #include <Poco/Types.h>
 
 
@@ -15,7 +15,7 @@
 
 namespace MBot {
 
-typedef SerialWrapper SerialLib;
+typedef TBS::Serial::SerialWrapper SerialLib;
 
 class MovementImpl {
 public:
