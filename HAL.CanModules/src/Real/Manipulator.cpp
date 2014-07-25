@@ -17,7 +17,10 @@ namespace MBot {
 		rotationModule("Manipulator.Rotation", &node, 2),
 
 		holderModule("Manipulator.Holder", &node, 1),
-
+#if ALLWORKING
+		joint1(3),
+		joint2(20),
+#endif
 		speed(20), maxRelDurationTimeInMs(50), t("ManipulatorWorker"), finished(false), enabled(false) {
 
 		LDEBUG("HAL")<< "Manipulator constructed" << LE;
@@ -33,12 +36,37 @@ namespace MBot {
 		enabled = true;
 		rotationExecution.addTask(rotationModule.taskEnable(true));
 		holderExecution.addTask(holderModule.taskEnable(true));
+#if ALLWORKING
+		joint1.enable();
+		joint2.enable();
 
+		Poco::Thread::sleep(800);
+
+		joint1.unbreakMotor();
+		joint2.unbreakMotor();
+
+		Poco::Thread::sleep(100);
+#endif
 	}
 	void Manipulator::Disable() {
 		enabled = false;
 		rotationExecution.addTask(rotationModule.taskEnable(false));
 		holderExecution.addTask(holderModule.taskEnable(false));
+
+#if ALLWORKING
+		joint1.stop();
+		joint2.stop();
+
+		Poco::Thread::sleep(100);
+
+		joint1.breakMotor();
+		joint2.breakMotor();
+
+		Poco::Thread::sleep(100);
+
+		joint1.disable();
+		joint2.disable();
+#endif
 	}
 
 
@@ -56,19 +84,27 @@ namespace MBot {
 	}
 
 	void Manipulator::StartJoint1(const double & speed) {
-
+#if ALLWORKING
+		joint1.go(speed);
+#endif
 	}
 
 	void Manipulator::StopJoint1() {
-
+#if ALLWORKING
+		joint1.stop();
+#endif
 	}
 
 	void Manipulator::StartJoint2(const double & speed) {
-
+#if ALLWORKING
+		joint2.go(speed);
+#endif
 	}
 
 	void Manipulator::StopJoint2() {
-
+#if ALLWORKING
+		joint2.stop();
+#endif
 	}
 
 	void Manipulator::StartHolder(const double & speed) {

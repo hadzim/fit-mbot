@@ -96,6 +96,9 @@ void drawSpeed(Mat & img) {
 }
 
 int main(int argc, char** argv) {
+
+	int maxManSpeed = 30000;
+
 	try {
 
 		TBS::initLogs("cvclient", 8);
@@ -344,6 +347,50 @@ int main(int argc, char** argv) {
 			} catch (Poco::Exception & e) {
 
 			}
+
+			try {
+				static int speed = 0;
+				static int lastInRow = 0;
+				if ((c & 255) == 'i') {
+					lastInRow++;
+					speed = maxManSpeed;
+					manipulatorClient->Manipulator().StartJoint1(speed);
+				} else if ((c & 255) == 'k') {
+					speed = -maxManSpeed;
+					lastInRow++;
+					manipulatorClient->Manipulator().StartJoint1(speed);
+				} else {
+					speed = 0;
+					if (lastInRow > 1) {
+						manipulatorClient->Manipulator().StopJoint1();
+					}
+					lastInRow = 0;
+				}
+			} catch (Poco::Exception & e) {
+
+			}
+
+			try {
+							static int speed = 0;
+							static int lastInRow = 0;
+							if ((c & 255) == 'u') {
+								lastInRow++;
+								speed = maxManSpeed;
+								manipulatorClient->Manipulator().StartJoint2(speed);
+							} else if ((c & 255) == 'j') {
+								speed = -maxManSpeed;
+								lastInRow++;
+								manipulatorClient->Manipulator().StartJoint2(speed);
+							} else {
+								speed = 0;
+								if (lastInRow > 1) {
+									manipulatorClient->Manipulator().StopJoint2();
+								}
+								lastInRow = 0;
+							}
+						} catch (Poco::Exception & e) {
+
+						}
 
 		}
 		client->Movement().StatusChanged -= Poco::delegate(&updateSpeed);
