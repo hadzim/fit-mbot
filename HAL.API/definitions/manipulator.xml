@@ -50,6 +50,7 @@
       <arg type="[MotorInfo]" name="rotation" direction="out"/>
       <arg type="[MotorInfo]" name="joint1" direction="out"/>
       <arg type="[MotorInfo]" name="joint2" direction="out"/>
+      <arg type="[MotorInfo]" name="holder" direction="out"/>
     </method>
     
   </interface>

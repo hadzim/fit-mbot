@@ -93,7 +93,7 @@ namespace HAL {
 
             this->client->CallMethod("SetHolderThreshold", pIn);
         }
-        void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2){
+        void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2, MotorInfo & holder){
             ::Json::Value pIn;
             pIn = ::Json::nullValue;
             ::Json::Value pOut = this->client->CallMethod("GetStatus", pIn);
@@ -101,6 +101,7 @@ namespace HAL {
 rotation = jsonrpc::Convertor::json2Cpp<MotorInfo >(pOut["rotation"]); 
 joint1 = jsonrpc::Convertor::json2Cpp<MotorInfo >(pOut["joint1"]); 
 joint2 = jsonrpc::Convertor::json2Cpp<MotorInfo >(pOut["joint2"]); 
+holder = jsonrpc::Convertor::json2Cpp<MotorInfo >(pOut["holder"]); 
 
         }
 

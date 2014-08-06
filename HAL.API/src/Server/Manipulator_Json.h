@@ -100,11 +100,13 @@ namespace HAL {
         	MotorInfo tmpvar_rotation;
 MotorInfo tmpvar_joint1;
 MotorInfo tmpvar_joint2;
+MotorInfo tmpvar_holder;
 
-        	this->GetStatus(tmpvar_rotation, tmpvar_joint1, tmpvar_joint2);
+        	this->GetStatus(tmpvar_rotation, tmpvar_joint1, tmpvar_joint2, tmpvar_holder);
         	response["rotation"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_rotation);
 response["joint1"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_joint1);
 response["joint2"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_joint2);
+response["holder"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_holder);
 
         }
 
@@ -153,8 +155,8 @@ response["joint2"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_joint2);
         	 interfaceImpl->SetHolderThreshold(threshold);
         }
 
-        void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2){
-        	 interfaceImpl->GetStatus(rotation, joint1, joint2);
+        void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2, MotorInfo & holder){
+        	 interfaceImpl->GetStatus(rotation, joint1, joint2, holder);
         }
 
 

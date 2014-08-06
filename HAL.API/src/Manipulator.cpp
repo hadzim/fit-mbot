@@ -69,6 +69,7 @@ cnmspc.push_back("Manipulator");
   m.outArguments.push_back(::TBS::Services::Introspection::Argument("rotation", "[MotorInfo]", ""));
   m.outArguments.push_back(::TBS::Services::Introspection::Argument("joint1", "[MotorInfo]", ""));
   m.outArguments.push_back(::TBS::Services::Introspection::Argument("joint2", "[MotorInfo]", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("holder", "[MotorInfo]", ""));
 	c.methods.push_back(m);
 }
 return c;

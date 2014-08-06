@@ -121,8 +121,9 @@ namespace HAL {
 		  * [out] MotorInfo rotation: 
 		  * [out] MotorInfo joint1: 
 		  * [out] MotorInfo joint2: 
+		  * [out] MotorInfo holder: 
 		  */ 
-		        virtual void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2) = 0;
+		        virtual void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2, MotorInfo & holder) = 0;
 
 				
  //signals 
