@@ -13,7 +13,7 @@
 
 namespace MBot {
 
-	HALFactory::HALFactory() {
+	HALFactory::HALFactory(int portMan1, int portMan2) : portMan1(portMan1), portMan2(portMan2) {
 		LDEBUG("HAL")<< "createfactory" << LE;
 			nw = new TBS::NotificationWorker("Can");
 			canChannel = new TBS::Robo::RoboCan::UsbChannel();
@@ -35,7 +35,7 @@ namespace MBot {
 		}
 
 	HAL::API::Manipulator::IManipulator::Ptr HALFactory::createManipulator(){
-		return new Manipulator(nw, canChannel);
+		return new Manipulator(nw, canChannel, portMan1, portMan2);
 	}
 
 	} /* namespace MBot */

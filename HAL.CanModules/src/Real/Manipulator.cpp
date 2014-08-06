@@ -11,15 +11,15 @@
 
 namespace MBot {
 
-	Manipulator::Manipulator(TBS::NotificationWorker::Ptr nw, TBS::Robo::RoboCan::IChannel::Ptr canChannel) :
+	Manipulator::Manipulator(TBS::NotificationWorker::Ptr nw, TBS::Robo::RoboCan::IChannel::Ptr canChannel, int portMan1, int portMan2) :
 		node("Manipulator", 4, nw, canChannel),
 
 		rotationModule("Manipulator.Rotation", &node, 2),
 
 		holderModule("Manipulator.Holder", &node, 1),
 #if ALLWORKING
-		joint1(3),
-		joint2(20),
+		joint1(portMan1),
+		joint2(portMan2),
 #endif
 		speed(20), maxRelDurationTimeInMs(50), t("ManipulatorWorker"), finished(false), enabled(false) {
 

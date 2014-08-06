@@ -28,7 +28,7 @@ namespace MBot {
 
 			};
 
-			Manipulator(TBS::NotificationWorker::Ptr nw, TBS::Robo::RoboCan::IChannel::Ptr canChannel);
+			Manipulator(TBS::NotificationWorker::Ptr nw, TBS::Robo::RoboCan::IChannel::Ptr canChannel,int portMan1, int portMan2);
 			~Manipulator();
 
 			void Enable();

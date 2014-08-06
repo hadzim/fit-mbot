@@ -14,7 +14,7 @@ namespace MBot {
 
 class HALFactory : public IHALFactory {
 public:
-	HALFactory();
+	HALFactory(int portMan1, int portMan2);
 	virtual ~HALFactory();
 
 	virtual HAL::API::BioRadar::IBioRadar::Ptr createBioRadar();
@@ -23,6 +23,7 @@ public:
 private:
 	TBS::NotificationWorker::Ptr nw;
 	TBS::Robo::RoboCan::UsbChannel::Ptr canChannel;
+	int portMan1; int portMan2;
 };
 
 } /* namespace MBot */
