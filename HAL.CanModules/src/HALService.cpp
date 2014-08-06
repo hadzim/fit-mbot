@@ -47,23 +47,24 @@ namespace HAL {
 		options.addOption(
 				Poco::Util::Option("help", "h", "display help information").required(false).repeatable(false).callback(
 						Poco::Util::OptionCallback<HALService>(this, &HALService::handleHelp)));
-		options.addOption(
-				Poco::Util::Option("mode", "m", "virtual or real mode").required(true).repeatable(false).argument("mode=value").callback(
-						Poco::Util::OptionCallback<HALService>(this, &HALService::handleMode)));
+
+		//options.addOption(
+		//		Poco::Util::Option("mode", "m", "virtual or real mode").required(true).repeatable(false)/*.argument("mode=value")*/.callback(
+		//				Poco::Util::OptionCallback<HALService>(this, &HALService::handleMode)));
 
 		options.addOption(
-				Poco::Util::Option("useBioRadar", "ub", "use bio radar").required(false).repeatable(false).argument("ub=enabled").callback(
+				Poco::Util::Option("bioradar", "b", "use bio radar").required(false).repeatable(false).argument("bioradar=value").callback(
 						Poco::Util::OptionCallback<HALService>(this, &HALService::handleBioRadarEnable)));
 
 		options.addOption(
-				Poco::Util::Option("useManipulator", "um", "use manipulator").required(false).repeatable(false).argument("um=enabled").callback(
+				Poco::Util::Option("manipulator", "m", "use manipulator").required(false).repeatable(false).argument("manipulator=value").callback(
 						Poco::Util::OptionCallback<HALService>(this, &HALService::handleManipulatorEnable)));
 
 		options.addOption(
-				Poco::Util::Option("manPort1", "mp1", "manipulator serial port 1 number").required(false).repeatable(false).argument("port1").callback(
+				Poco::Util::Option("port1", "q1", "manipulator serial port 1 number").required(false).repeatable(false).argument("manport1=value").callback(
 						Poco::Util::OptionCallback<HALService>(this, &HALService::handleManipulatorPort1)));
 		options.addOption(
-				Poco::Util::Option("manPort2", "mp2", "manipulator serial port 2 number").required(false).repeatable(false).argument("port2").callback(
+				Poco::Util::Option("port2", "q2", "manipulator serial port 2 number").required(false).repeatable(false).argument("manport2=value").callback(
 						Poco::Util::OptionCallback<HALService>(this, &HALService::handleManipulatorPort2)));
 
 
@@ -88,21 +89,21 @@ namespace HAL {
 	}
 
 	void HALService::handleBioRadarEnable(const std::string& name, const std::string& value) {
-		int val = Poco::NumberParser::parse(value.substr(1));
-		this->configuration.useBioRadar = val != 0;
+		int val = Poco::NumberParser::parse(value);//int val = Poco::NumberParser::parse(value.substr(1));
+				this->configuration.useBioRadar = val != 0;
 	}
 	void HALService::handleManipulatorEnable(const std::string& name, const std::string& value) {
-		int val = Poco::NumberParser::parse(value.substr(1));
+		int val = Poco::NumberParser::parse(value);//int val = Poco::NumberParser::parse(value.substr(1));
 		this->configuration.useManipulator = val != 0;
 	}
 
 	void HALService::handleManipulatorPort1(const std::string& name, const std::string& value) {
-		int val = Poco::NumberParser::parse(value.substr(1));
-		this->configuration.manipulatorJoint1Port = val;
+		int val = Poco::NumberParser::parse(value);//int val = Poco::NumberParser::parse(value.substr(1));
+				this->configuration.manipulatorJoint1Port = val;
 	}
 	void HALService::handleManipulatorPort2(const std::string& name, const std::string& value) {
-		int val = Poco::NumberParser::parse(value.substr(1));
-		this->configuration.manipulatorJoint2Port = val;
+		int val = Poco::NumberParser::parse(value);//int val = Poco::NumberParser::parse(value.substr(1));
+				this->configuration.manipulatorJoint2Port = val;
 	}
 
 	int HALService::main(const std::vector<std::string>& args) {
