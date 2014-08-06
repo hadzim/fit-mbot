@@ -36,6 +36,7 @@ namespace HAL {
             this->bindAndAddMethod(new jsonrpc::Procedure("StartHolder", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::StartHolderI);
             this->bindAndAddMethod(new jsonrpc::Procedure("StopHolder", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::StopHolderI);
             this->bindAndAddMethod(new jsonrpc::Procedure("SetHolderThreshold", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "threshold",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::SetHolderThresholdI);
+            this->bindAndAddMethod(new jsonrpc::Procedure("GetStatus", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::GetStatusI);
 
 					}
 					
@@ -94,6 +95,21 @@ namespace HAL {
             this->SetHolderThreshold(jsonrpc::Convertor::json2Cpp< double >(request["threshold"]));
         }
 
+        inline virtual void GetStatusI(const ::Json::Value& request, ::Json::Value& response) 
+        {
+        	MotorInfo tmpvar_rotation;
+MotorInfo tmpvar_joint1;
+MotorInfo tmpvar_joint2;
+MotorInfo tmpvar_holder;
+
+        	this->GetStatus(tmpvar_rotation, tmpvar_joint1, tmpvar_joint2, tmpvar_holder);
+        	response["rotation"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_rotation);
+response["joint1"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_joint1);
+response["joint2"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_joint2);
+response["holder"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_holder);
+
+        }
+
 
 					        void Enable(){
         	 interfaceImpl->Enable();
@@ -137,6 +153,10 @@ namespace HAL {
 
         void SetHolderThreshold(const double & threshold){
         	 interfaceImpl->SetHolderThreshold(threshold);
+        }
+
+        void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2, MotorInfo & holder){
+        	 interfaceImpl->GetStatus(rotation, joint1, joint2, holder);
         }
 
 

@@ -14,6 +14,28 @@
 namespace TBS{ namespace Services{ namespace Introspection{ class Class; struct Struct; } } } 
 
 
+namespace HAL { 
+	namespace API { 
+		namespace Manipulator { 
+       struct MotorInfo {
+				
+				static std::string name(){
+					static std::string n = "MotorInfo";
+					return n;
+				}
+				static const ::TBS::Services::Introspection::Struct & introspection();
+				
+ //members 
+						double position;
+		double current;
+
+				
+			};
+ } 
+ } 
+ } 
+
+
 
 
 namespace HAL { 
@@ -93,6 +115,15 @@ namespace HAL {
 		  * [in] double threshold: 
 		  */ 
 		        virtual void SetHolderThreshold(const double & threshold) = 0;
+
+		/** 
+		  * [method] GetStatus: 
+		  * [out] MotorInfo rotation: 
+		  * [out] MotorInfo joint1: 
+		  * [out] MotorInfo joint2: 
+		  * [out] MotorInfo holder: 
+		  */ 
+		        virtual void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2, MotorInfo & holder) = 0;
 
 				
  //signals 

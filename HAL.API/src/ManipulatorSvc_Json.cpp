@@ -9,7 +9,25 @@
 #include <TBS/Services/Json/JsonServicesImpl.h>
 
 //convertors
-namespace jsonrpc {}
+namespace jsonrpc {template<>
+class InternalConvertor<HAL::API::Manipulator::MotorInfo> { 
+	public:
+		static HAL::API::Manipulator::MotorInfo json2Cpp(const Json::Value & val) {
+		   using namespace HAL::API::Manipulator;
+		   HAL::API::Manipulator::MotorInfo var;
+		   		var.position =  Convertor::json2Cpp< double > (val["position"]);
+		   		var.current =  Convertor::json2Cpp< double > (val["current"]);
+			return var;
+		}
+		static Json::Value cpp2Json(const HAL::API::Manipulator::MotorInfo & val) {
+		    using namespace HAL::API::Manipulator;
+		    ::Json::Value retval(::Json::objectValue);
+		    retval["position"] = Convertor::cpp2Json< double >(val.position);
+		    retval["current"] = Convertor::cpp2Json< double >(val.current);
+			return retval;
+		}
+};
+}
 
 namespace HAL { 
 	namespace API { 

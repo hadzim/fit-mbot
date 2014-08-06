@@ -9,7 +9,6 @@
 #include "TBS/Log.h"
 #include <sstream>
 #include <iostream>
-#include "SerialWrapper.h"
 #include <Poco/NumberFormatter.h>
 #include <Poco/NumberParser.h>
 #include "Poco/Thread.h"
@@ -40,7 +39,7 @@ std::ostream & operator<<(std::ostream & o, const MBot::SerialLib::VectorBuffer 
 }
 
 MBot::SerialLib::VectorBuffer makeCommand(const std::string & s, char destination = 0){
-	MBot::SerialWrapper::VectorBuffer b;
+	TBS::Serial::SerialWrapper::VectorBuffer b;
 	b.push_back(0x80 + destination);
 	for (std::size_t i = 0; i < s.size(); i++){
 		b.push_back(s[i]);
@@ -54,7 +53,7 @@ void runCommand(MBot::SerialLib & serial, const MBot::SerialLib::VectorBuffer & 
 	s << "C " << cmd;
 	serial.send(cmd);
 
-	MBot::SerialWrapper::VectorBuffer response = serial.receive(50, cmd.size());
+	TBS::Serial::SerialWrapper::VectorBuffer response = serial.receive(50, cmd.size());
 	if (response != cmd){
 		s << " FAILED (" << response << ")";
 		std::cout << s.str() << std::endl;
@@ -81,12 +80,12 @@ std::vector <std::string> runQuestion(MBot::SerialLib & serial,const MBot::Seria
 
 	//std::cout << "Q " << cmd;
 	serial.send(cmd);
-	MBot::SerialWrapper::ListBuffer buf;
+	TBS::Serial::SerialWrapper::ListBuffer buf;
 	buf.push_back(0x20);
 	for (std::size_t i = 0; i < outParamsSize; i++){
 		buf.push_back(0x0D);
 	}
-	MBot::SerialWrapper::VectorBuffer response = serial.receive(buf, 50);
+	TBS::Serial::SerialWrapper::VectorBuffer response = serial.receive(buf, 50);
 	//std::cout << " ANSWER: " << response << std::endl;
 
 	std::vector <std::string> outParams;
