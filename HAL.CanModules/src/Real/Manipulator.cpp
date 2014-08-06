@@ -124,6 +124,17 @@ namespace MBot {
 		holderExecution.addTask(holderModule.taskSetThreshold(threshold));
 	}
 
+	void Manipulator::GetStatus(HAL::API::Manipulator::MotorInfo & rotation, HAL::API::Manipulator::MotorInfo & joint1, HAL::API::Manipulator::MotorInfo & joint2){
+		rotation.current = 12;
+		rotation.position = 458;
+
+		joint1.current = 13;
+		joint1.position = 460;
+
+		joint2.current = 14;
+		joint2.position = 462;
+	}
+
 	void Manipulator::run() {
 
 		while (!finished) {

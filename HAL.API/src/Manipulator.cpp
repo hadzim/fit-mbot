@@ -64,6 +64,13 @@ cnmspc.push_back("Manipulator");
   m.inArguments.push_back(::TBS::Services::Introspection::Argument("threshold", "d", ""));
 	c.methods.push_back(m);
 }
+{
+	::TBS::Services::Introspection::Method m("GetStatus", "");
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("rotation", "[MotorInfo]", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("joint1", "[MotorInfo]", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("joint2", "[MotorInfo]", ""));
+	c.methods.push_back(m);
+}
 return c;
 
 		}
