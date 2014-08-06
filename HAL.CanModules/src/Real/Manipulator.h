@@ -50,6 +50,9 @@ namespace MBot {
 
 			 virtual void GetStatus(HAL::API::Manipulator::MotorInfo & rotation, HAL::API::Manipulator::MotorInfo & joint1, HAL::API::Manipulator::MotorInfo & joint2, HAL::API::Manipulator::MotorInfo & holder);
 
+			 virtual void LightOn();
+			 virtual void LightOff();
+
 		private:
 			 void onPositionChanged(ManipulatorPositionTask::Position & pos);
 
@@ -63,9 +66,11 @@ namespace MBot {
 
 			TBS::Task::OneActiveTaskExectution rotationExecution;
 			TBS::Task::OneActiveTaskExectution holderExecution;
+			TBS::Task::OneActiveTaskExectution lightExecution;
 
 			MBot::ManipulatorRotationModule rotationModule;
 			MBot::ManipulatorHolderModule holderModule;
+			MBot::ManipulatorLightModule lightModule;
 
 			MBot::ManipulatorMagneticModule magneticModule;
 #if ALLWORKING

@@ -93,6 +93,16 @@ namespace HAL {
 
             this->client->CallMethod("SetHolderThreshold", pIn);
         }
+        void LightOn(){
+            ::Json::Value pIn;
+            pIn = ::Json::nullValue;
+            this->client->CallMethod("LightOn", pIn);
+        }
+        void LightOff(){
+            ::Json::Value pIn;
+            pIn = ::Json::nullValue;
+            this->client->CallMethod("LightOff", pIn);
+        }
         void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2, MotorInfo & holder){
             ::Json::Value pIn;
             pIn = ::Json::nullValue;

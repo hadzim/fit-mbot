@@ -65,6 +65,14 @@ cnmspc.push_back("Manipulator");
 	c.methods.push_back(m);
 }
 {
+	::TBS::Services::Introspection::Method m("LightOn", "");
+	c.methods.push_back(m);
+}
+{
+	::TBS::Services::Introspection::Method m("LightOff", "");
+	c.methods.push_back(m);
+}
+{
 	::TBS::Services::Introspection::Method m("GetStatus", "");
   m.outArguments.push_back(::TBS::Services::Introspection::Argument("rotation", "[MotorInfo]", ""));
   m.outArguments.push_back(::TBS::Services::Introspection::Argument("joint1", "[MotorInfo]", ""));

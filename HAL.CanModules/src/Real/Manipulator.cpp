@@ -12,22 +12,24 @@
 namespace MBot {
 
 	Manipulator::Manipulator(TBS::NotificationWorker::Ptr nw, TBS::Robo::RoboCan::IChannel::Ptr canChannel, int portMan1, int portMan2) :
-		node("Manipulator", 4, nw, canChannel),
+			node("Manipulator", 4, nw, canChannel),
 
-		rotationModule("Manipulator.Rotation", &node, 2),
+			rotationModule("Manipulator.Rotation", &node, 2),
 
-		holderModule("Manipulator.Holder", &node, 1),
+			holderModule("Manipulator.Holder", &node, 1),
 
-		magneticModule("Manipulatior.Magnetic", &node, 4),
+			lightModule("Manipulator.Light", &node, 3),
+
+			magneticModule("Manipulatior.Magnetic", &node, 4),
 #if ALLWORKING
-		joint1(portMan1),
-		joint2(portMan2),
+					joint1(portMan1),
+					joint2(portMan2),
 #endif
-		speed(20), maxRelDurationTimeInMs(50), t("ManipulatorWorker"), finished(false), enabled(false) {
+					speed(20), maxRelDurationTimeInMs(50), t("ManipulatorWorker"), finished(false), enabled(false) {
 
 		LDEBUG("HAL")<< "Manipulator constructed" << LE;
-		t.start(*this);
-	}
+			t.start(*this);
+		}
 
 	Manipulator::~Manipulator() {
 		finished = true;
@@ -71,16 +73,15 @@ namespace MBot {
 #endif
 	}
 
-
 	void Manipulator::StartRotation(const double & speed) {
 		if (speed == 0) {
 			LDEBUG("HAL")<< "Manipulator motor stop" << LE;
-			rotationExecution.addTask(rotationModule.taskStop());
-		} else {
-			LDEBUG("HAL")<< "Manipulator motor goRel: " << speed << " by " << maxRelDurationTimeInMs << LE;
-			rotationExecution.addTask(rotationModule.taskGoRel(speed, maxRelDurationTimeInMs));
+				rotationExecution.addTask(rotationModule.taskStop());
+			} else {
+				LDEBUG("HAL")<< "Manipulator motor goRel: " << speed << " by " << maxRelDurationTimeInMs << LE;
+				rotationExecution.addTask(rotationModule.taskGoRel(speed, maxRelDurationTimeInMs));
+			}
 		}
-	}
 	void Manipulator::StopRotation() {
 		rotationExecution.addTask(rotationModule.taskStop());
 	}
@@ -112,12 +113,12 @@ namespace MBot {
 	void Manipulator::StartHolder(const double & speed) {
 		if (speed == 0) {
 			LDEBUG("HAL")<< "Manipulator motor stop" << LE;
-			holderExecution.addTask(holderModule.taskStop());
-		} else {
-			LDEBUG("HAL")<< "Manipulator motor goRel: " << speed << " by " << maxRelDurationTimeInMs << LE;
-			holderExecution.addTask(holderModule.taskGoRel(speed, maxRelDurationTimeInMs));
+				holderExecution.addTask(holderModule.taskStop());
+			} else {
+				LDEBUG("HAL")<< "Manipulator motor goRel: " << speed << " by " << maxRelDurationTimeInMs << LE;
+				holderExecution.addTask(holderModule.taskGoRel(speed, maxRelDurationTimeInMs));
+			}
 		}
-	}
 	void Manipulator::StopHolder() {
 		holderExecution.addTask(holderModule.taskStop());
 	}
@@ -127,13 +128,14 @@ namespace MBot {
 	}
 
 	void Manipulator::onPositionChanged(ManipulatorPositionTask::Position & pos) {
-			Poco::Mutex::ScopedLock l(m);
-			std::cout << "pos changed: " << pos.current << " pos: " << pos.position << std::endl;
-			//this->currentStatus.base.position = pos.position;
-			//this->currentStatus.base.positionError = pos.isError;
+		Poco::Mutex::ScopedLock l(m);
+		std::cout << "pos changed: " << pos.current << " pos: " << pos.position << std::endl;
+		//this->currentStatus.base.position = pos.position;
+		//this->currentStatus.base.positionError = pos.isError;
 	}
 
-	void Manipulator::GetStatus(HAL::API::Manipulator::MotorInfo & rotation, HAL::API::Manipulator::MotorInfo & joint1, HAL::API::Manipulator::MotorInfo & joint2, HAL::API::Manipulator::MotorInfo & holder){
+	void Manipulator::GetStatus(HAL::API::Manipulator::MotorInfo & rotation, HAL::API::Manipulator::MotorInfo & joint1,
+			HAL::API::Manipulator::MotorInfo & joint2, HAL::API::Manipulator::MotorInfo & holder) {
 		Poco::Mutex::ScopedLock l(m);
 		rotation.current = 12;
 		rotation.position = 458;
@@ -148,6 +150,13 @@ namespace MBot {
 		holder.position = 0;
 	}
 
+	virtual void Manipulator::LightOn() {
+		lightExecution.addTask(lightModule.taskEnable(true));
+	}
+	virtual void Manipulator::LightOff() {
+		lightExecution.addTask(lightModule.taskEnable(false));
+	}
+
 	void Manipulator::run() {
 
 		std::cout << "manipulator BG" << std::endl;
@@ -160,7 +169,6 @@ namespace MBot {
 
 		while (!finished) {
 			if (enabled) {
-
 
 			}
 

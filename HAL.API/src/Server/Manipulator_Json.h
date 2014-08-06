@@ -36,6 +36,8 @@ namespace HAL {
             this->bindAndAddMethod(new jsonrpc::Procedure("StartHolder", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::StartHolderI);
             this->bindAndAddMethod(new jsonrpc::Procedure("StopHolder", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::StopHolderI);
             this->bindAndAddMethod(new jsonrpc::Procedure("SetHolderThreshold", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "threshold",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::SetHolderThresholdI);
+            this->bindAndAddMethod(new jsonrpc::Procedure("LightOn", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::LightOnI);
+            this->bindAndAddMethod(new jsonrpc::Procedure("LightOff", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::LightOffI);
             this->bindAndAddMethod(new jsonrpc::Procedure("GetStatus", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::GetStatusI);
 
 					}
@@ -93,6 +95,16 @@ namespace HAL {
         inline virtual void SetHolderThresholdI(const ::Json::Value& request, ::Json::Value& response) 
         {
             this->SetHolderThreshold(jsonrpc::Convertor::json2Cpp< double >(request["threshold"]));
+        }
+
+        inline virtual void LightOnI(const ::Json::Value& request, ::Json::Value& response) 
+        {
+            this->LightOn();
+        }
+
+        inline virtual void LightOffI(const ::Json::Value& request, ::Json::Value& response) 
+        {
+            this->LightOff();
         }
 
         inline virtual void GetStatusI(const ::Json::Value& request, ::Json::Value& response) 
@@ -153,6 +165,14 @@ response["holder"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_holder);
 
         void SetHolderThreshold(const double & threshold){
         	 interfaceImpl->SetHolderThreshold(threshold);
+        }
+
+        void LightOn(){
+        	 interfaceImpl->LightOn();
+        }
+
+        void LightOff(){
+        	 interfaceImpl->LightOff();
         }
 
         void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2, MotorInfo & holder){

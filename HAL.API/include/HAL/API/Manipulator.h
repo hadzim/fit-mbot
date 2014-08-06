@@ -117,6 +117,16 @@ namespace HAL {
 		        virtual void SetHolderThreshold(const double & threshold) = 0;
 
 		/** 
+		  * [method] LightOn: 
+		  */ 
+		        virtual void LightOn() = 0;
+
+		/** 
+		  * [method] LightOff: 
+		  */ 
+		        virtual void LightOff() = 0;
+
+		/** 
 		  * [method] GetStatus: 
 		  * [out] MotorInfo rotation: 
 		  * [out] MotorInfo joint1: 
