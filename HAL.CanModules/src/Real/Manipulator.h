@@ -15,6 +15,10 @@
 #include "../../include/TBS/MBot/HW/ManipulatorModules.h"
 #include "TBS/Robo/RoboCan/Communicaton/IChannel.h"
 #include "TBS/Robo/TaskExecutor.h"
+#include "ManipulatorModule.h"
+
+#define ALLWORKING 1
+
 namespace MBot {
 
 	class Manipulator: public HAL::API::Manipulator::IManipulator, public Poco::Runnable {
@@ -56,7 +60,10 @@ namespace MBot {
 
 			MBot::ManipulatorRotationModule rotationModule;
 			MBot::ManipulatorHolderModule holderModule;
-
+#if ALLWORKING
+			ManipulatorModule joint1;
+			ManipulatorModule joint2;
+#endif
 			int speed;
 			int maxRelDurationTimeInMs;
 
