@@ -109,16 +109,16 @@ namespace HAL {
 
         inline virtual void GetStatusI(const ::Json::Value& request, ::Json::Value& response) 
         {
-        	MotorInfo tmpvar_rotation;
-MotorInfo tmpvar_joint1;
-MotorInfo tmpvar_joint2;
-MotorInfo tmpvar_holder;
+        	double tmpvar_rotationEncoder;
+double tmpvar_joint1Encoder;
+double tmpvar_joint2Encoder;
+double tmpvar_holderCurrent;
 
-        	this->GetStatus(tmpvar_rotation, tmpvar_joint1, tmpvar_joint2, tmpvar_holder);
-        	response["rotation"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_rotation);
-response["joint1"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_joint1);
-response["joint2"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_joint2);
-response["holder"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_holder);
+        	this->GetStatus(tmpvar_rotationEncoder, tmpvar_joint1Encoder, tmpvar_joint2Encoder, tmpvar_holderCurrent);
+        	response["rotationEncoder"] = jsonrpc::Convertor::cpp2Json<double >(tmpvar_rotationEncoder);
+response["joint1Encoder"] = jsonrpc::Convertor::cpp2Json<double >(tmpvar_joint1Encoder);
+response["joint2Encoder"] = jsonrpc::Convertor::cpp2Json<double >(tmpvar_joint2Encoder);
+response["holderCurrent"] = jsonrpc::Convertor::cpp2Json<double >(tmpvar_holderCurrent);
 
         }
 
@@ -175,8 +175,8 @@ response["holder"] = jsonrpc::Convertor::cpp2Json<MotorInfo >(tmpvar_holder);
         	 interfaceImpl->LightOff();
         }
 
-        void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2, MotorInfo & holder){
-        	 interfaceImpl->GetStatus(rotation, joint1, joint2, holder);
+        void GetStatus(double & rotationEncoder, double & joint1Encoder, double & joint2Encoder, double & holderCurrent){
+        	 interfaceImpl->GetStatus(rotationEncoder, joint1Encoder, joint2Encoder, holderCurrent);
         }
 
 

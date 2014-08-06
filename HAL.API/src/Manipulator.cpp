@@ -74,11 +74,19 @@ cnmspc.push_back("Manipulator");
 }
 {
 	::TBS::Services::Introspection::Method m("GetStatus", "");
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("rotation", "[MotorInfo]", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("joint1", "[MotorInfo]", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("joint2", "[MotorInfo]", ""));
-  m.outArguments.push_back(::TBS::Services::Introspection::Argument("holder", "[MotorInfo]", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("rotationEncoder", "d", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("joint1Encoder", "d", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("joint2Encoder", "d", ""));
+  m.outArguments.push_back(::TBS::Services::Introspection::Argument("holderCurrent", "d", ""));
 	c.methods.push_back(m);
+}
+{
+	::TBS::Services::Introspection::Signal s("StatusChanged", "");
+  s.arguments.push_back(::TBS::Services::Introspection::Argument("rotationEncoder", "d", ""));
+  s.arguments.push_back(::TBS::Services::Introspection::Argument("joint1Encoder", "d", ""));
+  s.arguments.push_back(::TBS::Services::Introspection::Argument("joint2Encoder", "d", ""));
+  s.arguments.push_back(::TBS::Services::Introspection::Argument("holderCurrent", "d", ""));
+	c.signals.push_back(s);
 }
 return c;
 

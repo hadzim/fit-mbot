@@ -51,7 +51,7 @@ namespace MBot {
 			virtual void StopHolder();
 			virtual void SetHolderThreshold(const double & threshold);
 
-			 virtual void GetStatus(HAL::API::Manipulator::MotorInfo & rotation, HAL::API::Manipulator::MotorInfo & joint1, HAL::API::Manipulator::MotorInfo & joint2, HAL::API::Manipulator::MotorInfo & holder);
+			 virtual void GetStatus(double & rotation, double & joint1, double & joint2, double & holder);
 
 			 virtual void LightOn();
 			 virtual void LightOff();

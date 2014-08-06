@@ -128,16 +128,24 @@ namespace HAL {
 
 		/** 
 		  * [method] GetStatus: 
-		  * [out] MotorInfo rotation: 
-		  * [out] MotorInfo joint1: 
-		  * [out] MotorInfo joint2: 
-		  * [out] MotorInfo holder: 
+		  * [out] double rotationEncoder: 
+		  * [out] double joint1Encoder: 
+		  * [out] double joint2Encoder: 
+		  * [out] double holderCurrent: 
 		  */ 
-		        virtual void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2, MotorInfo & holder) = 0;
+		        virtual void GetStatus(double & rotationEncoder, double & joint1Encoder, double & joint2Encoder, double & holderCurrent) = 0;
 
 				
  //signals 
-				
+						struct StatusChangedArg { 
+double rotationEncoder;
+double joint1Encoder;
+double joint2Encoder;
+double holderCurrent;
+};
+		Poco::BasicEvent <StatusChangedArg> StatusChanged;
+		
+
 				
 			};
  } 

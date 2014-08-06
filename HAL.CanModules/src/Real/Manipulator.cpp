@@ -28,6 +28,12 @@ namespace MBot {
 					speed(20), maxRelDurationTimeInMs(50), t("ManipulatorWorker"), finished(false), enabled(false) {
 
 		LDEBUG("HAL")<< "Manipulator constructed" << LE;
+
+			HAL::API::Manipulator::MotorInfo mi;
+			mi.current = -1;
+			mi.position = -1;
+			this->currentStatus.holder = this->currentStatus.joint1 = this->currentStatus.joint2 = this->currentStatus.rotation = mi;
+
 			t.start(*this);
 		}
 
@@ -148,16 +154,14 @@ namespace MBot {
 		dump();
 	}
 
-	void Manipulator::GetStatus(HAL::API::Manipulator::MotorInfo & rotation, HAL::API::Manipulator::MotorInfo & joint1,
-			HAL::API::Manipulator::MotorInfo & joint2, HAL::API::Manipulator::MotorInfo & holder) {
+	void Manipulator::GetStatus(double & rotation, double & joint1, double & joint2, double & holder){
 		Poco::Mutex::ScopedLock l(m);
 
-		rotation = this->currentStatus.rotation;
-		joint1 = this->currentStatus.joint1;
-		joint2 = this->currentStatus.joint2;
+		rotation = this->currentStatus.rotation.position;
+		joint1 = this->currentStatus.joint1.position;
+		joint2 = this->currentStatus.joint2.position;
 
-		holder.current = 0;
-		holder.position = 0;
+		holder = this->currentStatus.holder.current;
 	}
 
 	void Manipulator::LightOn() {

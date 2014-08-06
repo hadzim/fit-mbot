@@ -103,15 +103,15 @@ namespace HAL {
             pIn = ::Json::nullValue;
             this->client->CallMethod("LightOff", pIn);
         }
-        void GetStatus(MotorInfo & rotation, MotorInfo & joint1, MotorInfo & joint2, MotorInfo & holder){
+        void GetStatus(double & rotationEncoder, double & joint1Encoder, double & joint2Encoder, double & holderCurrent){
             ::Json::Value pIn;
             pIn = ::Json::nullValue;
             ::Json::Value pOut = this->client->CallMethod("GetStatus", pIn);
 
-rotation = jsonrpc::Convertor::json2Cpp<MotorInfo >(pOut["rotation"]); 
-joint1 = jsonrpc::Convertor::json2Cpp<MotorInfo >(pOut["joint1"]); 
-joint2 = jsonrpc::Convertor::json2Cpp<MotorInfo >(pOut["joint2"]); 
-holder = jsonrpc::Convertor::json2Cpp<MotorInfo >(pOut["holder"]); 
+rotationEncoder = jsonrpc::Convertor::json2Cpp<double >(pOut["rotationEncoder"]); 
+joint1Encoder = jsonrpc::Convertor::json2Cpp<double >(pOut["joint1Encoder"]); 
+joint2Encoder = jsonrpc::Convertor::json2Cpp<double >(pOut["joint2Encoder"]); 
+holderCurrent = jsonrpc::Convertor::json2Cpp<double >(pOut["holderCurrent"]); 
 
         }
 

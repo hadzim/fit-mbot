@@ -34,18 +34,18 @@ namespace HAL {
 				if (finished)
 					break;
 
-				HAL::API::Manipulator::MotorInfo rotation, j1, j2, holder;
+				double rotation, j1, j2, holder;
 
 				client->Manipulator().GetStatus(rotation, j1, j2, holder);
-/*
+
 				Manipulator::IManipulator::StatusChangedArg a;
-				a.posLeft = posL;
-				a.posRight = posR;
-				a.speedLeft = speedL;
-				a.speedRight = speedR;
+				a.holderCurrent = holder;
+				a.joint1Encoder = j1;
+				a.joint2Encoder = j2;
+				a.rotationEncoder = rotation;
 
 				this->Manipulator().StatusChanged(this, a);
-				*/
+
 			}
 		}
 

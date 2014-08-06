@@ -53,11 +53,18 @@
     </method>
     
     <method name="GetStatus">
-      <arg type="[MotorInfo]" name="rotation" direction="out"/>
-      <arg type="[MotorInfo]" name="joint1" direction="out"/>
-      <arg type="[MotorInfo]" name="joint2" direction="out"/>
-      <arg type="[MotorInfo]" name="holder" direction="out"/>
+      <arg type="d" name="rotationEncoder" direction="out"/>
+      <arg type="d" name="joint1Encoder" direction="out"/>
+      <arg type="d" name="joint2Encoder" direction="out"/>
+      <arg type="d" name="holderCurrent" direction="out"/>
     </method>
+    
+    <signal name="StatusChanged">
+      <arg type="d" name="rotationEncoder" />
+      <arg type="d" name="joint1Encoder" />
+      <arg type="d" name="joint2Encoder" />
+      <arg type="d" name="holderCurrent" />
+    </signal>
     
   </interface>
   
