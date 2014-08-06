@@ -16,8 +16,9 @@
 #include "TBS/Robo/RoboCan/Communicaton/IChannel.h"
 #include "TBS/Robo/TaskExecutor.h"
 #include "ManipulatorModule.h"
+#include <TBS/MBot/HW/ManipulatorModules.h>
 
-#define ALLWORKING 1
+#define ALLWORKING 0
 
 namespace MBot {
 
@@ -49,6 +50,8 @@ namespace MBot {
 
 			 virtual void GetStatus(HAL::API::Manipulator::MotorInfo & rotation, HAL::API::Manipulator::MotorInfo & joint1, HAL::API::Manipulator::MotorInfo & joint2, HAL::API::Manipulator::MotorInfo & holder);
 
+		private:
+			 void onPositionChanged(ManipulatorPositionTask::Position & pos);
 
 		private:
 
@@ -63,6 +66,8 @@ namespace MBot {
 
 			MBot::ManipulatorRotationModule rotationModule;
 			MBot::ManipulatorHolderModule holderModule;
+
+			MBot::ManipulatorMagneticModule magneticModule;
 #if ALLWORKING
 			ManipulatorModule joint1;
 			ManipulatorModule joint2;

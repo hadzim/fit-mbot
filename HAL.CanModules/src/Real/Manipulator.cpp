@@ -17,6 +17,8 @@ namespace MBot {
 		rotationModule("Manipulator.Rotation", &node, 2),
 
 		holderModule("Manipulator.Holder", &node, 1),
+
+		magneticModule("Manipulatior.Magnetic", &node, 4),
 #if ALLWORKING
 		joint1(portMan1),
 		joint2(portMan2),
@@ -124,7 +126,15 @@ namespace MBot {
 		holderExecution.addTask(holderModule.taskSetThreshold(threshold));
 	}
 
+	void Manipulator::onPositionChanged(ManipulatorPositionTask::Position & pos) {
+			Poco::Mutex::ScopedLock l(m);
+			std::cout << "pos changed: " << pos.current << " pos: " << pos.position << std::endl;
+			//this->currentStatus.base.position = pos.position;
+			//this->currentStatus.base.positionError = pos.isError;
+	}
+
 	void Manipulator::GetStatus(HAL::API::Manipulator::MotorInfo & rotation, HAL::API::Manipulator::MotorInfo & joint1, HAL::API::Manipulator::MotorInfo & joint2, HAL::API::Manipulator::MotorInfo & holder){
+		Poco::Mutex::ScopedLock l(m);
 		rotation.current = 12;
 		rotation.position = 458;
 
@@ -140,14 +150,28 @@ namespace MBot {
 
 	void Manipulator::run() {
 
+		std::cout << "manipulator BG" << std::endl;
+
+		ManipulatorPositionTask::Ptr tBase = magneticModule.taskConsumePosition();
+		tBase->PositionChanged += Poco::delegate(this, &Manipulator::onPositionChanged);
+
+		std::cout << "start manipulator bg" << std::endl;
+		tBase->start();
+
 		while (!finished) {
 			if (enabled) {
-				//TODO
-				//std::cout << "running" << std::endl;
+
+
 			}
 
 			Poco::Thread::sleep(250);
 		}
+
+		std::cout << "done manipulator bg" << std::endl;
+
+		tBase->PositionChanged -= Poco::delegate(this, &Manipulator::onPositionChanged);
+
+		tBase->cancel();
 	}
 
 } /* namespace MBot */

@@ -8,90 +8,130 @@
 #ifndef MANIPULATORMODULES_H_
 #define MANIPULATORMODULES_H_
 #include "TBS/Robo/RoboCan/HW/CanModule.h"
+#include "TBS/Robo/RoboCan/Task/ConsumingDataModuleTask.h"
 
 namespace MBot {
 
-class ManipulatorRotationModule: public TBS::Robo::RoboCan::CanModule {
+	class ManipulatorRotationModule: public TBS::Robo::RoboCan::CanModule {
 
-	enum TwoStateCommands {
-		GoRel = 30, Enable = 32
+			enum TwoStateCommands {
+				GoRel = 30, Enable = 32
+			};
+
+		public:
+			ManipulatorRotationModule(const std::string & name, TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule) :
+					TBS::Robo::RoboCan::CanModule(name, node, numberWithinModule) {
+			}
+			virtual ~ManipulatorRotationModule() {
+			}
+
+			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskGoRel(Poco::Int16 speed, Poco::Int16 timeInMs) const {
+				TBS::Robo::RoboCan::RoboCanMessageData data;
+				TBS::Robo::RoboCan::RoboCanMessageData::Short2 val;
+				val.short1 = speed;
+				val.short2 = timeInMs;
+				data.setSHORT2(val);
+				return new TBS::Robo::RoboCan::ModuleCommandTask("gorel", this->getInternalModule(),
+						this->getInternalModule().composeCommand((int) GoRel, data));
+			}
+
+			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const {
+				TBS::Robo::RoboCan::RoboCanMessageData data;
+				data.setUSHORT(enable ? 1 : 0);
+				return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask("enable", this->getInternalModule(),
+						this->getInternalModule().composeCommand((int) Enable, data));
+			}
+
 	};
 
-public:
-	ManipulatorRotationModule(const std::string & name,
-			TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule) :
-			TBS::Robo::RoboCan::CanModule(name, node, numberWithinModule) {
-	}
-	virtual ~ManipulatorRotationModule() {
-	}
+	class ManipulatorHolderModule: public TBS::Robo::RoboCan::CanModule {
 
-	TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskGoRel(Poco::Int16 speed,
-			Poco::Int16 timeInMs) const {
-		TBS::Robo::RoboCan::RoboCanMessageData data;
-		TBS::Robo::RoboCan::RoboCanMessageData::Short2 val;
-		val.short1 = speed;
-		val.short2 = timeInMs;
-		data.setSHORT2(val);
-		return new TBS::Robo::RoboCan::ModuleCommandTask("gorel",
-				this->getInternalModule(),
-				this->getInternalModule().composeCommand((int) GoRel, data));
-	}
+			enum TwoStateCommands {
+				GoRel = 30, SetThreshold = 31, Enable = 32
+			};
 
-	TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const {
-		TBS::Robo::RoboCan::RoboCanMessageData data;
-		data.setUSHORT(enable ? 1 : 0);
-		return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask("enable",
-				this->getInternalModule(),
-				this->getInternalModule().composeCommand((int) Enable, data));
-	}
+		public:
+			ManipulatorHolderModule(const std::string & name, TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule) :
+					TBS::Robo::RoboCan::CanModule(name, node, numberWithinModule) {
+			}
+			virtual ~ManipulatorHolderModule() {
+			}
 
-};
+			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskGoRel(Poco::Int16 speed, Poco::Int16 timeInMs) const {
+				TBS::Robo::RoboCan::RoboCanMessageData data;
+				TBS::Robo::RoboCan::RoboCanMessageData::Short2 val;
+				val.short1 = speed;
+				val.short2 = timeInMs;
+				data.setSHORT2(val);
+				return new TBS::Robo::RoboCan::ModuleCommandTask("gorel", this->getInternalModule(),
+						this->getInternalModule().composeCommand((int) GoRel, data));
+			}
 
-class ManipulatorHolderModule: public TBS::Robo::RoboCan::CanModule {
+			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskSetThreshold(Poco::UInt16 thresh) const {
+				TBS::Robo::RoboCan::RoboCanMessageData data;
+				data.setUSHORT(thresh);
+				return new TBS::Robo::RoboCan::ModuleCommandTask("setthresh", this->getInternalModule(),
+						this->getInternalModule().composeCommand((int) SetThreshold, data));
+			}
 
-	enum TwoStateCommands {
-		GoRel = 30, SetThreshold = 31, Enable = 32
+			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const {
+				TBS::Robo::RoboCan::RoboCanMessageData data;
+				data.setUSHORT(enable ? 1 : 0);
+				return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask("enable", this->getInternalModule(),
+						this->getInternalModule().composeCommand((int) Enable, data));
+			}
+
 	};
 
-public:
-	ManipulatorHolderModule(const std::string & name,
-			TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule) :
-			TBS::Robo::RoboCan::CanModule(name, node, numberWithinModule) {
-	}
-	virtual ~ManipulatorHolderModule() {
-	}
+	class ManipulatorPositionTask: public TBS::Robo::RoboCan::ConsumingDataModuleTask {
+		public:
+			typedef Poco::SharedPtr<ManipulatorPositionTask> Ptr;
+			ManipulatorPositionTask(std::string name, const TBS::Robo::RoboCan::InternalCanModule & module);
+			virtual ~ManipulatorPositionTask();
 
-	TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskGoRel(Poco::Int16 speed,
-			Poco::Int16 timeInMs) const {
-		TBS::Robo::RoboCan::RoboCanMessageData data;
-		TBS::Robo::RoboCan::RoboCanMessageData::Short2 val;
-		val.short1 = speed;
-		val.short2 = timeInMs;
-		data.setSHORT2(val);
-		return new TBS::Robo::RoboCan::ModuleCommandTask("gorel",
-				this->getInternalModule(),
-				this->getInternalModule().composeCommand((int) GoRel, data));
-	}
+			struct Position {
+					double position;
+					double current;
+			};
+			Poco::BasicEvent<Position> PositionChanged;
+		private:
+			void onDataReady(TBS::Robo::RoboCan::DataMessage & msg);
+	};
 
-	TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskSetThreshold(
-			Poco::UInt16 thresh) const {
-		TBS::Robo::RoboCan::RoboCanMessageData data;
-		data.setUSHORT(thresh);
-		return new TBS::Robo::RoboCan::ModuleCommandTask("setthresh",
-				this->getInternalModule(),
-				this->getInternalModule().composeCommand((int) SetThreshold,
-						data));
-	}
+	class ManipulatorMagneticModule: public TBS::Robo::RoboCan::CanModule {
 
-	TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const {
-		TBS::Robo::RoboCan::RoboCanMessageData data;
-		data.setUSHORT(enable ? 1 : 0);
-		return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask("enable",
-				this->getInternalModule(),
-				this->getInternalModule().composeCommand((int) Enable, data));
-	}
+		public:
+			ManipulatorMagneticModule(const std::string & name, TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule);
+			virtual ~ManipulatorMagneticModule();
 
-};
+			ManipulatorPositionTask::Ptr taskConsumePosition() const;
+		private:
+			std::string n;
+	};
+
+	class ManipulatorLightModule: public TBS::Robo::RoboCan::CanModule {
+
+				enum TwoStateCommands {
+					Enable = 30
+				};
+
+			public:
+				ManipulatorLightModule(const std::string & name, TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule) :
+						TBS::Robo::RoboCan::CanModule(name, node, numberWithinModule) {
+				}
+				virtual ~ManipulatorLightModule() {
+				}
+
+
+				TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const {
+					TBS::Robo::RoboCan::RoboCanMessageData data;
+					data.setUSHORT(enable ? 1 : 0);
+					return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask("enable", this->getInternalModule(),
+							this->getInternalModule().composeCommand((int) Enable, data));
+				}
+
+		};
+
 
 } /* namespace MBot */
 

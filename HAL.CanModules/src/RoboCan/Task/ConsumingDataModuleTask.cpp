@@ -18,13 +18,14 @@ ConsumingDataModuleTask::ConsumingDataModuleTask(std::string name,
 		TBS::Task::Task(module.getName() + ":ConsumeData:" + name,
 				module.getNotificationWorker()), channel(
 				module.getCommunicationChannel()), canID(module.getCanID()) {
-	std::cout << "consume construct" << std::endl;
+	//std::cout << "consume construct" << std::endl;
 	this->OuterActivation += Poco::delegate(this,
 			&ConsumingDataModuleTask::onOuterActivation);
+	//std::cout << "consuming can ID:" << canID << std::endl;
 }
 
 ConsumingDataModuleTask::~ConsumingDataModuleTask() {
-	std::cout << "consume destruct" << std::endl;
+	//std::cout << "consume destruct" << std::endl;
 	this->OuterActivation -= Poco::delegate(this,
 			&ConsumingDataModuleTask::onOuterActivation);
 }

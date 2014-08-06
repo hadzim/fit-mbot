@@ -46,6 +46,12 @@
       <arg type="d" name="threshold" direction="in"/>
     </method>
     
+    <method name="LightOn">
+    </method>
+    
+    <method name="LightOff">
+    </method>
+    
     <method name="GetStatus">
       <arg type="[MotorInfo]" name="rotation" direction="out"/>
       <arg type="[MotorInfo]" name="joint1" direction="out"/>
