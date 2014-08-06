@@ -1,6 +1,11 @@
 <?xml version="1.0" ?>
 <node name="HAL.API.Manipulator">
   
+    <struct name='MotorInfo'>
+      <arg type="d" name="position"/>
+      <arg type="d" name="current"/>
+  </struct>
+  
   <interface name="HAL.API.Manipulator.Manipulator">
    
     <method name="Enable">
@@ -39,6 +44,10 @@
     
     <method name="SetHolderThreshold">
       <arg type="d" name="threshold" direction="in"/>
+    </method>
+    
+    <method name="GetStatus">
+      <arg type="[MotorInfo]" name="rotation" direction="out"/>
     </method>
     
   </interface>
