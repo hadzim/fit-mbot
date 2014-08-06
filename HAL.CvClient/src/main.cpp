@@ -27,7 +27,8 @@ HAL::API::Manipulator::Json::Client::Ptr manipulatorClient;
 
 static void onMouse(int event, int x, int y, int, void*) {
 	try {
-		if (event != CV_EVENT_LBUTTONDOWN) return;
+		if (event != CV_EVENT_LBUTTONDOWN)
+			return;
 
 		Point seed = Point(x, y);
 		double speed = -((-100 + y) * 1.0 / 100.0);
@@ -371,26 +372,38 @@ int main(int argc, char** argv) {
 			}
 
 			try {
-							static int speed = 0;
-							static int lastInRow = 0;
-							if ((c & 255) == 'u') {
-								lastInRow++;
-								speed = maxManSpeed;
-								manipulatorClient->Manipulator().StartJoint2(speed);
-							} else if ((c & 255) == 'j') {
-								speed = -maxManSpeed;
-								lastInRow++;
-								manipulatorClient->Manipulator().StartJoint2(speed);
-							} else {
-								speed = 0;
-								if (lastInRow > 1) {
-									manipulatorClient->Manipulator().StopJoint2();
-								}
-								lastInRow = 0;
-							}
-						} catch (Poco::Exception & e) {
+				static int speed = 0;
+				static int lastInRow = 0;
+				if ((c & 255) == 'u') {
+					lastInRow++;
+					speed = maxManSpeed;
+					manipulatorClient->Manipulator().StartJoint2(speed);
+				} else if ((c & 255) == 'j') {
+					speed = -maxManSpeed;
+					lastInRow++;
+					manipulatorClient->Manipulator().StartJoint2(speed);
+				} else {
+					speed = 0;
+					if (lastInRow > 1) {
+						manipulatorClient->Manipulator().StopJoint2();
+					}
+					lastInRow = 0;
+				}
+			} catch (Poco::Exception & e) {
 
-						}
+			}
+
+
+
+			try {
+				if ((c & 255) == ',') {
+					manipulatorClient->Manipulator().LightOn();
+				} else if ((c & 255) == '.') {
+					manipulatorClient->Manipulator().LightOff();
+				}
+			} catch (Poco::Exception & e) {
+
+			}
 
 		}
 		client->Movement().StatusChanged -= Poco::delegate(&updateSpeed);

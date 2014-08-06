@@ -51,6 +51,10 @@ namespace TBS {
 					return new ModuleCommandAnyAckTask("Stop", this->getInternalModule(), this->getInternalModule().cmdStop());
 				}
 
+				void CanModule::askData() const {
+					this->getInternalModule().getCommunicationChannel()->sendCanMessage(this->getInternalModule().cmdGetData());
+				}
+
 			/*
 
 			 void Module::cmdStatus() {

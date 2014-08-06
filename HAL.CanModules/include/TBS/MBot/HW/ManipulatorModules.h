@@ -12,6 +12,22 @@
 
 namespace MBot {
 
+	class ManipulatorRotationPositionTask: public TBS::Robo::RoboCan::ConsumingDataModuleTask {
+		public:
+			typedef Poco::SharedPtr<ManipulatorRotationPositionTask> Ptr;
+			ManipulatorRotationPositionTask(std::string name, const TBS::Robo::RoboCan::InternalCanModule & module);
+			virtual ~ManipulatorRotationPositionTask();
+
+			struct Position {
+					double encoder;
+			};
+			Poco::BasicEvent<Position> PositionChanged;
+
+
+		private:
+			void onDataReady(TBS::Robo::RoboCan::DataMessage & msg);
+	};
+
 	class ManipulatorRotationModule: public TBS::Robo::RoboCan::CanModule {
 
 			enum TwoStateCommands {
@@ -40,6 +56,10 @@ namespace MBot {
 				data.setUSHORT(enable ? 1 : 0);
 				return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask("enable", this->getInternalModule(),
 						this->getInternalModule().composeCommand((int) Enable, data));
+			}
+
+			ManipulatorRotationPositionTask::Ptr taskConsumePosition() const {
+				return new ManipulatorRotationPositionTask("consumerotpos", this->getInternalModule());
 			}
 
 	};
@@ -90,8 +110,8 @@ namespace MBot {
 			virtual ~ManipulatorPositionTask();
 
 			struct Position {
-					double position;
-					double current;
+					double encoder1;
+					double encoder2;
 			};
 			Poco::BasicEvent<Position> PositionChanged;
 		private:
@@ -111,27 +131,25 @@ namespace MBot {
 
 	class ManipulatorLightModule: public TBS::Robo::RoboCan::CanModule {
 
-				enum TwoStateCommands {
-					Enable = 30
-				};
+			enum TwoStateCommands {
+				Enable = 30
+			};
 
-			public:
-				ManipulatorLightModule(const std::string & name, TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule) :
-						TBS::Robo::RoboCan::CanModule(name, node, numberWithinModule) {
-				}
-				virtual ~ManipulatorLightModule() {
-				}
+		public:
+			ManipulatorLightModule(const std::string & name, TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule) :
+					TBS::Robo::RoboCan::CanModule(name, node, numberWithinModule) {
+			}
+			virtual ~ManipulatorLightModule() {
+			}
 
+			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const {
+				TBS::Robo::RoboCan::RoboCanMessageData data;
+				data.setUSHORT(enable ? 1 : 0);
+				return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask("enable", this->getInternalModule(),
+						this->getInternalModule().composeCommand((int) Enable, data));
+			}
 
-				TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const {
-					TBS::Robo::RoboCan::RoboCanMessageData data;
-					data.setUSHORT(enable ? 1 : 0);
-					return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask("enable", this->getInternalModule(),
-							this->getInternalModule().composeCommand((int) Enable, data));
-				}
-
-		};
-
+	};
 
 } /* namespace MBot */
 

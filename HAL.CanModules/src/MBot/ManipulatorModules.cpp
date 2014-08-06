@@ -9,6 +9,27 @@
 
 namespace MBot {
 
+	ManipulatorRotationPositionTask::ManipulatorRotationPositionTask(std::string name, const TBS::Robo::RoboCan::InternalCanModule & module) :
+			TBS::Robo::RoboCan::ConsumingDataModuleTask(name, module) {
+		this->DataMessageReady += Poco::delegate(this, &ManipulatorRotationPositionTask::onDataReady);
+	}
+	ManipulatorRotationPositionTask::~ManipulatorRotationPositionTask() {
+		this->DataMessageReady -= Poco::delegate(this, &ManipulatorRotationPositionTask::onDataReady);
+	}
+
+	void ManipulatorRotationPositionTask::onDataReady(TBS::Robo::RoboCan::DataMessage & msg) {
+		std::cout << "rot data ready" << std::endl;
+		Position p;
+
+		TBS::Robo::RoboCan::RoboCanMessageData::UShort2 val = msg.getData(0).getUSHORT2();
+		p.encoder = val.short1;
+		//p.position = val.short2;
+
+		std::cout << "rot data ready: " << val.short1 << " and " << val.short2 << std::endl;
+
+		PositionChanged(this, p);
+	}
+
 	ManipulatorPositionTask::ManipulatorPositionTask(std::string name, const TBS::Robo::RoboCan::InternalCanModule & module) :
 			TBS::Robo::RoboCan::ConsumingDataModuleTask(name, module) {
 		this->DataMessageReady += Poco::delegate(this, &ManipulatorPositionTask::onDataReady);
@@ -21,8 +42,8 @@ namespace MBot {
 		Position p;
 
 		TBS::Robo::RoboCan::RoboCanMessageData::UShort2 val = msg.getData(0).getUSHORT2();
-		p.current = val.short1;
-		p.position = val.short2;
+		p.encoder1 = val.short1;
+		p.encoder2 = val.short2;
 
 		PositionChanged(this, p);
 	}

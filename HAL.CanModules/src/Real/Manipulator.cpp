@@ -41,13 +41,15 @@ namespace MBot {
 		rotationExecution.addTask(rotationModule.taskEnable(true));
 		holderExecution.addTask(holderModule.taskEnable(true));
 #if ALLWORKING
-		joint1.enable();
 		joint2.enable();
+		joint1.enable();
+
 
 		Poco::Thread::sleep(800);
 
-		joint1.unbreakMotor();
 		joint2.unbreakMotor();
+		joint1.unbreakMotor();
+
 
 		Poco::Thread::sleep(100);
 #endif
@@ -58,13 +60,15 @@ namespace MBot {
 		holderExecution.addTask(holderModule.taskEnable(false));
 
 #if ALLWORKING
-		joint1.stop();
+
 		joint2.stop();
+		joint1.stop();
 
 		Poco::Thread::sleep(100);
 
-		joint1.breakMotor();
+
 		joint2.breakMotor();
+		joint1.breakMotor();
 
 		Poco::Thread::sleep(100);
 
@@ -129,31 +133,37 @@ namespace MBot {
 
 	void Manipulator::onPositionChanged(ManipulatorPositionTask::Position & pos) {
 		Poco::Mutex::ScopedLock l(m);
-		std::cout << "pos changed: " << pos.current << " pos: " << pos.position << std::endl;
-		//this->currentStatus.base.position = pos.position;
-		//this->currentStatus.base.positionError = pos.isError;
+		this->currentStatus.joint1.position = pos.encoder1;
+		this->currentStatus.joint1.current = 0;
+
+		this->currentStatus.joint2.position = pos.encoder2;
+		this->currentStatus.joint2.current = 0;
+		dump();
+	}
+
+	void Manipulator::onRotationChanged(ManipulatorRotationPositionTask::Position & pos){
+		Poco::Mutex::ScopedLock l(m);
+		this->currentStatus.rotation.position = pos.encoder;
+		this->currentStatus.rotation.current = 0;
+		dump();
 	}
 
 	void Manipulator::GetStatus(HAL::API::Manipulator::MotorInfo & rotation, HAL::API::Manipulator::MotorInfo & joint1,
 			HAL::API::Manipulator::MotorInfo & joint2, HAL::API::Manipulator::MotorInfo & holder) {
 		Poco::Mutex::ScopedLock l(m);
-		rotation.current = 12;
-		rotation.position = 458;
 
-		joint1.current = 13;
-		joint1.position = 460;
+		rotation = this->currentStatus.rotation;
+		joint1 = this->currentStatus.joint1;
+		joint2 = this->currentStatus.joint2;
 
-		joint2.current = 14;
-		joint2.position = 462;
-
-		holder.current = 15;
+		holder.current = 0;
 		holder.position = 0;
 	}
 
-	virtual void Manipulator::LightOn() {
+	void Manipulator::LightOn() {
 		lightExecution.addTask(lightModule.taskEnable(true));
 	}
-	virtual void Manipulator::LightOff() {
+	void Manipulator::LightOff() {
 		lightExecution.addTask(lightModule.taskEnable(false));
 	}
 
@@ -164,22 +174,31 @@ namespace MBot {
 		ManipulatorPositionTask::Ptr tBase = magneticModule.taskConsumePosition();
 		tBase->PositionChanged += Poco::delegate(this, &Manipulator::onPositionChanged);
 
+		ManipulatorRotationPositionTask::Ptr tRot = rotationModule.taskConsumePosition();
+		tRot->PositionChanged += Poco::delegate(this, &Manipulator::onRotationChanged);
+
 		std::cout << "start manipulator bg" << std::endl;
 		tBase->start();
+		tRot->start();
 
 		while (!finished) {
 			if (enabled) {
-
+				rotationModule.askData();
 			}
-
-			Poco::Thread::sleep(250);
+			Poco::Thread::sleep(50);
 		}
 
 		std::cout << "done manipulator bg" << std::endl;
 
 		tBase->PositionChanged -= Poco::delegate(this, &Manipulator::onPositionChanged);
+		tRot->PositionChanged -= Poco::delegate(this, &Manipulator::onRotationChanged);
 
 		tBase->cancel();
+		tRot->cancel();
+	}
+
+	void Manipulator::dump(){
+		std::cout << "position: r: " << this->currentStatus.rotation.position << " j1: " << this->currentStatus.joint1.position << " j2: " << this->currentStatus.joint2.position << std::endl;
 	}
 
 } /* namespace MBot */

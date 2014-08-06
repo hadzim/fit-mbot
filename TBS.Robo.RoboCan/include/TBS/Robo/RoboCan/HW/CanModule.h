@@ -43,6 +43,8 @@ namespace TBS {
 						ModuleCommandAnyAckTask::Ptr taskHalt() const;
 						ModuleCommandAnyAckTask::Ptr taskRestart() const;
 						ModuleCommandAnyAckTask::Ptr taskStop() const;
+
+						void askData() const;
 					protected:
 
 						const InternalCanModule & getInternalModule() const;

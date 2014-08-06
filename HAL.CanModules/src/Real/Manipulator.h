@@ -18,7 +18,7 @@
 #include "ManipulatorModule.h"
 #include <TBS/MBot/HW/ManipulatorModules.h>
 
-#define ALLWORKING 0
+#define ALLWORKING 1
 
 namespace MBot {
 
@@ -26,7 +26,10 @@ namespace MBot {
 		public:
 
 			struct Status {
-
+				HAL::API::Manipulator::MotorInfo rotation;
+				HAL::API::Manipulator::MotorInfo joint1;
+				HAL::API::Manipulator::MotorInfo joint2;
+				HAL::API::Manipulator::MotorInfo holder;
 			};
 
 			Manipulator(TBS::NotificationWorker::Ptr nw, TBS::Robo::RoboCan::IChannel::Ptr canChannel,int portMan1, int portMan2);
@@ -55,11 +58,13 @@ namespace MBot {
 
 		private:
 			 void onPositionChanged(ManipulatorPositionTask::Position & pos);
+			 void onRotationChanged(ManipulatorRotationPositionTask::Position & pos);
 
 		private:
 
 			void run();
 
+			void dump();
 		private:
 
 			TBS::Robo::RoboCan::CanNode node;
