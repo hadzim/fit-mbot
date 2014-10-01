@@ -8,9 +8,7 @@
 #include <iostream>
 #include <Poco/NumberParser.h>
 #include "HAL/API/MovementClient.h"
-
-#include "HAL/API/ManipulatorSvc_Json.h"
-#include "HAL/API/Manipulator.h"
+#include "HAL/API/ManipulatorClient.h"
 #include "HAL/API/api.h"
 
 #include "TBS/Log.h"
@@ -21,6 +19,8 @@
 void onSpeedChanged(HAL::API::Movement::IMovement::StatusChangedArg & arg){
 	std::cout << "Speed: (" << arg.speedLeft << " " << arg.speedRight << ") Odometry: (" << arg.posLeft << ", " << arg.posRight << ")" << std::endl;
 }
+
+
 
 int main(int argc, char **argv) {
 
@@ -61,7 +61,9 @@ int main(int argc, char **argv) {
 }*/
 
 
-
+void onManipulatorChanged(HAL::API::Manipulator::IManipulator::StatusChangedArg & arg){
+	std::cout << "pos rotation: " << arg.rotationEncoder << " j1: " << arg.joint1Encoder << " j2: " << arg.joint2Encoder << std::endl;
+}
 
 int main(int argc, char **argv) {
 
@@ -71,67 +73,26 @@ int main(int argc, char **argv) {
 		std::cout << "HAL Client Starts" << std::endl;
 		TBS::initLogs("hal.client", 4);
 		{
-			TBS::Services::JsonClientParams mc("localhost", HAL::API::Communication::ManipulatorPort, TBS::Services::JsonClientParams::JsonHttp);
-			HAL::API::Manipulator::Json::Client::Ptr manipulatorClient = new HAL::API::Manipulator::Json::Client(mc);
+			HAL::API::ManipulatorClient::Ptr client = new HAL::API::ManipulatorClient();
+			client->Manipulator().StatusChanged += Poco::delegate(&onManipulatorChanged);
 
+			//while (1){
 
-			while (1){
-
-				manipulatorClient->Manipulator().Enable();
-
-				Poco::Thread::sleep(200);
-
-				std::cout << "Iteration" << std::endl;
-
-				for (int j = 15; j < 50; j+= 10){
-					int wait = r.next(15);
-
-					for (int i = 0; i < j; i++){
-						try {
-							manipulatorClient->Manipulator().StartHolder(50);
-							Poco::Thread::sleep(wait);
-							//std::cout << "Ok" << std::endl;
-						} catch (Poco::Exception & e){
-							std::cout << "Exc: " << e.displayText() << std::endl;
-						}
-					}
-
-					for (int i = 0; i < j; i++){
-						try {
-							manipulatorClient->Manipulator().StartHolder(-50);
-							Poco::Thread::sleep(wait);
-							//std::cout << "Ok" << std::endl;
-						} catch (Poco::Exception & e){
-							std::cout << "Exc: " << e.displayText() << std::endl;
-						}
-					}
-				}
-
-
-				try {
-					manipulatorClient->Manipulator().StartRotation(50);
-					Poco::Thread::sleep(300);
-					//std::cout << "Ok" << std::endl;
-				} catch (Poco::Exception & e){
-					std::cout << "Exc: " << e.displayText() << std::endl;
-				}
-
-				try {
-					manipulatorClient->Manipulator().StartRotation(-50);
-					Poco::Thread::sleep(300);
-					//std::cout << "Ok" << std::endl;
-				} catch (Poco::Exception & e){
-					std::cout << "Exc: " << e.displayText() << std::endl;
-				}
+				//client->Manipulator().Enable();
 
 				Poco::Thread::sleep(200);
 
-				manipulatorClient->Manipulator().Disable();
+
+
+
+				Poco::Thread::sleep(5000);
+
+				//client->Manipulator().Disable();
 
 				Poco::Thread::sleep(500);
 
-			}
-
+			//}
+			client->Manipulator().StatusChanged -= Poco::delegate(&onManipulatorChanged);
 
 /*
 			while (1){

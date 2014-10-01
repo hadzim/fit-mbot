@@ -158,6 +158,7 @@ namespace MBot {
 
 	void Manipulator::onPositionChanged(ManipulatorPositionTask::Position & pos) {
 		Poco::Mutex::ScopedLock l(m);
+
 		this->currentStatus.joint1.position = pos.encoder1;
 		this->currentStatus.joint1.current = 0;
 

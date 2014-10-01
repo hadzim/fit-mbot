@@ -43,7 +43,6 @@ namespace HAL {
 				a.joint1Encoder = j1;
 				a.joint2Encoder = j2;
 				a.rotationEncoder = rotation;
-
 				this->Manipulator().StatusChanged(this, a);
 
 			}
