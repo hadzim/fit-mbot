@@ -29,6 +29,12 @@ cnmspc.push_back("Manipulator");
 	c.methods.push_back(m);
 }
 {
+	::TBS::Services::Introspection::Method m("StartRotationTo", "");
+  m.inArguments.push_back(::TBS::Services::Introspection::Argument("speed", "d", ""));
+  m.inArguments.push_back(::TBS::Services::Introspection::Argument("destination", "d", ""));
+	c.methods.push_back(m);
+}
+{
 	::TBS::Services::Introspection::Method m("StopRotation", "");
 	c.methods.push_back(m);
 }
@@ -38,12 +44,24 @@ cnmspc.push_back("Manipulator");
 	c.methods.push_back(m);
 }
 {
+	::TBS::Services::Introspection::Method m("StartJoint1To", "");
+  m.inArguments.push_back(::TBS::Services::Introspection::Argument("speed", "d", ""));
+  m.inArguments.push_back(::TBS::Services::Introspection::Argument("destination", "d", ""));
+	c.methods.push_back(m);
+}
+{
 	::TBS::Services::Introspection::Method m("StopJoint1", "");
 	c.methods.push_back(m);
 }
 {
 	::TBS::Services::Introspection::Method m("StartJoint2", "");
   m.inArguments.push_back(::TBS::Services::Introspection::Argument("speed", "d", ""));
+	c.methods.push_back(m);
+}
+{
+	::TBS::Services::Introspection::Method m("StartJoint2To", "");
+  m.inArguments.push_back(::TBS::Services::Introspection::Argument("speed", "d", ""));
+  m.inArguments.push_back(::TBS::Services::Introspection::Argument("destination", "d", ""));
 	c.methods.push_back(m);
 }
 {

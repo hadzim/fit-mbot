@@ -17,6 +17,10 @@
     <method name="StartRotation">
       <arg type="d" name="speed" direction="in"/>
     </method>
+    <method name="StartRotationTo">
+      <arg type="d" name="speed" direction="in"/>
+      <arg type="d" name="destination" direction="in"/>
+    </method>
     
     <method name="StopRotation">
     </method>
@@ -24,12 +28,20 @@
     <method name="StartJoint1">
       <arg type="d" name="speed" direction="in"/>
     </method>
+    <method name="StartJoint1To">
+      <arg type="d" name="speed" direction="in"/>
+      <arg type="d" name="destination" direction="in"/>
+    </method>
     
     <method name="StopJoint1">
     </method>
     
     <method name="StartJoint2">
       <arg type="d" name="speed" direction="in"/>
+    </method>
+    <method name="StartJoint2To">
+      <arg type="d" name="speed" direction="in"/>
+      <arg type="d" name="destination" direction="in"/>
     </method>
     
     <method name="StopJoint2">

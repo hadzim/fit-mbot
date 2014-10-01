@@ -92,9 +92,14 @@ namespace MBot {
 				rotationExecution.addTask(rotationModule.taskGoRel(speed, maxRelDurationTimeInMs));
 			}
 		}
+
+
+
 	void Manipulator::StopRotation() {
 		rotationExecution.addTask(rotationModule.taskStop());
 	}
+
+
 
 	void Manipulator::StartJoint1(const double & speed) {
 #if ALLWORKING
@@ -119,6 +124,20 @@ namespace MBot {
 		joint2.stop();
 #endif
 	}
+
+
+	void Manipulator::StartRotationTo(const double & speed, const double & destination){
+			throw Poco::NotImplementedException("not implemented");
+		}
+
+	void Manipulator::StartJoint1To(const double & speed, const double & destination){
+		throw Poco::NotImplementedException("not implemented");
+	}
+
+	void Manipulator::StartJoint2To(const double & speed, const double & destination){
+		throw Poco::NotImplementedException("not implemented");
+	}
+
 
 	void Manipulator::StartHolder(const double & speed) {
 		if (speed == 0) {
