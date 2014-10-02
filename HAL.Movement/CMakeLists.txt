@@ -10,8 +10,9 @@ include_directories("${PROJECT_SOURCE_DIR}")
 
 include_directories("${PROJECT_ROOT}/TBS/include")
 include_directories("${PROJECT_ROOT}/TBS.Services/include")
+include_directories("${PROJECT_ROOT}/TBS.Robo/include")
 include_directories("${PROJECT_ROOT}/HAL.API/include")
  
-LINK_LIBRARIES (PocoFoundation PocoUtil TBS TBS.Services HAL.API dbus-1) 
+LINK_LIBRARIES (PocoFoundation PocoUtil TBS TBS.Services TBS.Robo HAL.API dbus-1) 
  
 add_executable(${PROJECT_NAME} ${EXE_SOURCES})

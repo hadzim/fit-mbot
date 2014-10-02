@@ -28,10 +28,13 @@ namespace HAL {
 						            this->bindAndAddMethod(new jsonrpc::Procedure("Enable", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::EnableI);
             this->bindAndAddMethod(new jsonrpc::Procedure("Disable", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::DisableI);
             this->bindAndAddMethod(new jsonrpc::Procedure("StartRotation", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::StartRotationI);
+            this->bindAndAddMethod(new jsonrpc::Procedure("StartRotationTo", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL,"destination",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::StartRotationToI);
             this->bindAndAddMethod(new jsonrpc::Procedure("StopRotation", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::StopRotationI);
             this->bindAndAddMethod(new jsonrpc::Procedure("StartJoint1", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::StartJoint1I);
+            this->bindAndAddMethod(new jsonrpc::Procedure("StartJoint1To", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL,"destination",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::StartJoint1ToI);
             this->bindAndAddMethod(new jsonrpc::Procedure("StopJoint1", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::StopJoint1I);
             this->bindAndAddMethod(new jsonrpc::Procedure("StartJoint2", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::StartJoint2I);
+            this->bindAndAddMethod(new jsonrpc::Procedure("StartJoint2To", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL,"destination",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::StartJoint2ToI);
             this->bindAndAddMethod(new jsonrpc::Procedure("StopJoint2", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::StopJoint2I);
             this->bindAndAddMethod(new jsonrpc::Procedure("StartHolder", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL, "speed",jsonrpc::JSON_REAL, NULL), &Manipulator_JsonServer::StartHolderI);
             this->bindAndAddMethod(new jsonrpc::Procedure("StopHolder", jsonrpc::PARAMS_BY_NAME, jsonrpc::JSON_NULL,  NULL), &Manipulator_JsonServer::StopHolderI);
@@ -57,6 +60,11 @@ namespace HAL {
             this->StartRotation(jsonrpc::Convertor::json2Cpp< double >(request["speed"]));
         }
 
+        inline virtual void StartRotationToI(const ::Json::Value& request, ::Json::Value& response) 
+        {
+            this->StartRotationTo(jsonrpc::Convertor::json2Cpp< double >(request["speed"]), jsonrpc::Convertor::json2Cpp< double >(request["destination"]));
+        }
+
         inline virtual void StopRotationI(const ::Json::Value& request, ::Json::Value& response) 
         {
             this->StopRotation();
@@ -67,6 +75,11 @@ namespace HAL {
             this->StartJoint1(jsonrpc::Convertor::json2Cpp< double >(request["speed"]));
         }
 
+        inline virtual void StartJoint1ToI(const ::Json::Value& request, ::Json::Value& response) 
+        {
+            this->StartJoint1To(jsonrpc::Convertor::json2Cpp< double >(request["speed"]), jsonrpc::Convertor::json2Cpp< double >(request["destination"]));
+        }
+
         inline virtual void StopJoint1I(const ::Json::Value& request, ::Json::Value& response) 
         {
             this->StopJoint1();
@@ -75,6 +88,11 @@ namespace HAL {
         inline virtual void StartJoint2I(const ::Json::Value& request, ::Json::Value& response) 
         {
             this->StartJoint2(jsonrpc::Convertor::json2Cpp< double >(request["speed"]));
+        }
+
+        inline virtual void StartJoint2ToI(const ::Json::Value& request, ::Json::Value& response) 
+        {
+            this->StartJoint2To(jsonrpc::Convertor::json2Cpp< double >(request["speed"]), jsonrpc::Convertor::json2Cpp< double >(request["destination"]));
         }
 
         inline virtual void StopJoint2I(const ::Json::Value& request, ::Json::Value& response) 
@@ -135,6 +153,10 @@ response["holderCurrent"] = jsonrpc::Convertor::cpp2Json<double >(tmpvar_holderC
         	 interfaceImpl->StartRotation(speed);
         }
 
+        void StartRotationTo(const double & speed, const double & destination){
+        	 interfaceImpl->StartRotationTo(speed, destination);
+        }
+
         void StopRotation(){
         	 interfaceImpl->StopRotation();
         }
@@ -143,12 +165,20 @@ response["holderCurrent"] = jsonrpc::Convertor::cpp2Json<double >(tmpvar_holderC
         	 interfaceImpl->StartJoint1(speed);
         }
 
+        void StartJoint1To(const double & speed, const double & destination){
+        	 interfaceImpl->StartJoint1To(speed, destination);
+        }
+
         void StopJoint1(){
         	 interfaceImpl->StopJoint1();
         }
 
         void StartJoint2(const double & speed){
         	 interfaceImpl->StartJoint2(speed);
+        }
+
+        void StartJoint2To(const double & speed, const double & destination){
+        	 interfaceImpl->StartJoint2To(speed, destination);
         }
 
         void StopJoint2(){

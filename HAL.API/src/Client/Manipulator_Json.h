@@ -49,6 +49,13 @@ namespace HAL {
 
             this->client->CallMethod("StartRotation", pIn);
         }
+        void StartRotationTo(const double & speed, const double & destination){
+            ::Json::Value pIn;
+            pIn["speed"] = jsonrpc::Convertor::cpp2Json< double >(speed); 
+pIn["destination"] = jsonrpc::Convertor::cpp2Json< double >(destination); 
+
+            this->client->CallMethod("StartRotationTo", pIn);
+        }
         void StopRotation(){
             ::Json::Value pIn;
             pIn = ::Json::nullValue;
@@ -60,6 +67,13 @@ namespace HAL {
 
             this->client->CallMethod("StartJoint1", pIn);
         }
+        void StartJoint1To(const double & speed, const double & destination){
+            ::Json::Value pIn;
+            pIn["speed"] = jsonrpc::Convertor::cpp2Json< double >(speed); 
+pIn["destination"] = jsonrpc::Convertor::cpp2Json< double >(destination); 
+
+            this->client->CallMethod("StartJoint1To", pIn);
+        }
         void StopJoint1(){
             ::Json::Value pIn;
             pIn = ::Json::nullValue;
@@ -70,6 +84,13 @@ namespace HAL {
             pIn["speed"] = jsonrpc::Convertor::cpp2Json< double >(speed); 
 
             this->client->CallMethod("StartJoint2", pIn);
+        }
+        void StartJoint2To(const double & speed, const double & destination){
+            ::Json::Value pIn;
+            pIn["speed"] = jsonrpc::Convertor::cpp2Json< double >(speed); 
+pIn["destination"] = jsonrpc::Convertor::cpp2Json< double >(destination); 
+
+            this->client->CallMethod("StartJoint2To", pIn);
         }
         void StopJoint2(){
             ::Json::Value pIn;

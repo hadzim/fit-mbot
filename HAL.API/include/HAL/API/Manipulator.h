@@ -73,6 +73,13 @@ namespace HAL {
 		        virtual void StartRotation(const double & speed) = 0;
 
 		/** 
+		  * [method] StartRotationTo: 
+		  * [in] double speed: 
+		  * [in] double destination: 
+		  */ 
+		        virtual void StartRotationTo(const double & speed, const double & destination) = 0;
+
+		/** 
 		  * [method] StopRotation: 
 		  */ 
 		        virtual void StopRotation() = 0;
@@ -84,6 +91,13 @@ namespace HAL {
 		        virtual void StartJoint1(const double & speed) = 0;
 
 		/** 
+		  * [method] StartJoint1To: 
+		  * [in] double speed: 
+		  * [in] double destination: 
+		  */ 
+		        virtual void StartJoint1To(const double & speed, const double & destination) = 0;
+
+		/** 
 		  * [method] StopJoint1: 
 		  */ 
 		        virtual void StopJoint1() = 0;
@@ -93,6 +107,13 @@ namespace HAL {
 		  * [in] double speed: 
 		  */ 
 		        virtual void StartJoint2(const double & speed) = 0;
+
+		/** 
+		  * [method] StartJoint2To: 
+		  * [in] double speed: 
+		  * [in] double destination: 
+		  */ 
+		        virtual void StartJoint2To(const double & speed, const double & destination) = 0;
 
 		/** 
 		  * [method] StopJoint2: 

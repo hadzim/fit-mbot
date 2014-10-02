@@ -41,12 +41,15 @@ namespace MBot {
 			void Disable();
 
 			virtual void StartRotation(const double & speed);
+			virtual void StartRotationTo(const double & speed, const double & destination);
 			virtual void StopRotation();
 
 			virtual void StartJoint1(const double & speed);
+			virtual void StartJoint1To(const double & speed, const double & destination);
 			virtual void StopJoint1();
 
 			virtual void StartJoint2(const double & speed);
+			virtual void StartJoint2To(const double & speed, const double & destination);
 			virtual void StopJoint2();
 
 			virtual void StartHolder(const double & speed);
