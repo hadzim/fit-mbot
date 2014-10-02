@@ -220,9 +220,9 @@ int main(int argc, char** argv) {
 			}
 
 			try {
-				if ((c & 255) == 'o') {
+				if ((c & 255) == '{') {
 					cameraClient->Camera().Enable();
-				} else if ((c & 255) == 'p') {
+				} else if ((c & 255) == '}') {
 					cameraClient->Camera().Disable();
 				}
 			} catch (Poco::Exception & e) {
@@ -316,6 +316,14 @@ int main(int argc, char** argv) {
 					speed = -50;
 					lastInRow++;
 					manipulatorClient->Manipulator().StartRotation(speed);
+				} else if ((c & 255) == 'n') {
+					lastInRow++;
+					speed = 50;
+					manipulatorClient->Manipulator().StartRotationTo(speed, 1450);
+				} else if ((c & 255) == 'm') {
+					speed = -50;
+					lastInRow++;
+					manipulatorClient->Manipulator().StartRotationTo(speed, 1450);
 				} else {
 					speed = 0;
 					if (lastInRow > 1) {
@@ -326,7 +334,7 @@ int main(int argc, char** argv) {
 			} catch (Poco::Exception & e) {
 
 			}
-
+/*
 			try {
 				static int speed = 0;
 				static int lastInRow = 0;
@@ -348,11 +356,11 @@ int main(int argc, char** argv) {
 			} catch (Poco::Exception & e) {
 
 			}
-
+*/
 			try {
 				static int speed = 0;
 				static int lastInRow = 0;
-				if ((c & 255) == 'i') {
+				if ((c & 255) == 'j') {
 					lastInRow++;
 					speed = maxManSpeed;
 					manipulatorClient->Manipulator().StartJoint1(speed);
@@ -360,6 +368,14 @@ int main(int argc, char** argv) {
 					speed = -maxManSpeed;
 					lastInRow++;
 					manipulatorClient->Manipulator().StartJoint1(speed);
+				} else if ((c & 255) == 'g') {
+					lastInRow++;
+					speed = maxManSpeed;
+					manipulatorClient->Manipulator().StartJoint1To(speed, 3900);
+				} else if ((c & 255) == 'h') {
+					speed = -maxManSpeed;
+					lastInRow++;
+					manipulatorClient->Manipulator().StartJoint1To(speed, 3900);
 				} else {
 					speed = 0;
 					if (lastInRow > 1) {
@@ -378,10 +394,18 @@ int main(int argc, char** argv) {
 					lastInRow++;
 					speed = maxManSpeed;
 					manipulatorClient->Manipulator().StartJoint2(speed);
-				} else if ((c & 255) == 'j') {
+				} else if ((c & 255) == 'i') {
 					speed = -maxManSpeed;
 					lastInRow++;
 					manipulatorClient->Manipulator().StartJoint2(speed);
+				} else if ((c & 255) == 'o') {
+					lastInRow++;
+					speed = maxManSpeed;
+					manipulatorClient->Manipulator().StartJoint2To(speed, 1100);
+				} else if ((c & 255) == 'p') {
+					speed = -maxManSpeed;
+					lastInRow++;
+					manipulatorClient->Manipulator().StartJoint2To(speed, 1100);
 				} else {
 					speed = 0;
 					if (lastInRow > 1) {

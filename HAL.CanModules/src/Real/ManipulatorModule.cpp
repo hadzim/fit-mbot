@@ -86,6 +86,14 @@ namespace MBot {
 #define MAX_MAN_SPEED 30000
 
 	void ManipulatorModule::go(int speed) {
+		//speed needs to be inverted to be sign aligned with encoder
+		speed = -speed;
+
+		if (speed == 0) {
+			this->stop();
+			return;
+		}
+
 		send(w, "SP=" + Poco::NumberFormatter::format((int) std::abs(speed)));
 		if (speed > 0) {
 			if (speed > MAX_MAN_SPEED) {
@@ -93,9 +101,7 @@ namespace MBot {
 			}
 			send(w, "PR=" + Poco::NumberFormatter::format((int) std::abs(speed / 2)));
 		}
-		if (speed == 0) {
-			send(w, "ST[1]");
-		}
+
 		if (speed < 0) {
 			if (speed < -MAX_MAN_SPEED) {
 				speed = -MAX_MAN_SPEED;

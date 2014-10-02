@@ -24,7 +24,17 @@
 
 namespace MBot {
 
+
+
 	class Manipulator: public HAL::API::Manipulator::IManipulator, public Poco::Runnable {
+
+			struct CurrentCommand {
+					Poco::Mutex commandLock;
+					TBS::Nullable<double> speed;
+					TBS::Nullable<double> startPosition;
+					TBS::Nullable<double> finalPosition;
+			};
+
 		public:
 
 			struct Status {
@@ -69,9 +79,23 @@ namespace MBot {
 
 			void run();
 
-			//void feedbackLoop();
+			void feedbackLoopJoint1();
+			void feedbackLoopJoint2();
+			void feedbackLoopRot();
+
+			enum JointID {
+				J1,
+				J2,
+				Rot
+			};
+
+			void checkActivity(JointID jid, HAL::API::Manipulator::MotorInfo & motorInfo, CurrentCommand & cmd);
+
+			void updateCmd(double & speed, TBS::Nullable<double> final, HAL::API::Manipulator::MotorInfo & motorInfo, CurrentCommand & cmd, bool isRot);
+			void resetCmd(CurrentCommand & cmd);
 
 			void dump();
+			void rotateInternally(double sp, TBS::Nullable<double> pos);
 		private:
 
 			TBS::Robo::RoboCan::CanNode node;
@@ -98,7 +122,13 @@ namespace MBot {
 			Poco::Mutex m;
 			Status currentStatus;
 
-			//Poco::Activity<Manipulator> manipulatorFeedback;
+			Poco::Activity<Manipulator> joint1Feedback;
+			Poco::Activity<Manipulator> joint2Feedback;
+			Poco::Activity<Manipulator> rotationFeedback;
+
+			CurrentCommand joint1cmd;
+			CurrentCommand joint2cmd;
+			CurrentCommand rotationcmd;
 	};
 
 } /* namespace MBot */

@@ -18,15 +18,11 @@ namespace MBot {
 	}
 
 	void ManipulatorRotationPositionTask::onDataReady(TBS::Robo::RoboCan::DataMessage & msg) {
-		std::cout << "rot data ready" << std::endl;
 		Position p;
 
 		TBS::Robo::RoboCan::RoboCanMessageData::UShort2 val = msg.getData(0).getUSHORT2();
 		p.encoder = val.short1;
 		//p.position = val.short2;
-
-		std::cout << "rot data ready: " << val.short1 << " and " << val.short2 << std::endl;
-
 		PositionChanged(this, p);
 	}
 
