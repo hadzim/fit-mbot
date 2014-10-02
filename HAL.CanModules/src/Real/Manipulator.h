@@ -18,6 +18,8 @@
 #include "ManipulatorModule.h"
 #include <TBS/MBot/HW/ManipulatorModules.h>
 
+#include <Poco/Activity.h>
+
 #define ALLWORKING 1
 
 namespace MBot {
@@ -64,6 +66,8 @@ namespace MBot {
 
 			void run();
 
+			//void feedbackLoop();
+
 			void dump();
 		private:
 
@@ -90,6 +94,8 @@ namespace MBot {
 			bool enabled;
 			Poco::Mutex m;
 			Status currentStatus;
+
+			//Poco::Activity<Manipulator> manipulatorFeedback;
 	};
 
 } /* namespace MBot */

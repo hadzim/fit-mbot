@@ -206,4 +206,8 @@ namespace MBot {
 		std::cout << "position: r: " << this->currentStatus.rotation.position << " j1: " << this->currentStatus.joint1.position << " j2: " << this->currentStatus.joint2.position << std::endl;
 	}
 
+	void Manipulator::feedbackLoop(){
+
+	}
+
 } /* namespace MBot */
