@@ -14,6 +14,7 @@ namespace TBS {
 	namespace Serial {
 
 		SerialWrapper::SerialWrapper(int port, int br) {
+			std::cout << "serial wrapper port: " << port << std::endl;
 			serial = new LinSerial(port, br);
 		}
 
