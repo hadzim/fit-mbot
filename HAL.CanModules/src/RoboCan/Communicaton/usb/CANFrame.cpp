@@ -258,6 +258,7 @@ std::vector <Poco::UInt8> CANFrame::toByteArray()
 
 CANFrame::CANFrame(std::vector <Poco::UInt8> buf)
 {
+/*
 	std::cout << "dec:";
 	for (int i = 0; i < buf.size(); i++){
 		std::cout << "" << (int)buf[i] << " ";
@@ -270,7 +271,7 @@ CANFrame::CANFrame(std::vector <Poco::UInt8> buf)
 
 	}
 	std::cout << std::dec << std::endl;
-
+*/
     //data_ = new Poco::UInt8[8];// { 0, 0, 0, 0, 0, 0, 0, 0 };
 
     //Poco::UInt32 mess = (Poco::UInt32)((((Poco::UInt8)buf.at(0)) << 24) | (((Poco::UInt8)buf.at(1)) << 16) | (((Poco::UInt8)buf.at(2)) << 8) | (((Poco::UInt8)buf.at(3))));
@@ -302,10 +303,11 @@ CANFrame::CANFrame(std::vector <Poco::UInt8> buf)
     }
 
 
-    int i;
+    int start = 8;
+    int i = 0;
     for (i = 0; i < DLC_; i++)
     {
-        data_[i] = buf.at(5+i);
+        data_[i] = buf.at(start+i);
     }
 
     //buf->remove(0, 5+i); /* DLC + ID size */
