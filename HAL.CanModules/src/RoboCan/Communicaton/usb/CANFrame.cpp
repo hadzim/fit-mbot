@@ -1,7 +1,7 @@
 // Project libraries.
 #include <string.h>
 #include "CANFrame.h"
-
+#include <iostream>
 
 
 
@@ -258,9 +258,24 @@ std::vector <Poco::UInt8> CANFrame::toByteArray()
 
 CANFrame::CANFrame(std::vector <Poco::UInt8> buf)
 {
+	std::cout << "dec:";
+	for (int i = 0; i < buf.size(); i++){
+		std::cout << "" << (int)buf[i] << " ";
+
+	}
+	std::cout << std::endl;
+	std::cout << "hex:";
+	for (int i = 0; i < buf.size(); i++){
+		std::cout << "" << std::hex  << (int)buf[i] << " ";
+
+	}
+	std::cout << std::dec << std::endl;
+
     //data_ = new Poco::UInt8[8];// { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-    Poco::UInt32 mess = (Poco::UInt32)((((Poco::UInt8)buf.at(0)) << 24) | (((Poco::UInt8)buf.at(1)) << 16) | (((Poco::UInt8)buf.at(2)) << 8) | (((Poco::UInt8)buf.at(3))));
+    //Poco::UInt32 mess = (Poco::UInt32)((((Poco::UInt8)buf.at(0)) << 24) | (((Poco::UInt8)buf.at(1)) << 16) | (((Poco::UInt8)buf.at(2)) << 8) | (((Poco::UInt8)buf.at(3))));
+    Poco::UInt32 mess = (Poco::UInt32)((((Poco::UInt8)buf.at(3)) << 24) | (((Poco::UInt8)buf.at(2)) << 16) | (((Poco::UInt8)buf.at(1)) << 8) | (((Poco::UInt8)buf.at(0))));
+
     if ((mess & maskIDE) == 0)
     {
         IDE_ = STANDARD;
@@ -299,6 +314,8 @@ CANFrame::CANFrame(std::vector <Poco::UInt8> buf)
     {
         data_[i] = 0;
     }
+
+
 }
 
 
