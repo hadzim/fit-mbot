@@ -221,6 +221,9 @@ namespace MBot {
 	void Manipulator::GetStatus(double & rotation, double & joint1, double & joint2, double & holder){
 		Poco::Mutex::ScopedLock l(m);
 
+		std::cout << "get status" << std::endl;
+		dump();
+
 		rotation = this->currentStatus.rotation.position;
 		joint1 = this->currentStatus.joint1.position;
 		joint2 = this->currentStatus.joint2.position;
