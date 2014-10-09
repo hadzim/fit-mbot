@@ -208,6 +208,7 @@ namespace MBot {
 
 		this->currentStatus.joint2.position = pos.encoder2;
 		this->currentStatus.joint2.current = 0;
+		std::cout << "pos changed" << std::endl;
 		dump();
 	}
 
@@ -215,6 +216,7 @@ namespace MBot {
 		Poco::Mutex::ScopedLock l(m);
 		this->currentStatus.rotation.position = pos.encoder;
 		this->currentStatus.rotation.current = 0;
+		std::cout << "rot changed" << std::endl;
 		dump();
 	}
 
