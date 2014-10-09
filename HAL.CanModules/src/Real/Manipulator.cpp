@@ -45,9 +45,18 @@ namespace MBot {
 			joint1Feedback.start();
 			joint2Feedback.start();
 			rotationFeedback.start();
+
+			rotationExecution.addTask(rotationModule.taskEnable(true));
+			holderExecution.addTask(holderModule.taskEnable(true));
 		}
 
 	Manipulator::~Manipulator() {
+
+		rotationExecution.addTask(rotationModule.taskEnable(false));
+		holderExecution.addTask(holderModule.taskEnable(false));
+
+		Poco::Thread::sleep(200);
+
 		finished = true;
 		t.join();
 
@@ -63,8 +72,7 @@ namespace MBot {
 
 	void Manipulator::Enable() {
 		enabled = true;
-		rotationExecution.addTask(rotationModule.taskEnable(true));
-		holderExecution.addTask(holderModule.taskEnable(true));
+
 #if ALLWORKING
 		joint2.enable();
 		joint1.enable();
@@ -81,8 +89,7 @@ namespace MBot {
 	}
 	void Manipulator::Disable() {
 		enabled = false;
-		rotationExecution.addTask(rotationModule.taskEnable(false));
-		holderExecution.addTask(holderModule.taskEnable(false));
+
 
 #if ALLWORKING
 
@@ -243,10 +250,8 @@ namespace MBot {
 		tRot->start();
 
 		while (!finished) {
-			if (enabled) {
-				rotationModule.askData();
-			}
-			Poco::Thread::sleep(20);
+			rotationModule.askData();
+			Poco::Thread::sleep(25);
 		}
 
 		std::cout << "done manipulator bg" << std::endl;
