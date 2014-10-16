@@ -24,16 +24,48 @@
 
 namespace MBot {
 
+	struct CurrentCommand {
+			Poco::Mutex commandLock;
+			TBS::Nullable<double> speed;
+			TBS::Nullable<double> startPosition;
+			TBS::Nullable<double> finalPosition;
+	};
 
+	struct CurrentExec {
+		TBS::Nullable<double> speed;
+		TBS::Nullable<bool> stop;
+	};
+
+
+	class JointControl {
+		public:
+			JointControl(int portMan, HAL::API::Manipulator::MotorInfo & info, Poco::Mutex & infoLock);
+			~JointControl();
+			void StartJoint(const double & speed);
+			void StartJointTo(const double & speed, const double & destination);
+			void StopJoint();
+
+			ManipulatorModule & lowLevelModule();
+		private:
+			void feedbackLoopJoint();
+			void execLoopJoint();
+		private:
+
+			ManipulatorModule joint;
+
+			HAL::API::Manipulator::MotorInfo & info;
+			Poco::Mutex & infoLock;
+
+			CurrentExec execJointCmd;
+			Poco::Mutex execLock;
+			CurrentCommand feedbackJointCmd;
+
+			Poco::Activity<JointControl> jointFeedback;
+			Poco::Activity<JointControl> jointExec;
+	};
 
 	class Manipulator: public HAL::API::Manipulator::IManipulator, public Poco::Runnable {
 
-			struct CurrentCommand {
-					Poco::Mutex commandLock;
-					TBS::Nullable<double> speed;
-					TBS::Nullable<double> startPosition;
-					TBS::Nullable<double> finalPosition;
-			};
 
 		public:
 
@@ -83,16 +115,20 @@ namespace MBot {
 			void feedbackLoopJoint2();
 			void feedbackLoopRot();
 
+			void execLoopJoint1();
+			void execLoopJoint2();
+
+/*
 			enum JointID {
 				J1,
 				J2,
 				Rot
 			};
+*/
+			//void checkActivity(JointID jid, HAL::API::Manipulator::MotorInfo & motorInfo, CurrentCommand & cmd);
 
-			void checkActivity(JointID jid, HAL::API::Manipulator::MotorInfo & motorInfo, CurrentCommand & cmd);
-
-			void updateCmd(double & speed, TBS::Nullable<double> final, HAL::API::Manipulator::MotorInfo & motorInfo, CurrentCommand & cmd, bool isRot);
-			void resetCmd(CurrentCommand & cmd);
+			//void updateCmd(double & speed, TBS::Nullable<double> final, HAL::API::Manipulator::MotorInfo & motorInfo, CurrentCommand & cmd, bool isRot);
+			//void resetCmd(CurrentCommand & cmd);
 
 			void dump();
 			void rotateInternally(double sp, TBS::Nullable<double> pos);
@@ -109,10 +145,7 @@ namespace MBot {
 			MBot::ManipulatorLightModule lightModule;
 
 			MBot::ManipulatorMagneticModule magneticModule;
-#if ALLWORKING
-			ManipulatorModule joint1;
-			ManipulatorModule joint2;
-#endif
+
 			int speed;
 			int maxRelDurationTimeInMs;
 
@@ -122,13 +155,16 @@ namespace MBot {
 			Poco::Mutex m;
 			Status currentStatus;
 
-			Poco::Activity<Manipulator> joint1Feedback;
-			Poco::Activity<Manipulator> joint2Feedback;
 			Poco::Activity<Manipulator> rotationFeedback;
 
-			CurrentCommand joint1cmd;
-			CurrentCommand joint2cmd;
 			CurrentCommand rotationcmd;
+
+#if ALLWORKING
+			JointControl j1;
+			JointControl j2;
+			//ManipulatorModule joint1;
+			//ManipulatorModule joint2;
+#endif
 	};
 
 } /* namespace MBot */
