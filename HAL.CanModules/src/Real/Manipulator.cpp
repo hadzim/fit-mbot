@@ -229,7 +229,7 @@ namespace MBot {
 					speed(20), maxRelDurationTimeInMs(50), t("ManipulatorWorker"), finished(false), enabled(false), rotationFeedback(this,
 							&Manipulator::feedbackLoopRot)
 #if ALLWORKING
-					, j1(portMan1, currentStatus.joint1, m), j2(portMan1, currentStatus.joint2, m)
+					, j1(portMan1, currentStatus.joint1, m), j2(portMan2, currentStatus.joint2, m)
 #endif
 	{
 
