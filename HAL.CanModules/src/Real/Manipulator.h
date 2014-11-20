@@ -19,6 +19,7 @@
 #include <TBS/MBot/HW/ManipulatorModules.h>
 
 #include <Poco/Activity.h>
+#include <TBS/SimpleTimer.h>
 
 #define ALLWORKING 1
 
@@ -132,6 +133,8 @@ namespace MBot {
 
 			void dump();
 			void rotateInternally(double sp, TBS::Nullable<double> pos);
+			void lightInt(int timeout);
+			void onLightTimer(TBS::SimpleTimer::TimerArg & a);
 		private:
 
 			TBS::Robo::RoboCan::CanNode node;
@@ -158,6 +161,8 @@ namespace MBot {
 			Poco::Activity<Manipulator> rotationFeedback;
 
 			CurrentCommand rotationcmd;
+
+			TBS::SimpleTimer lightTimer;
 
 #if ALLWORKING
 			JointControl j1;

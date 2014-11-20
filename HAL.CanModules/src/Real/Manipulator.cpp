@@ -245,6 +245,8 @@ namespace MBot {
 
 			rotationExecution.addTask(rotationModule.taskEnable(true));
 			holderExecution.addTask(holderModule.taskEnable(true));
+
+			lightTimer.Timer += Poco::delegate(this, &Manipulator::onLightTimer);
 		}
 
 	Manipulator::~Manipulator() {
@@ -259,6 +261,8 @@ namespace MBot {
 
 		rotationFeedback.stop();
 		rotationFeedback.wait();
+
+		lightTimer.Timer -= Poco::delegate(this, &Manipulator::onLightTimer);
 	}
 
 	void Manipulator::Enable() {
@@ -297,27 +301,39 @@ namespace MBot {
 	}
 
 	void Manipulator::StartJoint1(const double & speed) {
+#if ALLWORKING
 		j1.StartJoint(speed);
+#endif
 	}
 
 	void Manipulator::StartJoint1To(const double & speed, const double & destination) {
+#if ALLWORKING
 		j1.StartJointTo(speed, destination);
+#endif
 	}
 
 	void Manipulator::StopJoint1() {
+#if ALLWORKING
 		j1.StopJoint();
+#endif
 	}
 
 	void Manipulator::StartJoint2(const double & speed) {
+#if ALLWORKING
 		j2.StartJoint(speed);
+#endif
 	}
 
 	void Manipulator::StartJoint2To(const double & speed, const double & destination) {
+#if ALLWORKING
 		j2.StartJointTo(speed, destination);
+#endif
 	}
 
 	void Manipulator::StopJoint2() {
+#if ALLWORKING
 		j2.StopJoint();
+#endif
 	}
 
 	void Manipulator::rotateInternally(double sp, TBS::Nullable<double> pos) {
@@ -388,14 +404,14 @@ namespace MBot {
 		Poco::Mutex::ScopedLock l(m);
 		this->currentStatus.rotation.position = pos.encoder;
 		this->currentStatus.rotation.current = 0;
-		std::cout << "rot changed" << std::endl;
+		//std::cout << "rot changed" << std::endl;
 		dump();
 	}
 
 	void Manipulator::GetStatus(double & rotation, double & joint1, double & joint2, double & holder) {
 		Poco::Mutex::ScopedLock l(m);
 
-		std::cout << "get status" << std::endl;
+		//std::cout << "get status" << std::endl;
 		dump();
 
 		rotation = this->currentStatus.rotation.position;
@@ -406,9 +422,21 @@ namespace MBot {
 	}
 
 	void Manipulator::LightOn() {
-		lightExecution.addTask(lightModule.taskEnable(true));
+		lightInt(1000);
 	}
 	void Manipulator::LightOff() {
+		lightInt(300);
+	}
+
+	void Manipulator::lightInt(int timeout){
+		lightExecution.addTask(lightModule.taskEnable(true));
+		std::cout << "ligh pulse on" << std::endl;
+		this->lightTimer.stop();
+		this->lightTimer.start(timeout, 0);
+	}
+
+	void Manipulator::onLightTimer(TBS::SimpleTimer::TimerArg & a){
+		std::cout << "ligh pulse off" << std::endl;
 		lightExecution.addTask(lightModule.taskEnable(false));
 	}
 
@@ -428,6 +456,7 @@ namespace MBot {
 
 		while (!finished) {
 			rotationModule.askData();
+			//magneticModule.askData();
 			Poco::Thread::sleep(25);
 		}
 
