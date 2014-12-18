@@ -119,12 +119,13 @@ namespace MBot {
 	};
 
 	class ManipulatorMagneticModule: public TBS::Robo::RoboCan::CanModule {
-
 		public:
 			ManipulatorMagneticModule(const std::string & name, TBS::Robo::RoboCan::ICanNode::RawPtr node, int numberWithinModule);
 			virtual ~ManipulatorMagneticModule();
 
 			ManipulatorPositionTask::Ptr taskConsumePosition() const;
+
+
 		private:
 			std::string n;
 	};
@@ -145,8 +146,10 @@ namespace MBot {
 			TBS::Robo::RoboCan::ModuleCommandTask::Ptr taskEnable(bool enable) const {
 				TBS::Robo::RoboCan::RoboCanMessageData data;
 				data.setUSHORT(enable ? 1 : 0);
+				std::cout << "send cmd: " << this->getInternalModule().composeCommand((int) Enable, data).toString() << std::endl;
 				return new TBS::Robo::RoboCan::ModuleCommandAnyAckTask("enable", this->getInternalModule(),
 						this->getInternalModule().composeCommand((int) Enable, data));
+
 			}
 
 	};
