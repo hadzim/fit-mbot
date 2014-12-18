@@ -79,6 +79,8 @@ void UltraSound::run() {
 				this->backLeft = data.at(2);
 				this->backRight = data.at(3);
 				this->isDataValid = true;
+
+				LTRACE("US") << "fl: " <<  this->frontLeft << " fr: " << this->frontRight << " bl: "<< this->backLeft << " br: " << this->backRight << LE;
 			}
 		} catch (Poco::Exception & e) {
 			//std::cerr << "EXC: " << e.displayText() << std::endl;

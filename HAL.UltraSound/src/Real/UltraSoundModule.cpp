@@ -34,6 +34,11 @@ std::vector<int> UltraSoundModule::readData() {
 		throw Poco::Exception("Bad first byte");
 	}
 
+	/*
+	 * First byte - control byte: 0x
+	 * then first 4 sensor read
+	 * */
+
 	std::vector<int> data;
 	data.push_back((int) b.at(0).at(2));
 	data.push_back((int) b.at(0).at(3));
