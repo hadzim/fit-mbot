@@ -24,8 +24,8 @@ double absoluteSpeedToRelative(Poco::Int64 speed){
 	return speed * 1.0 / MAXSPEED;
 }
 
-Movement::Movement() : finish(false), speedLeft(0), speedRight(0), posLeft(0), posRight(0) {
-	impl = new MovementImpl(3, 9600);
+Movement::Movement(int port) : port(port), finish(false), speedLeft(0), speedRight(0), posLeft(0), posRight(0) {
+	impl = new MovementImpl(port, 9600);
 	t.start(*this);
 }
 

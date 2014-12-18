@@ -10,7 +10,7 @@
 
 namespace MBot {
 
-HALFactory::HALFactory() {
+HALFactory::HALFactory(int port) : port(port) {
 
 }
 
@@ -19,7 +19,7 @@ HALFactory::~HALFactory() {
 }
 
 HAL::API::Movement::IMovement::Ptr HALFactory::createMovement(){
-	return new Movement();
+	return new Movement(port);
 }
 
 } /* namespace MBot */

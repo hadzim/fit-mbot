@@ -29,7 +29,7 @@ public:
 	void displayHelp();
 	void handleHelp(const std::string& name, const std::string& value);
 	void handleMode(const std::string& name, const std::string& value);
-
+	void handlePort(const std::string& name, const std::string& value);
 protected:
 
 	int main(const std::vector<std::string>& args);
@@ -37,6 +37,7 @@ protected:
 private:
 	bool help;
 	bool virtualMode;
+	int port;
 };
 
 } /* namespace BB */

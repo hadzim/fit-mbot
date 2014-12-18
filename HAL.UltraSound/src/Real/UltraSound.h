@@ -17,7 +17,7 @@ namespace MBot {
 
 class UltraSound: public HAL::API::UltraSound::IUltraSound, public Poco::Runnable {
 public:
-	UltraSound();
+	UltraSound(int port);
 	virtual ~UltraSound();
 
 	virtual void Reconnect() ;
@@ -38,6 +38,7 @@ private:
 	int backLeft;
 	int backRight;
 
+	int port;
 
 
 	Poco::Thread t;

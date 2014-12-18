@@ -12,7 +12,7 @@
 
 namespace MBot {
 
-HALFactory::HALFactory() {
+HALFactory::HALFactory(int port) : port(port) {
 
 }
 
@@ -21,7 +21,7 @@ HALFactory::~HALFactory() {
 }
 
 HAL::API::UltraSound::IUltraSound::Ptr HALFactory::createUltraSound(){
-	return new UltraSound();
+	return new UltraSound(port);
 }
 
 } /* namespace MBot */

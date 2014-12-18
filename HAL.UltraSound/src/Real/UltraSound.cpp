@@ -12,8 +12,8 @@
 
 namespace MBot {
 
-UltraSound::UltraSound() :
-		finish(false), reconnect(true), isDataValid(false),  frontLeft(0), frontRight(0), backLeft(0), backRight(0) {
+UltraSound::UltraSound(int port) :
+		finish(false), reconnect(true), isDataValid(false),  frontLeft(0), frontRight(0), backLeft(0), backRight(0), port(port) {
 
 	t.start(*this);
 }
@@ -57,7 +57,7 @@ void UltraSound::run() {
 				LDEBUG("US") << "Enable" << LE;
 
 				module = NULL;
-				module = new UltraSoundModule(10, 19200);
+				module = new UltraSoundModule(port, 19200);
 
 				LDEBUG("US") << "construct" << LE;
 

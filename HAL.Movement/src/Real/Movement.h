@@ -16,7 +16,7 @@ class MovementImpl;
 
 class Movement: public HAL::API::Movement::IMovement, public Poco::Runnable {
 public:
-	Movement();
+	Movement(int port);
 	virtual ~Movement();
 
 	virtual void Move(const double & speedLeft, const double & speedRight);
@@ -32,6 +32,7 @@ public:
 private:
 	virtual void run();
 
+	int port;
 
 	Poco::SharedPtr<MovementImpl> impl;
 	bool finish;

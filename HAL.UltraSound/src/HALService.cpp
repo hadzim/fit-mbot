@@ -8,6 +8,7 @@
 #include "HALService.h"
 #include <iostream>
 #include <Poco/Delegate.h>
+#include <Poco/NumberParser.h>
 #include "Poco/Thread.h"
 
 #include "HAL/API/api.h"
@@ -22,6 +23,7 @@ namespace HAL {
 
 HALService::HALService() : help(false), virtualMode(false) {
 	setUnixOptions(true);
+	port = 1;
 }
 
 HALService::~HALService() {
@@ -43,6 +45,14 @@ void HALService::defineOptions(Poco::Util::OptionSet& options) {
 						Poco::Util::OptionCallback<HALService>(this,
 								&HALService::handleMode)));
 
+		options.addOption(
+				Poco::Util::Option("port", "q", "ultrasound serial port number").required(false).repeatable(false).argument("port=value").callback(
+						Poco::Util::OptionCallback<HALService>(this, &HALService::handlePort)));
+
+	}
+
+	void HALService::handlePort(const std::string& name, const std::string& value){
+		port = Poco::NumberParser::parse(value);
 	}
 
 	void HALService::displayHelp() {
@@ -81,7 +91,7 @@ int HALService::main(const std::vector<std::string>& args) {
 		if (virtualMode){
 			f = new MBot::VirtualHALFactory();
 		} else {
-			f = new MBot::HALFactory();
+			f = new MBot::HALFactory(port);
 		}
 
 		TBS::Services::JsonServerParams p(HAL::API::Communication::UltraSoundPort);

@@ -8,6 +8,7 @@
 #include "HALService.h"
 #include <iostream>
 #include <Poco/Delegate.h>
+#include <Poco/NumberParser.h>
 #include "Poco/Thread.h"
 
 #include "HAL/API/api.h"
@@ -20,7 +21,7 @@ namespace HAL {
 
 
 
-HALService::HALService() : help(false), virtualMode(false) {
+HALService::HALService() : help(false), virtualMode(false), port(3) {
 	setUnixOptions(true);
 }
 
@@ -43,6 +44,10 @@ void HALService::defineOptions(Poco::Util::OptionSet& options) {
 						Poco::Util::OptionCallback<HALService>(this,
 								&HALService::handleMode)));
 
+		options.addOption(
+						Poco::Util::Option("port", "q", "movement serial port number").required(false).repeatable(false).argument("port=value").callback(
+								Poco::Util::OptionCallback<HALService>(this, &HALService::handlePort)));
+
 	}
 
 	void HALService::displayHelp() {
@@ -60,6 +65,9 @@ void HALService::defineOptions(Poco::Util::OptionSet& options) {
 	void HALService::handleMode(const std::string& name, const std::string& value) {
 		std::cout << "mode: " << name << " val " << value << std::endl;
 		virtualMode = value == "virtual";
+	}
+	void HALService::handlePort(const std::string& name, const std::string& value){
+		port = Poco::NumberParser::parse(value);
 	}
 
 
@@ -81,7 +89,7 @@ int HALService::main(const std::vector<std::string>& args) {
 		if (virtualMode){
 			f = new MBot::VirtualHALFactory();
 		} else {
-			f = new MBot::HALFactory();
+			f = new MBot::HALFactory(port);
 		}
 
 		TBS::Services::JsonServerParams p(HAL::API::Communication::MovementPort);

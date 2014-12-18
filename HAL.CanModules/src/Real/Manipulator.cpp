@@ -138,6 +138,8 @@ namespace MBot {
 		jointFeedback.start();
 		jointExec.start();
 
+		std::cout << "create joint: " << port << std::endl;
+
 	}
 
 	JointControl::~JointControl() {

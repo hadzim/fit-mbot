@@ -13,10 +13,12 @@ namespace MBot {
 
 class HALFactory : public IHALFactory {
 public:
-	HALFactory();
+	HALFactory(int port);
 	virtual ~HALFactory();
 
 	virtual HAL::API::UltraSound::IUltraSound::Ptr createUltraSound();
+private:
+	int port;
 };
 
 } /* namespace MBot */
