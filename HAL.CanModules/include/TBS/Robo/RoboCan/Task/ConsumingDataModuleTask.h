@@ -1,10 +1,27 @@
-/*
- * ConsumingModuleTask.h
- *
- *  Created on: 30.4.2014
- *      Author: JV
- */
+//------------------------------------------------------------------------------
+//
+//  Project:   VG20102014024
+//             Robot for search of human beings in crushes and avalanches
+//
+//             Brno University of Technology
+//             Faculty of Information Technology
+//
+//------------------------------------------------------------------------------
+//
+//             This project was financially supported by project
+//                  VG20102014024 funds provided by MV CR.
+//
+//------------------------------------------------------------------------------
+/*!
 
+@file
+@brief     Header file
+@details   Details
+@authors   Jan Vana (<ivanajan@fit.vutbr.cz>)
+@date      2010-2014
+@note      This project was supported by project funds of the MV CR grant VG20102014024.
+
+*/
 #ifndef CONSUMINGMODULETASK_H_
 #define CONSUMINGMODULETASK_H_
 #include "TBS/Task/Task.h"

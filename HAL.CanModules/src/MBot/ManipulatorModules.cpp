@@ -1,11 +1,28 @@
-/*
- * ManipulatorModules.cpp
- *
- *  Created on: Jul 22, 2014
- *      Author: dron
- */
+//------------------------------------------------------------------------------
+//
+//  Project:   VG20102014024
+//             Robot for search of human beings in crushes and avalanches
+//
+//             Brno University of Technology
+//             Faculty of Information Technology
+//
+//------------------------------------------------------------------------------
+//
+//             This project was financially supported by project
+//                  VG20102014024 funds provided by MV CR.
+//
+//------------------------------------------------------------------------------
+/*!
 
-#include <TBS/MBot/HW/ManipulatorModules.h>
+@file
+@brief     Implementation of methods
+@details   Details
+@authors   Jan Vana (<ivanajan@fit.vutbr.cz>)
+@date      2010-2014
+@note      This project was supported by project funds of the MV CR grant VG20102014024.
+
+*/
+#include <MBot/HW/ManipulatorModules.h>
 
 namespace MBot {
 
@@ -21,6 +38,11 @@ namespace MBot {
 		Position p;
 
 		TBS::Robo::RoboCan::RoboCanMessageData::UShort2 val = msg.getData(0).getUSHORT2();
+
+		TBS::Robo::RoboCan::RoboCanMessage m;
+		msg.getData(0).writeToMessage(m);
+
+		std::cout << "pos received: " << (int)val.short1 << " data: " << m.toString() << std::endl;
 		p.encoder = val.short1;
 		//p.position = val.short2;
 		PositionChanged(this, p);

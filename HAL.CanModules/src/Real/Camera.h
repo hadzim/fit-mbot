@@ -1,10 +1,27 @@
-/*
- * Camera.h
- *
- *  Created on: 1.4.2014
- *      Author: JV
- */
+//------------------------------------------------------------------------------
+//
+//  Project:   VG20102014024
+//             Robot for search of human beings in crushes and avalanches
+//
+//             Brno University of Technology
+//             Faculty of Information Technology
+//
+//------------------------------------------------------------------------------
+//
+//             This project was financially supported by project
+//                  VG20102014024 funds provided by MV CR.
+//
+//------------------------------------------------------------------------------
+/*!
 
+@file
+@brief     Header file
+@details   Details
+@authors   Jan Vana (<ivanajan@fit.vutbr.cz>)
+@date      2010-2014
+@note      This project was supported by project funds of the MV CR grant VG20102014024.
+
+*/
 #ifndef Camera_H_
 #define Camera_H_
 #include "HAL/API/Camera.h"
@@ -12,7 +29,7 @@
 #include "TBS/Robo/RoboCan/Task/ModuleCommandTask.h"
 
 #include "TBS/Robo/RoboCan/HW/CanNode.h"
-#include "../../include/TBS/MBot/HW/CameraModules.h"
+#include "MBot/HW/CameraModules.h"
 #include "TBS/Robo/RoboCan/Communicaton/IChannel.h"
 #include "TBS/Robo/TaskExecutor.h"
 namespace MBot {

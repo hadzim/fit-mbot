@@ -1,14 +1,32 @@
-/*
- * NetChannel.cpp
- *
- *  Created on: 28.3.2013
- *      Author: JV
- */
+//------------------------------------------------------------------------------
+//
+//  Project:   VG20102014024
+//             Robot for search of human beings in crushes and avalanches
+//
+//             Brno University of Technology
+//             Faculty of Information Technology
+//
+//------------------------------------------------------------------------------
+//
+//             This project was financially supported by project
+//                  VG20102014024 funds provided by MV CR.
+//
+//------------------------------------------------------------------------------
+/*!
 
+@file
+@brief     Implementation of methods
+@details   Details
+@authors   Jan Vana (<ivanajan@fit.vutbr.cz>)
+@date      2010-2014
+@note      This project was supported by project funds of the MV CR grant VG20102014024.
+
+*/
 #include <iostream>
 #include "usb/CANFrame.h"
 #include "usb/ICanWorker.h"
 #include <Poco/Delegate.h>
+#include <TBS/Robo/RoboCan/Communicaton/RoboCanMessage.h>
 #include "TBS/Robo/RoboCan/Communication/UsbChannel.h"
 
 namespace TBS {
@@ -69,14 +87,23 @@ UsbChannel::~UsbChannel() {
 void UsbChannel::sendCanMessage(
 		const TBS::Robo::RoboCan::CanMessage & canMessage) {
 	Poco::Mutex::ScopedLock l(m);
+
+	TBS::Robo::RoboCan::RoboCanMessage rm(canMessage);
+	//std::cout << "send: " << rm.toString() << std::endl;
+
 	canList.push_back(canMessage);
 }
 
 void UsbChannel::onFrame(CANFrame::Ptr & f) {
 	TBS::Robo::RoboCan::CanMessage message = messageFromFrame(f);
 	//std::cout << std::endl;
-	//std::cout << "recv: " << message.toString() << std::endl;
 	//std::cout << std::endl;
+
+	std::cout << "recv raw: " << message.toString() <<  std::endl;
+
+	TBS::Robo::RoboCan::RoboCanMessage rm(message);
+	std::cout << "recv: " << rm.toString() << std::endl;
+
 	this->MessageRetrieved.notify(this, message);
 }
 
