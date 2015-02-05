@@ -135,6 +135,7 @@ void UsbChannel::run() {
 			if (stopThread)
 				break;
 
+			Poco::Thread::sleep(5);
 		}
 		interface->FrameReady -= Poco::delegate(this, &UsbChannel::onFrame);
 		std::cout << "usb thread loop exit" << std::endl;
